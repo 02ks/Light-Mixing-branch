@@ -3,7 +3,6 @@ import Adafruit_ADS1x15
 from pidev.stepper import stepper
 from Slush.Devices import L6480Registers as LReg6480, L6470Registers as LReg6470
 
-
 sys.path.insert(0, "/home/pi/packages/Adafruit_16_Channel_PWM_Module_Easy_Library")
 import Adafruit_Ease_Lib as ael
 led = ael.Adafruit_Ease_Lib()
@@ -59,37 +58,21 @@ current = 30
 
 motor_1 = stepper(port=1, speed=100, hold_current=current, run_current=current, accel_current=current,
                   deaccel_current=current)
-motor_1.setParam(LReg6480.GATECFG1, 0x5F)
-motor_1.setParam(LReg6480.OCD_TH, 0x1F)
-motor_1.setParam(LReg6480.CONFIG, 0x3688)
-# motor_1.print_status()
 
 motor_2 = stepper(port=2, speed=100, hold_current=current, run_current=current, accel_current=current,
                   deaccel_current=current)
-motor_2.setParam(LReg6480.GATECFG1, 0x5F)
-motor_2.setParam(LReg6480.OCD_TH, 0x1F)
-motor_2.setParam(LReg6480.CONFIG, 0x3688)
-# motor_2.print_status()
 
 motor_3 = stepper(port=3, speed=100, hold_current=current, run_current=current, accel_current=current,
                   deaccel_current=current)
-motor_3.setParam(LReg6470.CONFIG, 0x3688)
-# motor_3.print_status()
 
 motor_4 = stepper(port=4, speed=100, hold_current=current, run_current=current, accel_current=current,
                   deaccel_current=current)
-motor_4.setParam(LReg6470.CONFIG, 0x3688)
-# motor_4.print_status()
 
 motor_5 = stepper(port=5, speed=100, hold_current=current, run_current=current, accel_current=current,
                   deaccel_current=current)
-motor_5.setParam(LReg6470.CONFIG, 0x3688)
-# motor_5.print_status()
 
 motor_6 = stepper(port=6, speed=100, hold_current=current, run_current=current, accel_current=current,
                   deaccel_current=current)
-motor_6.setParam(LReg6470.CONFIG, 0x3688)
-# motor_6.print_status()
 motors = [motor_1, motor_2, motor_3, motor_4, motor_5, motor_6]
 microstepping = 32
 for motor in motors:
@@ -165,31 +148,26 @@ while True:
     if movement_amount is not 0 and not motor_5.is_busy():
 
         motor_5.move(round(movement_amount * microstepping / 4))
-        # print(motor_5.get_position())
 
     movement_amount = round(scale_joystick_value(adc_green.read_adc(1, gain=GAIN)) * increment)
     if movement_amount is not 0 and not motor_6.is_busy():
 
         motor_6.move(round(movement_amount * microstepping / 4))
-        # print(motor_6.get_position())
 
     movement_amount = round(scale_joystick_value(adc_red.read_adc(2, gain=GAIN)) * increment)
     if movement_amount is not 0 and not motor_1.is_busy():
 
         motor_1.move(round(-movement_amount * microstepping / 4))
-        # print(motor_1.get_position())
 
     movement_amount = round(scale_joystick_value(adc_green.read_adc(2, gain=GAIN)) * increment)
     if movement_amount is not 0 and not motor_2.is_busy():
 
         motor_2.move(round(-movement_amount * microstepping / 4))
-        # print(motor_2.get_position())
 
     movement_amount = round(scale_joystick_value(adc_blue.read_adc(2, gain=GAIN)) * increment)
     if movement_amount is not 0 and not motor_3.is_busy():
 
         motor_3.move(round(-movement_amount * microstepping / 4))
-        # print(motor_3.get_position())
 
 
     # print("red knob: " + str(adc_red.read_adc(0, gain = GAIN)) + "   red x: " + str(adc_red.read_adc(1, gain = GAIN)) + "  red y: " + str(adc_red.read_adc(2, gain = GAIN)),end = '        ')
