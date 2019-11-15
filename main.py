@@ -4,7 +4,8 @@ sys.path.insert(0, "/home/pi/packages")
 
 import RPi.GPIO as GPIO
 
-from RaspberryPiCommon.pidev import stepper, RPiMIB
+from pidev import stepper, RPiMIB
+from pidev.stepper import stepper
 
 import Slush
 import spidev
@@ -165,25 +166,29 @@ if board is 'D':
         print("Stepper 4 Updated CONFIG Register: " + hex(motor_4.getParam(LReg6470.CONFIG)))
         motor_4.print_status()
 
-        motor_5 = stepper(port = 5, speed = 25, hold_current = current, run_current = current, accel_current = current, deaccel_current = current, micro_steps = 2)
+        """
+        motor_5 = stepper(port=5, speed=25, hold_current=current, run_current=current, accel_current=current,
+                          deaccel_current=current, micro_steps=2)
         motor_5.print_status()
         print("Stepper 5 Initial CONFIG Register: " + hex(motor_5.getParam(LReg6470.CONFIG)))
         print("Stepper 5 Intial OCD_TH Register: " + hex(motor_5.getParam(LReg6470.OCD_TH)))
         motor_5.setParam(LReg6480.CONFIG, 0x3688)
         while motor_5.isBusy():
-                continue
+            continue
         print("Stepper 5 Updated CONFIG Register: " + hex(motor_5.getParam(LReg6470.CONFIG)))
         motor_5.print_status()
 
-        motor_6 = stepper(port = 6, speed = 25, hold_current = current, run_current = current, accel_current = current, deaccel_current = current, micro_steps = 2)
+        motor_6 = stepper(port=6, speed=25, hold_current=current, run_current=current, accel_current=current,
+                          deaccel_current=current, micro_steps=2)
         motor_6.print_status()
         print("Stepper 6 Initial CONFIG Register: " + hex(motor_6.getParam(LReg6470.CONFIG)))
         print("Stepper 6 Intial OCD_TH Register: " + hex(motor_6.getParam(LReg6470.OCD_TH)))
         motor_6.setParam(LReg6470.CONFIG, 0x3688)
         while motor_6.isBusy():
-                continue
+            continue
         print("Stepper 6 Updated CONFIG Register: " + hex(motor_6.getParam(LReg6470.CONFIG)))
         motor_6.print_status()
+        """
 
 def setup_all_motors():
     #MOTOR 1 SETUP

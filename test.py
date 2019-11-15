@@ -93,7 +93,12 @@ motor_3.go_to(199 * microstepping)
 motor_4.go_to(-76 * microstepping)
 motor_5.go_to(-76 * microstepping)
 motor_6.go_to(-76 * microstepping)
-
+motor_1.set_speed(15)
+motor_2.set_speed(15)
+motor_3.set_speed(15)
+motor_4.set_speed(15)
+motor_5.set_speed(15)
+motor_6.set_speed(15)
 GAIN = 1
 increment = 1
 # Create an ADS1115 ADC (16-bit) instance.
@@ -141,35 +146,76 @@ while True:
 
     movement_amount = round(scale_joystick_value(adc_red.read_adc(1, gain=GAIN)) * increment)
     if movement_amount is not 0 and not motor_4.is_busy():
-        motor_4.move(round(movement_amount * microstepping / 4))
+        #print(motor_4.getPosition())
+        print(movement_amount)
+        if(motor_4.getPosition() >=8000 & movement_amount!=-1):
+            print(motor_4.getPosition())
+            print("yep")
+        elif(motor_4.getPosition() <=-8000 & movement_amount<0):
+            print("working")
+        else:
+            motor_4.move(round(movement_amount * microstepping * 24))
         # print(motor_4.get_position())
 
     movement_amount = round(scale_joystick_value(adc_blue.read_adc(1, gain=GAIN)) * increment)
     if movement_amount is not 0 and not motor_5.is_busy():
-
-        motor_5.move(round(movement_amount * microstepping / 4))
+        print(motor_5.getPosition())
+        if (motor_5.getPosition() >= 8000 & movement_amount != -1):
+            print(motor_5.getPosition())
+            print("yep")
+        elif (motor_5.getPosition() <= -8000 & movement_amount < 0):
+            print("working")
+        else:
+            motor_5.move(round(movement_amount * microstepping * 24))
 
     movement_amount = round(scale_joystick_value(adc_green.read_adc(1, gain=GAIN)) * increment)
     if movement_amount is not 0 and not motor_6.is_busy():
-
-        motor_6.move(round(movement_amount * microstepping / 4))
+        print(motor_6.getPosition())
+        if (motor_6.getPosition() >= 8000 & movement_amount != -1):
+            print(motor_6.getPosition())
+            print("yep")
+        elif (motor_6.getPosition() <= -8000 & movement_amount < 0):
+            print("working")
+        else:
+            motor_6.move(round(movement_amount * microstepping * 24))
 
     movement_amount = round(scale_joystick_value(adc_red.read_adc(2, gain=GAIN)) * increment)
     if movement_amount is not 0 and not motor_1.is_busy():
+        print(movement_amount)
+        if (motor_1.getPosition() >= 12000 & movement_amount != -1):
+            print(motor_1.getPosition())
+            print("yep")
+        elif (motor_1.getPosition() <= -1000 & movement_amount < 0):
+            print(motor_3.getPosition())
+            print("working")
+        else:
+            motor_1.move(round(movement_amount * microstepping * 24))
 
-        motor_1.move(round(-movement_amount * microstepping / 4))
-
-    movement_amount = round(scale_joystick_value(adc_green.read_adc(2, gain=GAIN)) * increment)
+    movement_amount = round(scale_joystick_value(adc_green.read_adc(2, gain=GAIN)-6000) * increment)
     if movement_amount is not 0 and not motor_2.is_busy():
-
-        motor_2.move(round(-movement_amount * microstepping / 4))
+        print(movement_amount)
+        if (motor_2.getPosition() >= 12000 & movement_amount != -1):
+            print(motor_2.getPosition())
+            print("yep")
+        elif (motor_2.getPosition() <= -1000 & movement_amount < 0):
+            print(motor_3.getPosition())
+            print("working")
+        else:
+            motor_2.move(round(movement_amount * microstepping * 24))
 
     movement_amount = round(scale_joystick_value(adc_blue.read_adc(2, gain=GAIN)) * increment)
-    if movement_amount is not 0 and not motor_3.is_busy():
+    if movement_amount is not 0 and not motor_3.is_busy() :
+        print(movement_amount)
+        if (motor_3.getPosition() >= 12000 & movement_amount != -1):
+            print(motor_3.getPosition())
+            print("yep")
+        elif (motor_3.getPosition() <= -1000 & movement_amount < 0):
+            print(motor_3.getPosition())
+            print("working")
+        else:
+            motor_3.move(round(movement_amount * microstepping * 24))
 
-        motor_3.move(round(-movement_amount * microstepping / 4))
 
-
-    # print("red knob: " + str(adc_red.read_adc(0, gain = GAIN)) + "   red x: " + str(adc_red.read_adc(1, gain = GAIN)) + "  red y: " + str(adc_red.read_adc(2, gain = GAIN)),end = '        ')
-    # print("blue knob: " + str(adc_blue.read_adc(0, gain = GAIN)) + "   blue x: " + str(adc_blue.read_adc(1, gain = GAIN)) + "  blue y: " + str(adc_blue.read_adc(2, gain = GAIN)),end = '      ')
-    # print("green knob: " + str(adc_green.read_adc(0, gain = GAIN)) + "   green x: " + str(adc_green.read_adc(1, gain = GAIN)) + "  green y: " + str(adc_green.read_adc(2, gain = GAIN)))
+    #print("red knob: " + str(adc_red.read_adc(0, gain = GAIN)) + "   red x: " + str(adc_red.read_adc(1, gain = GAIN)) + "  red y: " + str(adc_red.read_adc(2, gain = GAIN)),end = '        ')
+    #print("blue knob: " + str(adc_blue.read_adc(0, gain = GAIN)) + "   blue x: " + str(adc_blue.read_adc(1, gain = GAIN)) + "  blue y: " + str(adc_blue.read_adc(2, gain = GAIN)),end = '      ')
+    #print("green knob: " + str(adc_green.read_adc(0, gain = GAIN)) + "   green x: " + str(adc_green.read_adc(1, gain = GAIN)) + "  green y: " + str(adc_green.read_adc(2, gain = GAIN)-6000))
