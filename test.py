@@ -1,6 +1,7 @@
 import sys
 import Adafruit_ADS1x15
 from pidev.stepper import stepper
+from time import sleep
 from Slush.Devices import L6480Registers as LReg6480, L6470Registers as LReg6470
 
 sys.path.insert(0, "/home/pi/packages/Adafruit_16_Channel_PWM_Module_Easy_Library")
@@ -137,10 +138,13 @@ def joy_val_filter(value):
         return 0
     else:
         return value
-
+sleep(4)
 while True:
+    sleep(1)
     led.change_percentage(0, clamp(value_as_percent("red", adc_red.read_adc(0, gain=GAIN)), 0, 100))
+    sleep(1)
     led.change_percentage(1, clamp(value_as_percent("red", adc_green.read_adc(0, gain=GAIN)), 0, 100))
+    sleep(1)
     led.change_percentage(2, clamp(value_as_percent("red", adc_blue.read_adc(0, gain=GAIN)), 0, 100))
 
 
@@ -195,45 +199,58 @@ while True:
             motor_6.start_relative_move(movement_amount*30)
 
     movement_amount = round(scale_joystick_value(adc_red.read_adc(2, gain=GAIN)) * increment)
+    if (movement_amount == 0):
+        motor_1.softStop()
     if movement_amount is not 0 and not motor_1.is_busy():
         print(movement_amount)
         print(motor_1.getPosition())
+        motor_1.softStop()
         if (motor_1.getPosition() >= 14000 & movement_amount > 0):
             print(motor_1.getPosition())
             print("yep")
+            motor_1.softStop()
         elif (motor_1.getPosition() <= 2000 & movement_amount <= 1):
             print(motor_1.getPosition())
             print("working")
+            motor_1.softStop()
         else:
-            motor_1.move(-round(movement_amount * microstepping * 30))
-
-    movement_amount = round(scale_joystick_value(adc_green.read_adc(2, gain=GAIN)-6000) * increment)
+            motor_1.start_relative_move(-movement_amount*30)
+    movement_amount = round(scale_joystick_value(adc_green.read_adc(2, gain=GAIN)) * increment)
+    if (movement_amount == 0):
+        motor_2.softStop()
     if movement_amount is not 0 and not motor_2.is_busy():
         print(movement_amount)
         print(motor_2.getPosition())
+        motor_2.softStop()
         if (motor_2.getPosition() >= 14000 & movement_amount > 0):
             print(motor_2.getPosition())
             print("yep")
+            motor_2.softStop()
         elif (motor_2.getPosition() <= 2000 & movement_amount <= 1):
             print(motor_2.getPosition())
             print("working")
+            motor_2.softStop()
         else:
-            motor_2.move(-round(movement_amount * microstepping * 30))
+            motor_2.start_relative_move(-movement_amount * 30)
 
     movement_amount = round(scale_joystick_value(adc_blue.read_adc(2, gain=GAIN)) * increment)
+    if (movement_amount == 0):
+        motor_3.softStop()
     if movement_amount is not 0 and not motor_3.is_busy() :
         print(movement_amount)
         print(motor_3.getPosition())
         if (motor_3.getPosition() >= 14000 & movement_amount > 0):
             print(motor_3.getPosition())
+            motor_3.softStop()
             print("yep")
         elif (motor_3.getPosition() <= 2000 & movement_amount <= 1):
             print(motor_3.getPosition())
             print("working")
+            motor_3.softStop()
         else:
-            motor_3.move(-round(movement_amount * microstepping * 30))
+            motor_3.start_relative_move(-movement_amount * 30)
 
 
     #print("red knob: " + str(adc_red.read_adc(0, gain = GAIN)) + "   red x: " + str(adc_red.read_adc(1, gain = GAIN)) + "  red y: " + str(adc_red.read_adc(2, gain = GAIN)),end = '        ')
     #print("blue knob: " + str(adc_blue.read_adc(0, gain = GAIN)) + "   blue x: " + str(adc_blue.read_adc(1, gain = GAIN)) + "  blue y: " + str(adc_blue.read_adc(2, gain = GAIN)),end = '      ')
-    #print("green knob: " + str(adc_green.read_adc(0, gain = GAIN)) + "   green x: " + str(adc_green.read_adc(1, gain = GAIN)) + "  green y: " + str(adc_green.read_adc(2, gain = GAIN)-6000))
+    print("green knob: " + str(adc_green.read_adc(0, gain = GAIN)) + "   green x: " + str(adc_green.read_adc(1, gain = GAIN)) + "  green y: " + str(adc_green.read_adc(2, gain = GAIN)))
