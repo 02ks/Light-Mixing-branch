@@ -57,7 +57,7 @@ class ProjectNameGUI(App):
         :return: Kivy Screen Manager instance
         """
         return SCREEN_MANAGER
-Window.clearcolor = (1, 1, 1, 1)  # White
+Window.clearcolor = (1, .6, .3, 1)  # White
 
 
 class MainScreen(Screen):
@@ -198,6 +198,25 @@ class AdminScreen(Screen):
         Shutdown the system. This should free all steppers and do any cleanup necessary
         :return: None
         """
+        global gamer
+        gamer = False
+        motor_1.softFree()
+        sleep(.05)
+        motor_2.softFree()
+        sleep(.05)
+        motor_3.softFree()
+        sleep(.05)
+        motor_4.softFree()
+        sleep(.05)
+        motor_5.softFree()
+        sleep(.05)
+        motor_6.softFree()
+        sleep(.05)
+        led.change_percentage(0, clamp(value_as_percent("red", 0), 0, 100))
+        sleep(.05)
+        led.change_percentage(1, clamp(value_as_percent("red", 0), 0, 100))
+        sleep(.05)
+        led.change_percentage(2, clamp(value_as_percent("red", 0), 0, 100))
         os.system("sudo shutdown now")
 
     @staticmethod
