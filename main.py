@@ -1,52 +1,231 @@
-import math
 import sys
-sys.path.insert(0, "/home/pi/packages")
-
-import RPi.GPIO as GPIO
-
-from pidev import stepper, RPiMIB
-from pidev.stepper import stepper
-
-import Slush
-import spidev
-
-import pygame
-from time import sleep
-sys.path.insert(0, "/home/pi/packages/Adafruit_16_Channel_PWM_Module_Easy_Library")
-print("pre-import")
-import Adafruit_Ease_Lib as ael
-print("post-import")
-led = ael.Adafruit_Ease_Lib()
-print("post-object")
-
-from threading import Thread
-from multiprocessing import Process
-
-sys.path.insert(0, "/home/pi/packages/Adafruit_Python_ADS1x15/examples")
-# Import the ADS1x15 module.
 import Adafruit_ADS1x15
+import os
 
+from kivy.app import App
+from kivy.core.window import Window
+from kivy.lang import Builder
+from kivy.uix.screenmanager import ScreenManager, Screen
+
+from pidev.MixPanel import MixPanel
+from pidev.kivy.PassCodeScreen import PassCodeScreen
+from pidev.kivy.PauseScreen import PauseScreen
+from pidev.kivy import DPEAButton
+from pidev.kivy import ImageButton
+from pidev.stepper import stepper
+from time import sleep
+from threading import Thread
+from Slush.Devices import L6480Registers as LReg6480, L6470Registers as LReg6470
+
+sys.path.insert(0, "/home/pi/packages/Adafruit_16_Channel_PWM_Module_Easy_Library")
+import Adafruit_Ease_Lib as ael
+led = ael.Adafruit_Ease_Lib()
+led.change_frequency(2000)
+pwms = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 , 13, 14, 15]
+led.change_percentage(pwms, 50)
+
+AXIS_MOTOR_SETTINGS = {
+    'hold_current': 20,
+    'run_current': 20,
+    'acc_current': 20,
+    'dec_current': 20,
+    'max_speed': 100,
+    'min_speed': 0,
+    'micro_steps': 1,
+    'threshold_speed': 400,
+    'over_current': 2000,
+    'stall_current': 2031.25,
+    'accel': 0xF00,
+    'decel': 0xF00,
+    'low_speed_opt': False,
+    'homing_direction': 0
+}
+MIXPANEL_TOKEN = "x"
+MIXPANEL = MixPanel("Project Name", MIXPANEL_TOKEN)
+
+SCREEN_MANAGER = ScreenManager()
+MAIN_SCREEN_NAME = 'main'
+ADMIN_SCREEN_NAME = 'admin'
+class ProjectNameGUI(App):
+    """
+    Class to handle running the GUI Application
+    """
+
+    def build(self):
+        """
+        Build the application
+        :return: Kivy Screen Manager instance
+        """
+        return SCREEN_MANAGER
+Window.clearcolor = (1, 1, 1, 1)  # White
+
+
+class MainScreen(Screen):
+    """
+    Class to handle the main screen and its associated touch events
+    """
+
+    def pressed(self):
+        """
+        Function called on button touch event for button with id: testButton
+        :return: None
+        """
+        PauseScreen.pause(pause_scene_name='pauseScene', transition_back_scene='main', text="Test", pause_duration=5)
+
+    def admin_action(self):
+        """
+        Hidden admin button touch event. Transitions to passCodeScreen.
+        This method is called from pidev/kivy/PassCodeScreen.kv
+        :return: None
+        """
+        SCREEN_MANAGER.current = 'passCode'
+
+# motor_1 = stepper(port=1, speed=AXIS_MOTOR_SETTINGS['max_speed'])
+# motor_2 = stepper(port=2, speed=AXIS_MOTOR_SETTINGS['max_speed'])
+# motor_3 = stepper(port=3, speed=AXIS_MOTOR_SETTINGS['max_speed'])
+# motor_4 = stepper(port=4, speed=AXIS_MOTOR_SETTINGS['max_speed'])
+# motor_5 = stepper(port=5, speed=AXIS_MOTOR_SETTINGS['max_speed'])
+# motor_6 = stepper(port=6, speed=AXIS_MOTOR_SETTINGS['max_speed'])
+#
+# motors = [motor_1, motor_2, motor_3, motor_4, motor_5, motor_6]
+# for motor in motors:
+#     motor.setCurrent(hold=AXIS_MOTOR_SETTINGS['hold_current'], run=AXIS_MOTOR_SETTINGS['run_current'],
+#                      acc=AXIS_MOTOR_SETTINGS['acc_current'], dec=AXIS_MOTOR_SETTINGS['dec_current'])
+#     motor.setMaxSpeed(AXIS_MOTOR_SETTINGS['max_speed'])
+#     motor.setMinSpeed(AXIS_MOTOR_SETTINGS['min_speed'])
+#     motor.setMicroSteps(AXIS_MOTOR_SETTINGS['micro_steps'])
+#     motor.setThresholdSpeed(AXIS_MOTOR_SETTINGS['threshold_speed'])
+#     motor.setOverCurrent(AXIS_MOTOR_SETTINGS['over_current'])
+#     motor.setStallCurrent(AXIS_MOTOR_SETTINGS['stall_current'])
+#     motor.setAccel(AXIS_MOTOR_SETTINGS['accel'])
+#     motor.setDecel(AXIS_MOTOR_SETTINGS['decel'])
+#     motor.setLowSpeedOpt(AXIS_MOTOR_SETTINGS['low_speed_opt'])
+#     motor.setParam(LReg.CONFIG, 0x3688)
+#     motor.home(0)
+#     while motor.isBusy():
+#         continue
+
+
+current = 30
+
+
+motor_1 = stepper(port=1, speed=100, hold_current=current, run_current=current, accel_current=current,
+                  deaccel_current=current)
+
+motor_2 = stepper(port=2, speed=100, hold_current=current, run_current=current, accel_current=current,
+                  deaccel_current=current)
+
+motor_3 = stepper(port=3, speed=100, hold_current=current, run_current=current, accel_current=current,
+                  deaccel_current=current)
+
+motor_4 = stepper(port=4, speed=100, hold_current=current, run_current=current, accel_current=current,
+                  deaccel_current=current)
+
+motor_5 = stepper(port=5, speed=100, hold_current=current, run_current=current, accel_current=current,
+                  deaccel_current=current)
+
+motor_6 = stepper(port=6, speed=100, hold_current=current, run_current=current, accel_current=current,
+                  deaccel_current=current)
+motors = [motor_1, motor_2, motor_3, motor_4, motor_5, motor_6]
+microstepping = 32
+for motor in motors:
+    motor.setAccel(0xF00)
+    motor.setDecel(0xF00)
+    motor.set_micro_steps(microstepping)
+
+motor_1.home(0)
+motor_2.home(0)
+motor_4.home(1)
+motor_5.home(1)
+motor_6.home(1)
+sleep(.5)
+motor_3.home(0)
+
+motor_1.go_to(199 * microstepping)
+motor_2.go_to(199 * microstepping)
+motor_3.go_to(150 * microstepping)
+motor_4.go_to(-76 * microstepping)
+motor_5.go_to(-76 * microstepping)
+motor_6.go_to(-76 * microstepping)
+motor_1.set_speed(15)
+motor_2.set_speed(15)
+motor_3.set_speed(15)
+motor_4.set_speed(15)
+motor_5.set_speed(15)
+motor_6.set_speed(15)
+GAIN = 1
+increment = 1
 # Create an ADS1115 ADC (16-bit) instance.
 adc_red = Adafruit_ADS1x15.ADS1115(0x4A)
 adc_blue = Adafruit_ADS1x15.ADS1115(0x48)
 adc_green = Adafruit_ADS1x15.ADS1115(0x49)
-
+global gamer
+gamer = True
 clamp = lambda n, min_n, max_n: max(min(max_n, n), min_n)
 
-##########################################
-#############KNOB CONTROLS################
-##########################################
 
-GAIN = 1
+class AdminScreen(Screen):
+    """
+    Class to handle the AdminScreen and its functionality
+    """
 
-led.change_frequency(2000)
+    def __init__(self, **kwargs):
+        """
+        Load the AdminScreen.kv file. Set the necessary names of the screens for the PassCodeScreen to transition to.
+        Lastly super Screen's __init__
+        :param kwargs: Normal kivy.uix.screenmanager.Screen attributes
+        """
+        Builder.load_file('AdminScreen.kv')
 
-pwms = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 , 13, 14, 15]
+        PassCodeScreen.set_admin_events_screen(
+            ADMIN_SCREEN_NAME)  # Specify screen name to transition to after correct password
+        PassCodeScreen.set_transition_back_screen(
+            MAIN_SCREEN_NAME)  # set screen name to transition to if "Back to Game is pressed"
 
-led.change_percentage(pwms, 50)
+        super(AdminScreen, self).__init__(**kwargs)
 
-##print(adc_blue.read_adc(1, gain = GAIN))
+    @staticmethod
+    def transition_back():
+        """
+        Transition back to the main screen
+        :return:
+        """
+        SCREEN_MANAGER.current = MAIN_SCREEN_NAME
 
+    @staticmethod
+    def shutdown():
+        """
+        Shutdown the system. This should free all steppers and do any cleanup necessary
+        :return: None
+        """
+        os.system("sudo shutdown now")
+
+    @staticmethod
+    def exit_program():
+        global gamer
+        """
+        Quit the program. This should free all steppers and do any cleanup necessary
+        :return: None
+        """
+        gamer = False
+        motor_1.softFree()
+        sleep(.05)
+        motor_2.softFree()
+        sleep(.05)
+        motor_3.softFree()
+        sleep(.05)
+        motor_4.softFree()
+        sleep(.05)
+        motor_5.softFree()
+        sleep(.05)
+        motor_6.softFree()
+        sleep(.05)
+        led.change_percentage(0, clamp(value_as_percent("red", 0), 0, 100))
+        sleep(.05)
+        led.change_percentage(1, clamp(value_as_percent("red", 0), 0, 100))
+        sleep(.05)
+        led.change_percentage(2, clamp(value_as_percent("red", 0), 0, 100))
+        quit()
 def value_to_m(value):
     if value < 5:
         return 0
@@ -62,189 +241,9 @@ def value_as_percent(color, value):
         return value_to_m(((value-3850)*100)/(14832-3850))
     if color == "blue":
         return value_to_m(((value-100)*100)/(11280-100))
-    
-def knob_red():   
-    while True:
-        sleep(.03)
-##        print(clamp(value_as_percent("red", adc_red.read_adc(0, gain = GAIN)), 0, 100))
-        led.change_percentage(0, clamp(value_as_percent("red", adc_red.read_adc(0, gain = GAIN)), 0, 100))
 
-def knob_blue():
-    while True:
-        sleep(.03)
-##        print(clamp(value_as_percent("blue", adc_blue.read_adc(0, gain = GAIN)), 0, 100))        
-        led.change_percentage(2, clamp(value_as_percent("blue", adc_blue.read_adc(0, gain = GAIN)), 0, 100))
-
-def knob_green():
-    while True:
-        sleep(.03)
-##        print(clamp(value_as_percent("green", adc_green.read_adc(0, gain = GAIN)), 0, 100))
-        led.change_percentage(1, clamp(value_as_percent("green", adc_green.read_adc(0, gain = GAIN)), 0, 100))
-
-
-
-
-r = Thread(target = knob_red)
-b = Thread(target = knob_blue)
-g = Thread(target = knob_green)
-r.start()
-b.start()
-g.start()
-  
-##########################################
-###########JOYSTICK CONTROLS##############
-##########################################
-from Slush.Devices import L6470Registers as LReg6470
-from Slush.Devices import L6480Registers as LReg6480
-from pidev.slush_manager import slush_board
-
-home_pos_x = -11.5
-home_pos_y = 25
-board = 'D'
-if board is 'D':
-        current = 30
-        
-        motor_1 = stepper(port = 1, speed = 25, hold_current = current, run_current = current, accel_current = current, deaccel_current = current, micro_steps = 2)
-        while motor_1.isBusy():
-                continue
-        motor_1.print_status()
-        print("Stepper 1 Initial CONFIG Register: " + hex(motor_1.getParam(LReg6480.CONFIG)))
-        print("Stepper 1 Intial GATECFG1 Register: " + hex(motor_1.getParam(LReg6480.GATECFG1)))
-        motor_1.setParam(LReg6480.GATECFG1, 0x5F)
-        while motor_1.isBusy():
-                continue
-        print("Stepper 1 Updated GATECFG1 Register: " + hex(motor_1.getParam(LReg6480.GATECFG1)))
-        print("Stepper 1 Intial OCD_TH Register: " + hex(motor_1.getParam(LReg6480.OCD_TH)))
-        motor_1.setParam(LReg6480.OCD_TH, 0x1F)
-        while motor_1.isBusy():
-                continue
-        print("Stepper 1 Updated OCD_TH Register: " + hex(motor_1.getParam(LReg6480.OCD_TH)))
-        motor_1.setParam(LReg6480.CONFIG, 0x3688)
-        while motor_1.isBusy():
-                continue
-        print("Stepper 1 Updated CONFIG Register: " + hex(motor_1.getParam(LReg6480.CONFIG)))
-        motor_1.print_status()
-        
-        motor_2 = stepper(port = 2, speed = 25, hold_current = current, run_current = current, accel_current = current, deaccel_current = current, micro_steps = 2)
-        while motor_2.isBusy():
-                continue
-        motor_2.print_status()
-        print("Stepper 2 Initial CONFIG Register: " + hex(motor_2.getParam(LReg6480.CONFIG)))
-        print("Stepper 2 Intial GATECFG1 Register: " + hex(motor_2.getParam(LReg6480.GATECFG1)))
-        motor_2.setParam(LReg6480.GATECFG1, 0x5F)
-        while motor_2.isBusy():
-                continue
-        print("Stepper 2 Updated GATECFG1 Register: " + hex(motor_2.getParam(LReg6480.GATECFG1)))
-        print("Stepper 2 Intial OCD_TH Register: " + hex(motor_2.getParam(LReg6480.OCD_TH)))
-        motor_2.setParam(LReg6480.OCD_TH, 0x1F)
-        while motor_2.isBusy():
-                continue
-        print("Stepper 2 Updated OCD_TH Register: " + hex(motor_2.getParam(LReg6480.OCD_TH)))
-        motor_2.setParam(LReg6480.CONFIG, 0x3688)
-        while motor_2.isBusy():
-                continue
-        print("Stepper 2 Updated CONFIG Register: " + hex(motor_2.getParam(LReg6480.CONFIG)))
-        motor_2.print_status()
-        
-        motor_3 = stepper(port = 3, speed = 25, hold_current = current, run_current = current, accel_current = current, deaccel_current = current, micro_steps = 2)
-        motor_3.print_status()
-        print("Stepper 3 Initial CONFIG Register: " + hex(motor_3.getParam(LReg6470.CONFIG)))
-        print("Stepper 3 Intial OCD_TH Register: " + hex(motor_3.getParam(LReg6470.OCD_TH)))
-        motor_3.setParam(LReg6480.CONFIG, 0x3688)
-        while motor_3.isBusy():
-                continue
-        print("Stepper 3 Updated CONFIG Register: " + hex(motor_3.getParam(LReg6470.CONFIG)))
-        motor_3.print_status()
-
-        motor_4 = stepper(port = 4, speed = 25, hold_current = current, run_current = current, accel_current = current, deaccel_current = current, micro_steps = 2)
-        motor_4.print_status()
-        print("Stepper 4 Initial CONFIG Register: " + hex(motor_4.getParam(LReg6470.CONFIG)))
-        print("Stepper 4 Intial OCD_TH Register: " + hex(motor_4.getParam(LReg6470.OCD_TH)))
-        motor_4.setParam(LReg6480.CONFIG, 0x3688)
-        while motor_4.isBusy():
-                continue
-        print("Stepper 4 Updated CONFIG Register: " + hex(motor_4.getParam(LReg6470.CONFIG)))
-        motor_4.print_status()
-
-        """
-        motor_5 = stepper(port=5, speed=25, hold_current=current, run_current=current, accel_current=current,
-                          deaccel_current=current, micro_steps=2)
-        motor_5.print_status()
-        print("Stepper 5 Initial CONFIG Register: " + hex(motor_5.getParam(LReg6470.CONFIG)))
-        print("Stepper 5 Intial OCD_TH Register: " + hex(motor_5.getParam(LReg6470.OCD_TH)))
-        motor_5.setParam(LReg6480.CONFIG, 0x3688)
-        while motor_5.isBusy():
-            continue
-        print("Stepper 5 Updated CONFIG Register: " + hex(motor_5.getParam(LReg6470.CONFIG)))
-        motor_5.print_status()
-
-        motor_6 = stepper(port=6, speed=25, hold_current=current, run_current=current, accel_current=current,
-                          deaccel_current=current, micro_steps=2)
-        motor_6.print_status()
-        print("Stepper 6 Initial CONFIG Register: " + hex(motor_6.getParam(LReg6470.CONFIG)))
-        print("Stepper 6 Intial OCD_TH Register: " + hex(motor_6.getParam(LReg6470.OCD_TH)))
-        motor_6.setParam(LReg6470.CONFIG, 0x3688)
-        while motor_6.isBusy():
-            continue
-        print("Stepper 6 Updated CONFIG Register: " + hex(motor_6.getParam(LReg6470.CONFIG)))
-        motor_6.print_status()
-        """
-
-def setup_all_motors():
-    #MOTOR 1 SETUP
-    motor_1.home(0)
-    print("homed motor 1")
-    sleep(.5)
-    motor_1.go_to_position(home_pos_y)
-    print("motor 1 set up")
-
-    #MOTOR 2 SETUP
-    print('tryin to home')
-    motor_2.home(0)
-    print("homed motor 2")
-    sleep(.5)
-    motor_2.go_to_position(home_pos_y)
-    print("motor 2 set up")
-
-    #MOTOR 3 SETUP
-    motor_3.home(0)
-    print("homed motor 3")
-    sleep(.5)
-    motor_3.go_to_position(home_pos_y)
-    print("motor 3 set up")
-    
-    #MOTOR 4 SETUP
-    motor_4.home(1) 
-    print("homed motor 4")
-    sleep(.5)
-    motor_4.go_to_position(home_pos_x)
-    print("motor 4 set up")
-
-    #MOTOR 5 SETUP
-    motor_5.home(1)
-    print("homed motor 5")
-    sleep(.5)
-    motor_5.go_to_position(home_pos_x)
-    print("motor 5 set up")
-
-    #MOTOR 6 SETUP
-    motor_6.home(1)
-    sleep(.5)
-    motor_6.go_to_position(home_pos_x)
-     
-setup_all_motors()
-
-current_pos_yr = home_pos_y
-current_pos_xr = home_pos_x
-
-current_pos_yg = home_pos_y
-current_pos_xg = home_pos_x
-
-current_pos_yb = home_pos_y
-current_pos_xb = home_pos_x
-
-clamp = lambda n, min_n, max_n: max(min(max_n, n), min_n)
-increment = 1
+def scale_joystick_value(value):
+    return (value - 6600)/6000
 
 def joy_val_filter(value):
     if value < -0.9:
@@ -255,97 +254,145 @@ def joy_val_filter(value):
         return 0
     else:
         return value
-    
-def scale_joystick_value(value):
-    return joy_val_filter((value - 6600)/6000)
+motor_3.go_to(49 * microstepping)
+sleep(3)
 
-def blue_joy_x(): ## WILL HAVE TO USE MOTORS 4 AND 5 IN THE FUTURE
-    global current_pos_xb
-    while True:
-        movement_amount = joy_val_filter(scale_joystick_value(adc_blue.read_adc(1, gain = GAIN))*increment)
-        current_pos_xb += movement_amount
-##        if current_pos_xb > home_pos_x - 15.77 and current_pos_xb < home_pos_x + 15.77:
-##            motor_5.start_relative_move(movement_amount)
-        current_pos_xb = clamp(current_pos_xb, home_pos_x - 15.77, home_pos_x + 15.77)
-        #motor_5.start_go_to_position(current_pos_xb)
-        if not movement_amount == 0:
-            motor_5.start_relative_move(movement_amount)
-        #print(current_pos_xb)
-        
-        #motor_3.start_go_to_position(current_pos_xb)
-def blue_joy_y(): ## WILL HAVE TO USE MOTORS 4 AND 5 IN THE FUTURE
-##    global current_pos_yb
-    while True:
-        movement_amount = joy_val_filter(scale_joystick_value(adc_blue.read_adc(2, gain = GAIN))*increment)
-##        if current_pos_yb > home_pos_y - 13 and current_pos_yb < home_pos_y + 13:
-##            motor_3.start_relative_move(movement_amount)
-##        current_pos_yb = current_pos_yb + movement_amount
-        #current_pos_xg = clamp(current_pos_xg, home_pos_x - 15.77, home_pos_x + 15.77)
-        #print(current_pos_yb)
-        print(movement_amount)
-        if not movement_amount == 0:
-            motor_3.start_relative_move(movement_amount)
-
-def green_joy_x(): ## WILL HAVE TO USE MOTORS 4 AND 5 IN THE FUTURE
-    while True:
-        movement_amount = joy_val_filter(scale_joystick_value(adc_green.read_adc(1, gain = GAIN))*increment)
-##        global current_pos_xg
-##        if current_pos_xg > home_pos_x - 15.77 and current_pos_xg < home_pos_x + 15.77:
-##            motor_6.start_relative_move(movement_amount)
-##        current_pos_xg = current_pos_xg + movement_amount
-        if not movement_amount == 0:
-            motor_6.start_relative_move(movement_amount)
-        #current_pos_xg = clamp(current_pos_xg, home_pos_x - 15.77, home_pos_x + 15.77)
-        #print(current_pos_xg)
-        
-        #motor_3.start_go_to_position(current_pos_xb)
-def green_joy_y(): ## WILL HAVE TO USE MOTORS 4 AND 5 IN THE FUTURE
-    while True:
-        movement_amount = joy_val_filter(scale_joystick_value(adc_green.read_adc(2, gain = GAIN))*increment)
-##        global current_pos_yg
-##        if current_pos_yg > home_pos_y - 13 and current_pos_yg < home_pos_y + 13:
-##            motor_2.start_relative_move(movement_amount)
-##        current_pos_yg = current_pos_yg + movement_amount
-        if not movement_amount == 0:            motor_2.start_relative_move(movement_amount)
-        #current_pos_xg = clamp(current_pos_xg, home_pos_x - 15.77, home_pos_x + 15.77)
-        #print(current_pos_yg)
-
-def red_joy_x(): ## WILL HAVE TO USE MOTORS 4 AND 5 IN THE FUTURE
-    while True:
-        movement_amount = joy_val_filter(scale_joystick_value(adc_red.read_adc(1, gain = GAIN))*increment)
-##        global current_pos_xg
-##        if current_pos_xg > home_pos_x - 15.77 and current_pos_xg < home_pos_x + 15.77:
-##            motor_6.start_relative_move(movement_amount)
-##        current_pos_xg = current_pos_xg + movement_amount
-        if not movement_amount == 0:
-            motor_4.start_relative_move(movement_amount)
-        #current_pos_xg = clamp(current_pos_xg, home_pos_x - 15.77, home_pos_x + 15.77)
-
-def red_joy_y(): ## WILL HAVE TO USE MOTORS 4 AND 5 IN THE FUTURE
-    while True:
-        movement_amount = joy_val_filter(scale_joystick_value(adc_red.read_adc(2, gain = GAIN))*increment)
-##        global current_pos_xg
-##        if current_pos_xg > home_pos_x - 15.77 and current_pos_xg < home_pos_x + 15.77:
-##            motor_6.start_relative_move(movement_amount)
-##        current_pos_xg = current_pos_xg + movement_amount
-        if not movement_amount == 0:
-            motor_1.start_relative_move(movement_amount)
-
-      
-blue_x = Thread(target = blue_joy_x)
-blue_y = Thread(target = blue_joy_y)
-green_x = Thread(target = green_joy_x)
-green_y = Thread(target = green_joy_y)
-red_x = Thread(target = red_joy_x)
-red_y = Thread(target = red_joy_y)
-##blue_x.start()
-##blue_y.start()
-####green_x.start()
-####green_y.start()
-##red_x.start()
-##red_y.start()
-
-while True:
-    print("x : green %(green)s, blue %(blue)s, red %(red)s | y: green %(greeny)s blue %(bluey)s red %(redy)s"% {"green" : joy_val_filter(scale_joystick_value(adc_green.read_adc(1, 1))), "blue" : joy_val_filter(scale_joystick_value(adc_blue.read_adc(1, 1))), "red" : joy_val_filter(scale_joystick_value(adc_red.read_adc(1, 1))), "greeny":joy_val_filter(scale_joystick_value(adc_green.read_adc(2, 1))), "bluey":joy_val_filter(scale_joystick_value(adc_blue.read_adc(2, 1))), "redy":joy_val_filter(scale_joystick_value(adc_red.read_adc(2, 1)))})       
+def threadman():
+    while gamer ==True:
+        led.change_percentage(0, clamp(value_as_percent("red", adc_red.read_adc(0, gain=GAIN)), 0, 100))
+        led.change_percentage(1, clamp(value_as_percent("red", adc_green.read_adc(0, gain=GAIN)), 0, 100))
+        led.change_percentage(2, clamp(value_as_percent("red", adc_blue.read_adc(0, gain=GAIN)), 0, 100))
 
 
+        movement_amount = round(scale_joystick_value(adc_red.read_adc(1, gain=GAIN)) * increment)
+        if (movement_amount == 0):
+            motor_4.softStop()
+        if movement_amount is not 0 and not motor_4.is_busy() or movement_amount is not 0 and motor_4.getPosition() >=7000 or motor_4.getPosition() <=-7000:
+            #print(motor_4.getPosition())
+            print(movement_amount)
+            motor_4.softStop()
+            if(motor_4.getPosition() >=7000 & movement_amount!=-1):
+                print(motor_4.getPosition())
+                motor_4.stop()
+                print("yep")
+            elif(motor_4.getPosition() <=-7000 & movement_amount<0):
+                motor_4.stop()
+                print("working")
+            else:
+                motor_4.start_relative_move(movement_amount*100)
+            # print(motor_4.get_position())
+
+        movement_amount = round(scale_joystick_value(adc_blue.read_adc(1, gain=GAIN)) * increment)
+        if (movement_amount == 0):
+            motor_5.softStop()
+        if movement_amount is not 0 and not motor_5.is_busy() or movement_amount is not 0 and motor_5.getPosition() >=7000 or motor_5.getPosition() <=-7000:
+            print(motor_5.getPosition())
+            motor_5.softStop()
+            if (motor_5.getPosition() >= 7000 & movement_amount != -1):
+                print(motor_5.getPosition())
+                motor_5.stop()
+                print("yep")
+            elif (motor_5.getPosition() <= -7000 & movement_amount < 0):
+                motor_5.stop()
+                print("working")
+            else:
+                motor_5.start_relative_move(movement_amount*100)
+
+        movement_amount = round(scale_joystick_value(adc_green.read_adc(1, gain=GAIN)) * increment)
+        if (movement_amount == 0):
+            motor_6.softStop()
+        if movement_amount is not 0 and not motor_6.is_busy() or movement_amount is not 0 and motor_6.getPosition() >=7000 or motor_6.getPosition() <=-7000:
+            print(motor_6.getPosition())
+            motor_6.softStop()
+            if (motor_6.getPosition() >= 7000 & movement_amount != -1):
+                print(motor_6.getPosition())
+                motor_6.stop()
+                print("yep")
+            elif (motor_6.getPosition() <= -7000 & movement_amount < 0):
+                motor_6.stop()
+                print("working")
+            else:
+                motor_6.start_relative_move(movement_amount*100)
+
+        movement_amount = round(scale_joystick_value(adc_red.read_adc(2, gain=GAIN)) * increment)
+        if (movement_amount == 0):
+            motor_1.softStop()
+            print("stoppd")
+        if movement_amount is not 0 and not motor_1.is_busy() or movement_amount is not 0 and motor_1.getPosition() >=14000 or motor_1.getPosition() <=-500:
+            print(movement_amount)
+            print(motor_1.getPosition())
+            motor_1.softStop()
+            if (motor_1.getPosition() >= 14000 & movement_amount > 0):
+                print(motor_1.getPosition())
+                print("yep")
+                motor_1.softStop()
+            elif (motor_1.getPosition() <= 2000 & movement_amount <= 1):
+                print(motor_1.getPosition())
+                print("working")
+                motor_1.softStop()
+            else:
+                motor_1.start_relative_move(-movement_amount*100)
+        movement_amount = round(scale_joystick_value(adc_green.read_adc(2, gain=GAIN)-6000) * increment)
+        if (movement_amount == 0):
+            motor_2.softStop()
+        if movement_amount is not 0 and not motor_2.is_busy() or movement_amount is not 0 and motor_2.getPosition() >=14000 or motor_2.getPosition() <=-500:
+            print(movement_amount)
+            print(motor_2.getPosition())
+            motor_2.softStop()
+            if (motor_2.getPosition() >= 14000 & movement_amount > 0):
+                print(motor_2.getPosition())
+                print("yep")
+                motor_2.softStop()
+            elif (motor_2.getPosition() <= 2000 & movement_amount <= 1):
+                print(motor_2.getPosition())
+                print("working")
+                motor_2.softStop()
+            else:
+                motor_2.start_relative_move(-movement_amount * 100)
+
+        movement_amount = round(scale_joystick_value(adc_blue.read_adc(2, gain=GAIN)) * increment)
+        if (movement_amount == 0):
+            motor_3.softStop()
+        if movement_amount is not 0 and not motor_3.is_busy() or movement_amount is not 0 and motor_3.getPosition() >=14000 or motor_3.getPosition() <=-500:
+            print(movement_amount)
+            print(motor_3.getPosition())
+            if (motor_3.getPosition() >= 14000 & movement_amount > 0):
+                print(motor_3.getPosition())
+                motor_3.softStop()
+                print("yep")
+            elif (motor_3.getPosition() <= 2000 & movement_amount <= 1):
+                print(motor_3.getPosition())
+                print("working")
+                motor_3.softStop()
+            else:
+                motor_3.start_relative_move(-movement_amount * 100)
+
+
+        #print("red knob: " + str(adc_red.read_adc(0, gain = GAIN)) + "   red x: " + str(adc_red.read_adc(1, gain = GAIN)) + "  red y: " + str(adc_red.read_adc(2, gain = GAIN)),end = '        ')
+        #print("blue knob: " + str(adc_blue.read_adc(0, gain = GAIN)) + "   blue x: " + str(adc_blue.read_adc(1, gain = GAIN)) + "  blue y: " + str(adc_blue.read_adc(2, gain = GAIN)),end = '      ')
+        print("green knob: " + str(adc_green.read_adc(0, gain = GAIN)) + "   green x: " + str(adc_green.read_adc(1, gain = GAIN)) + "  green y: " + str(adc_green.read_adc(2, gain = GAIN)))
+Builder.load_file('main.kv')
+SCREEN_MANAGER.add_widget(MainScreen(name=MAIN_SCREEN_NAME))
+SCREEN_MANAGER.add_widget(PassCodeScreen(name='passCode'))
+SCREEN_MANAGER.add_widget(PauseScreen(name='pauseScene'))
+SCREEN_MANAGER.add_widget(AdminScreen(name=ADMIN_SCREEN_NAME))
+
+Thread(target=threadman).start()
+Thread.daemon = True
+print("happesns")
+def send_event(event_name):
+    """
+    Send an event to MixPanel without properties
+    :param event_name: Name of the event
+    :return: None
+    """
+    global MIXPANEL
+
+    MIXPANEL.set_event_name(event_name)
+    MIXPANEL.send_event()
+
+
+if __name__ == "__main__":
+    # send_event("Project Initialized")
+    # Window.fullscreen = 'auto'
+    ProjectNameGUI().run()
