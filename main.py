@@ -150,12 +150,15 @@ motor_2.go_to(199 * microstepping)
 motor_4.go_to(-76 * microstepping)
 motor_5.go_to(-76 * microstepping)
 motor_6.go_to(-76 * microstepping)
-motor_1.set_speed(15)
-motor_2.set_speed(15)
-motor_3.set_speed(15)
-motor_4.set_speed(15)
-motor_5.set_speed(15)
-motor_6.set_speed(15)
+motor_1.set_speed(13)
+motor_2.set_speed(13)
+motor_3.set_speed(13)
+motor_4.set_speed(13)
+motor_5.set_speed(13)
+motor_6.set_speed(13)
+motor_4.set_limit_hardstop(False)
+motor_5.set_limit_hardstop(False)
+motor_6.set_limit_hardstop(False)
 GAIN = 1
 increment = 1
 # Create an ADS1115 ADC (16-bit) instance.
@@ -461,11 +464,11 @@ def threadman():
         movement_amount = round(scale_joystick_value(adc_red.read_adc(1, gain=GAIN)) * increment)
         if (movement_amount == 0):
             motor_4.softStop()
-        if movement_amount is not 0 and not motor_4.is_busy() or movement_amount is not 0 and motor_4.getPosition() >=7000 or motor_4.getPosition() <=-7000:
+        if movement_amount is not 0 and not motor_4.is_busy() or movement_amount is not 0 and motor_4.getPosition() >=1000 or motor_4.getPosition() <=-7000:
             #print(motor_4.getPosition())
             print(movement_amount)
             motor_4.softStop()
-            if(motor_4.getPosition() >=7000 & movement_amount!=-1):
+            if(motor_4.getPosition() >=1000 & movement_amount==-1 or motor_4.getPosition() >=1000 & movement_amount == 0 ):
                 print(motor_4.getPosition())
                 motor_4.stop()
                 print("yep")
@@ -479,10 +482,10 @@ def threadman():
         movement_amount = round(scale_joystick_value(adc_blue.read_adc(1, gain=GAIN)) * increment)
         if (movement_amount == 0):
             motor_5.softStop()
-        if movement_amount is not 0 and not motor_5.is_busy() or movement_amount is not 0 and motor_5.getPosition() >=7000 or motor_5.getPosition() <=-7000:
+        if movement_amount is not 0 and not motor_5.is_busy() or movement_amount is not 0 and motor_5.getPosition() >=1000 or motor_5.getPosition() <=-7000:
             print(motor_5.getPosition())
             motor_5.softStop()
-            if (motor_5.getPosition() >= 7000 & movement_amount != -1):
+            if (motor_5.getPosition() >= 1000 & movement_amount == -1 or motor_5.getPosition() >= 1000 & movement_amount == 0):
                 print(motor_5.getPosition())
                 motor_5.stop()
                 print("yep")
@@ -495,10 +498,10 @@ def threadman():
         movement_amount = round(scale_joystick_value(adc_green.read_adc(1, gain=GAIN)) * increment)
         if (movement_amount == 0):
             motor_6.softStop()
-        if movement_amount is not 0 and not motor_6.is_busy() or movement_amount is not 0 and motor_6.getPosition() >=7000 or motor_6.getPosition() <=-7000:
+        if movement_amount is not 0 and not motor_6.is_busy() or movement_amount is not 0 and motor_6.getPosition() >=1000 or motor_6.getPosition() <=-7000:
             print(motor_6.getPosition())
             motor_6.softStop()
-            if (motor_6.getPosition() >= 7000 & movement_amount != -1):
+            if (motor_6.getPosition() >= 1000 & movement_amount == -1 or motor_6.getPosition() >= 1000 & movement_amount == 0):
                 print(motor_6.getPosition())
                 motor_6.stop()
                 print("yep")
