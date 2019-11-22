@@ -181,13 +181,11 @@ class MainScreen(Screen):
         if(game == False):
             game = True
             gamer = False
-            Thread(target = self.idleThread()).start()
-            Thread.daemon = True
+            Thread(target = self.idleThread(), daemon=True).start()
         else:
             gamer = True
             game = False
-            Thread(target=threadman).start()
-            Thread.daemon = True
+            Thread(target=threadman, daemon=True).start()
             game = False
     def idleThread(self):
         global a
@@ -197,7 +195,18 @@ class MainScreen(Screen):
         global e
         global f
         global change
+        global change2
+        global change3
+        global change4
+        global change5
+        global change6
         change = 0
+        change2 = 0
+        change3 = 0
+        change3 = 0
+        change4 = 0
+        change5 = 0
+        change6 = 0
         a = 100
         b = 100
         c = 100
@@ -207,122 +216,93 @@ class MainScreen(Screen):
 
         while game == True:
             change = change + 1
-            if not motor_1.is_busy() or change == 10:
-                motor_1.start_relative_move(a)
-                if (change == 10):
+            change2 = change2 + 1
+            change3 = change3 + 1
+            change4 = change4 + 1
+            change5 = change5 + 1
+            change6 = change6 + 1
+
+            if not motor_1.is_busy() or change == 1000:
+                if (change == 1000):
                     motor_1.stop()
-                    if (a == 100):
-                        a = -100
-                    else:
-                        a = 100
+                    a = a * -1
                     motor_1.start_relative_move(a)
                     change = 0
-            if motor_1.getPosition() >= 9000 or motor_1.getPosition() <= 3000:
+                else:
+                    motor_1.start_relative_move(a)
+            if motor_1.getPosition() >= 9000 and a == 100 or motor_1.getPosition() <= 3000 and a == -100:
                 motor_1.stop()
+                a = a * -1
+                motor_1.start_relative_move(a)
+
                 print("stoppeders")
-                if (a == 100):
-                    a = -100
-                    motor_1.start_relative_move(a)
-                else:
-                    a = 100
-                    motor_1.start_relative_move(a)
-            if not motor_2.is_busy() or change ==10:
-                motor_2.start_relative_move(b)
-                if (change == 10):
+            if not motor_2.is_busy() or change2 ==1000:
+
+                if (change2 == 1000):
                     motor_2.stop()
-                    if(b == 100):
-                        b = -100
-                    else:
-                        b = 100
+                    b = b * -1
                     motor_2.start_relative_move(b)
-                    change = 0
-            if motor_2.getPosition() >= 9000 or motor_2.getPosition() <= 3000:
+                    change2 = 0
+                else:
+                    motor_2.start_relative_move(b)
+            if motor_2.getPosition() >= 9000 and b == 100 or motor_2.getPosition() <= 3000 and b == -100:
                 motor_2.stop()
+                b = b* -1
                 print("stoppeders")
-                if (b == 100):
-                    b = -100
-                    motor_2.start_relative_move(b)
-                else:
-                    b = 100
-                    motor_2.start_relative_move(b)
-            if not motor_3.is_busy() or change == 10:
-                motor_3.start_relative_move(c)
-                if (change == 10):
+                motor_1.start_relative_move(b)
+            if not motor_3.is_busy() or change3 == 1000:
+                if (change3 == 1000):
                     motor_3.stop()
-                    if (c == 100):
-                        c = -100
-                    else:
-                        c = 100
+                    c = c * -1
                     motor_3.start_relative_move(c)
-                    change = 0
-            if motor_3.getPosition() >= 9000 or motor_3.getPosition() <= 3000:
+                    change3 = 0
+                else:
+                    motor_3.start_relative_move(c)
+            if motor_3.getPosition() >= 9000 and c == 100 or motor_3.getPosition() <= 3000 and c == -100:
                 motor_3.stop()
+                c = c * -1
                 print("stoppeders")
-                if (c == 100):
-                    c = -100
-                    motor_3.start_relative_move(c)
-
-                else:
-                    c = 100
-                    motor_3.start_relative_move(c)
-            if not motor_4.is_busy() or change == 10:
-                motor_4.start_relative_move(a)
-                if (change == 10):
+                motor_3.start_relative_move(c)
+            if not motor_4.is_busy() or change4 == 1000:
+                if (change4 == 1000):
                     motor_4.stop()
-                    if (d == 100):
-                        d = -100
-                    else:
-                        d = 100
+                    d = d * -1
                     motor_4.start_relative_move(d)
-                    change = 0
-            if motor_4.getPosition() >= 1000 or motor_4.getPosition() <= -7000:
+                    change4 = 0
+                else:
+                    motor_4.start_relative_move(d)
+            if motor_4.getPosition() >= 1000 and d == 100 or motor_4.getPosition() <= -7000 and d == -100:
                 motor_4.stop()
+                d = d *-1
                 print("stoppeders")
-                if (d == 100):
-                    d = -100
-                    motor_4.start_relative_move(d)
-                else:
-                    d = 100
-                    motor_4.start_relative_move(d)
+                motor_4.start_relative_move(d)
 
-            if not motor_5.is_busy() or change ==10:
-                motor_5.start_relative_move(b)
-                if (change == 10):
+            if not motor_5.is_busy() or change5 ==1000:
+                if (change5 == 1000):
                     motor_5.stop()
-                    if (e == 100):
-                        e = -100
-                    else:
-                        e = 100
+                    e = e * -1
                     motor_5.start_relative_move(e)
-                    change = 0
-            if motor_5.getPosition() >= 1000 or motor_5.getPosition() <= -7000:
+                    change5 = 0
+                else:
+                    motor_5.start_relative_move(e)
+            if motor_5.getPosition() >= 1000 and e == 100 or motor_5.getPosition() <= -7000 and e == -100:
                 motor_5.stop()
+                e = e * -1
                 print("stoppeders")
-                if (e == 100):
-                    e = -100
-                    motor_5.start_relative_move(e)
-                else:
-                    e = 100
-                    motor_5.start_relative_move(e)
-            if not motor_6.is_busy() or change == 10:
-                motor_6.start_relative_move(c)
-                if (change == 10):
+                motor_5.start_relative_move(e)
+            if not motor_6.is_busy() or change6 == 1000:
+                if (change6 == 1000):
                     motor_6.stop()
-                    if (f == 100):
-                        f = -100
-                    else:
-                        f = 100
+                    f = f * -1
                     motor_6.start_relative_move(f)
-                    change = 0
-            if motor_6.getPosition() >= 1000 or motor_6.getPosition() <= -7000:
-                motor_6.stop()
-                print("stoppeders")
-                if (f == 100):
-                    f = -100
-                    motor_6.start_relative_move(f)
+                    change6 = 0
                 else:
-                    f = 100
                     motor_6.start_relative_move(f)
+            if motor_6.getPosition() >= 1000 and f == 100 or motor_6.getPosition() <= -7000 and f ==-100:
+                motor_6.stop()
+                f = f * -1
+                print("stoppeders")
+                motor_6.start_relative_move(f)
 
     def admin_action(self):
         """
