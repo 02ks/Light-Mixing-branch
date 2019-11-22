@@ -223,11 +223,9 @@ class MainScreen(Screen):
                 if (a == 100):
                     a = -100
                     motor_1.start_relative_move(a)
-                    sleep(.05)
                 else:
                     a = 100
                     motor_1.start_relative_move(a)
-                    sleep(.05)
             if not motor_2.is_busy() or change ==10:
                 motor_2.start_relative_move(b)
                 if (change == 10):
@@ -244,11 +242,9 @@ class MainScreen(Screen):
                 if (b == 100):
                     b = -100
                     motor_2.start_relative_move(b)
-                    sleep(.05)
                 else:
                     b = 100
                     motor_2.start_relative_move(b)
-                    sleep(.05)
             if not motor_3.is_busy() or change == 10:
                 motor_3.start_relative_move(c)
                 if (change == 10):
@@ -265,11 +261,10 @@ class MainScreen(Screen):
                 if (c == 100):
                     c = -100
                     motor_3.start_relative_move(c)
-                    sleep(.05)
+
                 else:
                     c = 100
                     motor_3.start_relative_move(c)
-                    sleep(.05)
             if not motor_4.is_busy() or change == 10:
                 motor_4.start_relative_move(a)
                 if (change == 10):
@@ -280,17 +275,16 @@ class MainScreen(Screen):
                         d = 100
                     motor_4.start_relative_move(d)
                     change = 0
-            if motor_4.getPosition() >= 7000 or motor_4.getPosition() <= -7000:
+            if motor_4.getPosition() >= 1000 or motor_4.getPosition() <= -7000:
                 motor_4.stop()
                 print("stoppeders")
                 if (d == 100):
                     d = -100
                     motor_4.start_relative_move(d)
-                    sleep(.05)
                 else:
                     d = 100
                     motor_4.start_relative_move(d)
-                    sleep(.05)
+
             if not motor_5.is_busy() or change ==10:
                 motor_5.start_relative_move(b)
                 if (change == 10):
@@ -301,17 +295,15 @@ class MainScreen(Screen):
                         e = 100
                     motor_5.start_relative_move(e)
                     change = 0
-            if motor_5.getPosition() >= 7000 or motor_2.getPosition() <= -7000:
+            if motor_5.getPosition() >= 1000 or motor_5.getPosition() <= -7000:
                 motor_5.stop()
                 print("stoppeders")
                 if (e == 100):
                     e = -100
                     motor_5.start_relative_move(e)
-                    sleep(.05)
                 else:
                     e = 100
                     motor_5.start_relative_move(e)
-                    sleep(.05)
             if not motor_6.is_busy() or change == 10:
                 motor_6.start_relative_move(c)
                 if (change == 10):
@@ -322,17 +314,15 @@ class MainScreen(Screen):
                         f = 100
                     motor_6.start_relative_move(f)
                     change = 0
-            if motor_6.getPosition() >= 7000 or motor_3.getPosition() <= -7000:
+            if motor_6.getPosition() >= 1000 or motor_6.getPosition() <= -7000:
                 motor_6.stop()
                 print("stoppeders")
                 if (f == 100):
                     f = -100
                     motor_6.start_relative_move(f)
-                    sleep(.05)
                 else:
                     f = 100
                     motor_6.start_relative_move(f)
-                    sleep(.05)
 
     def admin_action(self):
         """
