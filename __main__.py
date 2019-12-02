@@ -181,7 +181,9 @@ adc_green = Adafruit_ADS1x15.ADS1115(0x49)
 global gamer
 gamer = True
 clamp = lambda n, min_n, max_n: max(min(max_n, n), min_n)
-
+global dsaf
+global dsaf2
+global dsaf3
 class MainScreen(Screen):
     """
     Class to handle the main screen and its associated touch events
@@ -191,15 +193,9 @@ class MainScreen(Screen):
     def idle(self):
         global game
         global gamer
-        if(game == False):
-            game = True
-            gamer = False
-            Thread(target=self.idleThread(), daemon=True).start()
-        else:
-            gamer = True
-            game = False
-            Thread(target=threadman, daemon=True).start()
-            game = False
+        game = True
+        gamer = False
+        Thread(target=self.idleThread(), daemon=True).start()
 
     def init(self):
         motor_1.free()
@@ -242,7 +238,7 @@ class MainScreen(Screen):
         motor_5.set_limit_hardstop(False)
         motor_6.set_limit_hardstop(False)
         motor_3.go_to(199 * microstepping)
-        sleep(3)
+        sleep(4)
 
     def idleThread(self):
         global a
@@ -252,13 +248,10 @@ class MainScreen(Screen):
         global gamer
         global e
         global game
-        global dsaf
-        dsaf = adc_red.read_adc(0, gain=GAIN)
-        global dsaf2
-        dsaf2 = adc_blue.read_adc(0, gain=GAIN)
-        global dsaf3
-        dsaf3 = adc_green.read_adc(0, gain=GAIN)
         global f
+        global dsaf
+        global dsaf2
+        global dsaf3
         global change
         global change2
         global change3
@@ -373,6 +366,7 @@ class MainScreen(Screen):
                 self.init()
                 gamer = True
                 game = False
+
                 Thread(target=threadman, daemon=True).start()
             if (dsaf2 - adc_blue.read_adc(0, gain=GAIN) >= 1000 or dsaf2 - adc_blue.read_adc(0, gain=GAIN) <= -1000):
                 self.init()
@@ -505,7 +499,13 @@ def joy_val_filter(value):
 
 
 def threadman():
+    global dsaf
+    global dsaf2
+    global dsaf3
     while gamer ==True:
+        dsaf = adc_red.read_adc(0, gain=GAIN)
+        dsaf2 = adc_blue.read_adc(0, gain=GAIN)
+        dsaf3 = adc_green.read_adc(0, gain=GAIN)
         led.change_percentage(0, clamp(value_as_percent("red", adc_red.read_adc(0, gain=GAIN)), 0, 100))
         led.change_percentage(1, clamp(value_as_percent("red", adc_green.read_adc(0, gain=GAIN)), 0, 100))
         led.change_percentage(2, clamp(value_as_percent("red", adc_blue.read_adc(0, gain=GAIN)), 0, 100))
