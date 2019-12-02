@@ -254,6 +254,10 @@ class MainScreen(Screen):
         global game
         global dsaf
         dsaf = adc_red.read_adc(0, gain=GAIN)
+        global dsaf2
+        dsaf2 = adc_blue.read_adc(0, gain=GAIN)
+        global dsaf3
+        dsaf3 = adc_green.read_adc(0, gain=GAIN)
         global f
         global change
         global change2
@@ -370,7 +374,16 @@ class MainScreen(Screen):
                 gamer = True
                 game = False
                 Thread(target=threadman, daemon=True).start()
-
+            if (dsaf2 - adc_blue.read_adc(0, gain=GAIN) >= 1000 or dsaf2 - adc_blue.read_adc(0, gain=GAIN) <= -1000):
+                self.init()
+                gamer = True
+                game = False
+                Thread(target=threadman, daemon=True).start()
+            if (dsaf3 - adc_green.read_adc(0, gain=GAIN) >= 1000 or dsaf3 - adc_green.read_adc(0, gain=GAIN) <= -1000):
+                self.init()
+                gamer = True
+                game = False
+                Thread(target=threadman, daemon=True).start()
 
     def admin_action(self):
         """
