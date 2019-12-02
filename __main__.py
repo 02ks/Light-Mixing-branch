@@ -184,6 +184,18 @@ clamp = lambda n, min_n, max_n: max(min(max_n, n), min_n)
 global dsaf
 global dsaf2
 global dsaf3
+global dsaf4
+global dsaf5
+global dsaf6
+global dsaf7
+global dsaf8
+global dsaf9
+dsaf4 = adc_red.read_adc(1, gain=GAIN)
+dsaf5 = adc_blue.read_adc(1, gain=GAIN)
+dsaf6 = adc_green.read_adc(1, gain=GAIN)
+dsaf7 = adc_red.read_adc(2, gain=GAIN)
+dsaf8 = adc_blue.read_adc(2, gain=GAIN)
+dsaf9 = adc_green.read_adc(2, gain=GAIN)
 class MainScreen(Screen):
     """
     Class to handle the main screen and its associated touch events
@@ -193,11 +205,13 @@ class MainScreen(Screen):
     def idle(self):
         global game
         global gamer
-        game = True
-        gamer = False
-        Thread(target=self.idleThread(), daemon=True).start()
+        if(game == False):
+            game = True
+            gamer = False
+            Thread(target=self.idleThread(), daemon=True).start()
 
     def init(self):
+
         motor_1.free()
         sleep(.05)
         motor_2.free()
@@ -378,6 +392,38 @@ class MainScreen(Screen):
                 gamer = True
                 game = False
                 Thread(target=threadman, daemon=True).start()
+            if (dsaf4 - adc_red.read_adc(1, gain=GAIN) >= 1000 or dsaf4 - adc_red.read_adc(1, gain=GAIN) <= -1000):
+                self.init()
+                gamer = True
+                game = False
+
+                Thread(target=threadman, daemon=True).start()
+            if (dsaf5 - adc_blue.read_adc(1, gain=GAIN) >= 1000 or dsaf5 - adc_blue.read_adc(1, gain=GAIN) <= -1000):
+                self.init()
+                gamer = True
+                game = False
+                Thread(target=threadman, daemon=True).start()
+            if (dsaf6 - adc_green.read_adc(1, gain=GAIN) >= 1000 or dsaf6 - adc_green.read_adc(1, gain=GAIN) <= -1000):
+                self.init()
+                gamer = True
+                game = False
+                Thread(target=threadman, daemon=True).start()
+            if (dsaf7 - adc_red.read_adc(2, gain=GAIN) >= 1000 or dsaf7 - adc_red.read_adc(2, gain=GAIN) <= -1000):
+                self.init()
+                gamer = True
+                game = False
+
+                Thread(target=threadman, daemon=True).start()
+            if (dsaf8 - adc_blue.read_adc(2, gain=GAIN) >= 1000 or dsaf8 - adc_blue.read_adc(2, gain=GAIN) <= -1000):
+                self.init()
+                gamer = True
+                game = False
+                Thread(target=threadman, daemon=True).start()
+            if (dsaf9 - adc_green.read_adc(2, gain=GAIN) >= 1000 or dsaf9 - adc_green.read_adc(2, gain=GAIN) <= -1000):
+                self.init()
+                gamer = True
+                game = False
+                Thread(target=threadman, daemon=True).start()
 
     def admin_action(self):
         """
@@ -502,6 +548,12 @@ def threadman():
     global dsaf
     global dsaf2
     global dsaf3
+    global dsaf4
+    global dsaf5
+    global dsaf6
+    global dsaf7
+    global dsaf8
+    global dsaf9
     while gamer ==True:
         dsaf = adc_red.read_adc(0, gain=GAIN)
         dsaf2 = adc_blue.read_adc(0, gain=GAIN)
