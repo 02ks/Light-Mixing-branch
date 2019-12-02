@@ -2,8 +2,13 @@
     name: 'main'
     FloatLayout:
         size_hint: None, None
+
+    CustomImage:
+        source: "rgb3.jpeg"
+        allow_stretch: True
+        keep_ratio: True
+
     DPEAButton:
-        # Quit button
         size: 200, 200
         center_x: root.width * 0.5
         center_y: root.height * 0.5
