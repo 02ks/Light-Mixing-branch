@@ -191,7 +191,7 @@ class MainScreen(Screen):
         if(game == False):
             game = True
             gamer = False
-            Thread(target = self.idleThread(), daemon=True).start()
+            Thread(target=self.idleThread(), daemon=True).start()
         else:
             gamer = True
             game = False
@@ -202,7 +202,11 @@ class MainScreen(Screen):
         global b
         global c
         global d
+        global gamer
         global e
+        global game
+        global dsaf
+        dsaf = adc_red.read_adc(0, gain=GAIN)
         global f
         global change
         global change2
@@ -313,6 +317,50 @@ class MainScreen(Screen):
                 f = f * -1
                 print("stoppeders")
                 motor_6.start_relative_move(f)
+            if(dsaf - adc_red.read_adc(0, gain=GAIN) >= 1000 or dsaf - adc_red.read_adc(0, gain=GAIN) <= -1000):
+                motor_1.free()
+                sleep(.05)
+                motor_2.free()
+                sleep(.05)
+                motor_3.free()
+                sleep(.05)
+                motor_4.free()
+                sleep(.05)
+                motor_5.free()
+                sleep(.05)
+                motor_6.free()
+                sleep(2)
+                motor_1.set_speed(50)
+                motor_2.set_speed(50)
+                motor_3.set_speed(50)
+                motor_4.set_speed(50)
+                motor_5.set_speed(50)
+                motor_6.set_speed(50)
+                motor_1.home(0)
+                motor_2.home(0)
+                motor_4.home(1)
+                motor_5.home(1)
+                motor_6.home(1)
+                sleep(.5)
+                motor_3.home(0)
+                motor_1.go_to(199 * microstepping)
+                motor_2.go_to(199 * microstepping)
+                motor_4.go_to(-76 * microstepping)
+                motor_5.go_to(-76 * microstepping)
+                motor_6.go_to(-76 * microstepping)
+                motor_1.set_speed(13)
+                motor_2.set_speed(13)
+                motor_3.set_speed(13)
+                motor_4.set_speed(13)
+                motor_5.set_speed(13)
+                motor_6.set_speed(13)
+                motor_3.go_to(199 * microstepping)
+                sleep(3)
+                gamer = True
+                game = False
+
+                Thread(target=threadman, daemon=True).start()
+
 
     def admin_action(self):
         """
