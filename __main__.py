@@ -142,6 +142,7 @@ for motor in motors:
     motor.setAccel(0xF00)
     motor.setDecel(0xF00)
     motor.set_micro_steps(microstepping)
+
 motor_1.set_speed(50)
 motor_2.set_speed(50)
 motor_3.set_speed(50)
@@ -169,6 +170,8 @@ motor_6.set_speed(13)
 motor_4.set_limit_hardstop(False)
 motor_5.set_limit_hardstop(False)
 motor_6.set_limit_hardstop(False)
+motor_3.go_to(199 * microstepping)
+sleep(3)
 GAIN = 1
 increment = 1
 # Create an ADS1115 ADC (16-bit) instance.
@@ -197,6 +200,50 @@ class MainScreen(Screen):
             game = False
             Thread(target=threadman, daemon=True).start()
             game = False
+
+    def init(self):
+        motor_1.free()
+        sleep(.05)
+        motor_2.free()
+        sleep(.05)
+        motor_3.free()
+        sleep(.05)
+        motor_4.free()
+        sleep(.05)
+        motor_5.free()
+        sleep(.05)
+        motor_6.free()
+        sleep(2)
+        motor_1.set_speed(50)
+        motor_2.set_speed(50)
+        motor_3.set_speed(50)
+        motor_4.set_speed(50)
+        motor_5.set_speed(50)
+        motor_6.set_speed(50)
+        motor_1.home(0)
+        motor_2.home(0)
+        motor_4.home(1)
+        motor_5.home(1)
+        motor_6.home(1)
+        sleep(.5)
+        motor_3.home(0)
+        motor_1.go_to(199 * microstepping)
+        motor_2.go_to(199 * microstepping)
+        motor_4.go_to(-76 * microstepping)
+        motor_5.go_to(-76 * microstepping)
+        motor_6.go_to(-76 * microstepping)
+        motor_1.set_speed(13)
+        motor_2.set_speed(13)
+        motor_3.set_speed(13)
+        motor_4.set_speed(13)
+        motor_5.set_speed(13)
+        motor_6.set_speed(13)
+        motor_4.set_limit_hardstop(False)
+        motor_5.set_limit_hardstop(False)
+        motor_6.set_limit_hardstop(False)
+        motor_3.go_to(199 * microstepping)
+        sleep(3)
+
     def idleThread(self):
         global a
         global b
@@ -227,6 +274,7 @@ class MainScreen(Screen):
         d = 100
         e = 100
         f = 100
+
 
         while game == True:
             change = change + 1
@@ -318,47 +366,9 @@ class MainScreen(Screen):
                 print("stoppeders")
                 motor_6.start_relative_move(f)
             if(dsaf - adc_red.read_adc(0, gain=GAIN) >= 1000 or dsaf - adc_red.read_adc(0, gain=GAIN) <= -1000):
-                motor_1.free()
-                sleep(.05)
-                motor_2.free()
-                sleep(.05)
-                motor_3.free()
-                sleep(.05)
-                motor_4.free()
-                sleep(.05)
-                motor_5.free()
-                sleep(.05)
-                motor_6.free()
-                sleep(2)
-                motor_1.set_speed(50)
-                motor_2.set_speed(50)
-                motor_3.set_speed(50)
-                motor_4.set_speed(50)
-                motor_5.set_speed(50)
-                motor_6.set_speed(50)
-                motor_1.home(0)
-                motor_2.home(0)
-                motor_4.home(1)
-                motor_5.home(1)
-                motor_6.home(1)
-                sleep(.5)
-                motor_3.home(0)
-                motor_1.go_to(199 * microstepping)
-                motor_2.go_to(199 * microstepping)
-                motor_4.go_to(-76 * microstepping)
-                motor_5.go_to(-76 * microstepping)
-                motor_6.go_to(-76 * microstepping)
-                motor_1.set_speed(13)
-                motor_2.set_speed(13)
-                motor_3.set_speed(13)
-                motor_4.set_speed(13)
-                motor_5.set_speed(13)
-                motor_6.set_speed(13)
-                motor_3.go_to(199 * microstepping)
-                sleep(3)
+                self.init()
                 gamer = True
                 game = False
-
                 Thread(target=threadman, daemon=True).start()
 
 
@@ -479,8 +489,7 @@ def joy_val_filter(value):
         return 0
     else:
         return value
-motor_3.go_to(199 * microstepping)
-sleep(3)
+
 
 def threadman():
     while gamer ==True:
