@@ -7,7 +7,7 @@ from kivy.uix.image import Image
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
-
+import random
 from pidev.MixPanel import MixPanel
 from pidev.kivy.PassCodeScreen import PassCodeScreen
 from pidev.kivy.PauseScreen import PauseScreen
@@ -247,13 +247,13 @@ class MainScreen(Screen):
         global change4
         global change5
         global change6
-        change = 0
-        change2 = 0
-        change3 = 0
-        change3 = 0
-        change4 = 0
-        change5 = 0
-        change6 = 0
+        change = random.random() * 999
+        change2 = random.random() * 999
+        change3 = random.random() * 999
+        change3 = random.random() * 999
+        change4 = random.random() * 999
+        change5 = random.random() * 999
+        change6 = random.random() * 999
         a = 100
         b = 100
         c = 100
@@ -274,7 +274,7 @@ class MainScreen(Screen):
                     motor_1.stop()
                     a = a * -1
                     motor_1.start_relative_move(a)
-                    change = 0
+                    change = random.random() * 999
                 else:
                     motor_1.start_relative_move(a)
             if motor_1.getPosition() >= 9000 and a == 100 or motor_1.getPosition() <= 3000 and a == -100:
@@ -288,7 +288,7 @@ class MainScreen(Screen):
                     motor_2.stop()
                     b = b * -1
                     motor_2.start_relative_move(b)
-                    change2 = 0
+                    change2 = random.random() * 999
                 else:
                     motor_2.start_relative_move(b)
             if motor_2.getPosition() >= 9000 and b == 100 or motor_2.getPosition() <= 3000 and b == -100:
@@ -301,7 +301,7 @@ class MainScreen(Screen):
                     motor_3.stop()
                     c = c * -1
                     motor_3.start_relative_move(c)
-                    change3 = 0
+                    change3 = random.random() * 999
                 else:
                     motor_3.start_relative_move(c)
             if motor_3.getPosition() >= 9000 and c == 100 or motor_3.getPosition() <= 3000 and c == -100:
@@ -314,7 +314,7 @@ class MainScreen(Screen):
                     motor_4.stop()
                     d = d * -1
                     motor_4.start_relative_move(d)
-                    change4 = 0
+                    change4 = random.random() * 999
                 else:
                     motor_4.start_relative_move(d)
             if motor_4.getPosition() >= 1000 and d == 100 or motor_4.getPosition() <= -7000 and d == -100:
@@ -328,7 +328,7 @@ class MainScreen(Screen):
                     motor_5.stop()
                     e = e * -1
                     motor_5.start_relative_move(e)
-                    change5 = 0
+                    change5 = random.random() * 999
                 else:
                     motor_5.start_relative_move(e)
             if motor_5.getPosition() >= 1000 and e == 100 or motor_5.getPosition() <= -7000 and e == -100:
@@ -341,7 +341,7 @@ class MainScreen(Screen):
                     motor_6.stop()
                     f = f * -1
                     motor_6.start_relative_move(f)
-                    change6 = 0
+                    change6 = random.random() * 999
                 else:
                     motor_6.start_relative_move(f)
             if motor_6.getPosition() >= 1000 and f == 100 or motor_6.getPosition() <= -7000 and f == -100:
