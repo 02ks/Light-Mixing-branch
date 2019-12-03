@@ -17,9 +17,9 @@ from pidev.stepper import stepper
 from time import sleep
 from threading import Thread
 from Slush.Devices import L6480Registers as LReg6480, L6470Registers as LReg6470
+import Adafruit_Ease_Lib as ael
 
 sys.path.insert(0, "/home/pi/packages/Adafruit_16_Channel_PWM_Module_Easy_Library")
-import Adafruit_Ease_Lib as ael
 led = ael.Adafruit_Ease_Lib()
 led.change_frequency(2000)
 pwms = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 , 13, 14, 15]
@@ -41,12 +41,14 @@ AXIS_MOTOR_SETTINGS = {
     'low_speed_opt': False,
     'homing_direction': 0
 }
+
 MIXPANEL_TOKEN = "x"
 MIXPANEL = MixPanel("Project Name", MIXPANEL_TOKEN)
 
 SCREEN_MANAGER = ScreenManager()
 MAIN_SCREEN_NAME = 'main'
 ADMIN_SCREEN_NAME = 'admin'
+
 
 class CustomImage(Image):
     def __init__(self, *args, **kwargs):
@@ -55,6 +57,7 @@ class CustomImage(Image):
 
     def _update_texture_filters(self, image, texture):
         texture.mag_filter = 'nearest'
+
 
 class ProjectNameGUI(App):
     """
@@ -67,7 +70,9 @@ class ProjectNameGUI(App):
         :return: Kivy Screen Manager instance
         """
         return SCREEN_MANAGER
-Window.clearcolor = (0, 0, 0, 1)  # White
+
+
+Window.clearcolor = (0, 0, 0, 1)
 
 
 class MainScreen(Screen):
@@ -89,31 +94,6 @@ class MainScreen(Screen):
         :return: None
         """
         SCREEN_MANAGER.current = 'passCode'
-
-# motor_1 = stepper(port=1, speed=AXIS_MOTOR_SETTINGS['max_speed'])
-# motor_2 = stepper(port=2, speed=AXIS_MOTOR_SETTINGS['max_speed'])
-# motor_3 = stepper(port=3, speed=AXIS_MOTOR_SETTINGS['max_speed'])
-# motor_4 = stepper(port=4, speed=AXIS_MOTOR_SETTINGS['max_speed'])
-# motor_5 = stepper(port=5, speed=AXIS_MOTOR_SETTINGS['max_speed'])
-# motor_6 = stepper(port=6, speed=AXIS_MOTOR_SETTINGS['max_speed'])
-#
-# motors = [motor_1, motor_2, motor_3, motor_4, motor_5, motor_6]
-# for motor in motors:
-#     motor.setCurrent(hold=AXIS_MOTOR_SETTINGS['hold_current'], run=AXIS_MOTOR_SETTINGS['run_current'],
-#                      acc=AXIS_MOTOR_SETTINGS['acc_current'], dec=AXIS_MOTOR_SETTINGS['dec_current'])
-#     motor.setMaxSpeed(AXIS_MOTOR_SETTINGS['max_speed'])
-#     motor.setMinSpeed(AXIS_MOTOR_SETTINGS['min_speed'])
-#     motor.setMicroSteps(AXIS_MOTOR_SETTINGS['micro_steps'])
-#     motor.setThresholdSpeed(AXIS_MOTOR_SETTINGS['threshold_speed'])
-#     motor.setOverCurrent(AXIS_MOTOR_SETTINGS['over_current'])
-#     motor.setStallCurrent(AXIS_MOTOR_SETTINGS['stall_current'])
-#     motor.setAccel(AXIS_MOTOR_SETTINGS['accel'])
-#     motor.setDecel(AXIS_MOTOR_SETTINGS['decel'])
-#     motor.setLowSpeedOpt(AXIS_MOTOR_SETTINGS['low_speed_opt'])
-#     motor.setParam(LReg.CONFIG, 0x3688)
-#     motor.home(0)
-#     while motor.isBusy():
-#         continue
 
 
 current = 30
@@ -174,10 +154,12 @@ motor_3.go_to(199 * microstepping)
 sleep(3)
 GAIN = 1
 increment = 1
+
 # Create an ADS1115 ADC (16-bit) instance.
 adc_red = Adafruit_ADS1x15.ADS1115(0x4A)
 adc_blue = Adafruit_ADS1x15.ADS1115(0x48)
 adc_green = Adafruit_ADS1x15.ADS1115(0x49)
+
 global gamer
 gamer = True
 clamp = lambda n, min_n, max_n: max(min(max_n, n), min_n)
@@ -196,22 +178,24 @@ dsaf6 = adc_green.read_adc(1, gain=GAIN)
 dsaf7 = adc_red.read_adc(2, gain=GAIN)
 dsaf8 = adc_blue.read_adc(2, gain=GAIN)
 dsaf9 = adc_green.read_adc(2, gain=GAIN)
+
+
 class MainScreen(Screen):
     """
     Class to handle the main screen and its associated touch events
     """
     global game
     game = False
+
     def idle(self):
         global game
         global gamer
-        if(game == False):
+        if game == False:
             game = True
             gamer = False
             Thread(target=self.idleThread(), daemon=True).start()
 
     def init(self):
-
         motor_1.free()
         sleep(.05)
         motor_2.free()
@@ -286,7 +270,6 @@ class MainScreen(Screen):
         e = 100
         f = 100
 
-
         while game == True:
             change = change + 1
             change2 = change2 + 1
@@ -296,7 +279,7 @@ class MainScreen(Screen):
             change6 = change6 + 1
 
             if not motor_1.is_busy() or change == 1000:
-                if (change == 1000):
+                if change == 1000:
                     motor_1.stop()
                     a = a * -1
                     motor_1.start_relative_move(a)
@@ -310,8 +293,7 @@ class MainScreen(Screen):
 
                 print("stoppeders")
             if not motor_2.is_busy() or change2 ==1000:
-
-                if (change2 == 1000):
+                if change2 == 1000:
                     motor_2.stop()
                     b = b * -1
                     motor_2.start_relative_move(b)
@@ -324,7 +306,7 @@ class MainScreen(Screen):
                 print("stoppeders")
                 motor_1.start_relative_move(b)
             if not motor_3.is_busy() or change3 == 1000:
-                if (change3 == 1000):
+                if change3 == 1000:
                     motor_3.stop()
                     c = c * -1
                     motor_3.start_relative_move(c)
@@ -337,7 +319,7 @@ class MainScreen(Screen):
                 print("stoppeders")
                 motor_3.start_relative_move(c)
             if not motor_4.is_busy() or change4 == 1000:
-                if (change4 == 1000):
+                if change4 == 1000:
                     motor_4.stop()
                     d = d * -1
                     motor_4.start_relative_move(d)
@@ -351,7 +333,7 @@ class MainScreen(Screen):
                 motor_4.start_relative_move(d)
 
             if not motor_5.is_busy() or change5 ==1000:
-                if (change5 == 1000):
+                if change5 == 1000:
                     motor_5.stop()
                     e = e * -1
                     motor_5.start_relative_move(e)
@@ -364,62 +346,59 @@ class MainScreen(Screen):
                 print("stoppeders")
                 motor_5.start_relative_move(e)
             if not motor_6.is_busy() or change6 == 1000:
-                if (change6 == 1000):
+                if change6 == 1000:
                     motor_6.stop()
                     f = f * -1
                     motor_6.start_relative_move(f)
                     change6 = 0
                 else:
                     motor_6.start_relative_move(f)
-            if motor_6.getPosition() >= 1000 and f == 100 or motor_6.getPosition() <= -7000 and f ==-100:
+            if motor_6.getPosition() >= 1000 and f == 100 or motor_6.getPosition() <= -7000 and f == -100:
                 motor_6.stop()
                 f = f * -1
                 print("stoppeders")
                 motor_6.start_relative_move(f)
-            if(dsaf - adc_red.read_adc(0, gain=GAIN) >= 1000 or dsaf - adc_red.read_adc(0, gain=GAIN) <= -1000):
-                self.init()
-                gamer = True
-                game = False
-
-                Thread(target=threadman, daemon=True).start()
-            if (dsaf2 - adc_blue.read_adc(0, gain=GAIN) >= 1000 or dsaf2 - adc_blue.read_adc(0, gain=GAIN) <= -1000):
+            if dsaf - adc_red.read_adc(0, gain=GAIN) >= 1000 or dsaf - adc_red.read_adc(0, gain=GAIN) <= -1000:
                 self.init()
                 gamer = True
                 game = False
                 Thread(target=threadman, daemon=True).start()
-            if (dsaf3 - adc_green.read_adc(0, gain=GAIN) >= 1000 or dsaf3 - adc_green.read_adc(0, gain=GAIN) <= -1000):
+            if dsaf2 - adc_blue.read_adc(0, gain=GAIN) >= 1000 or dsaf2 - adc_blue.read_adc(0, gain=GAIN) <= -1000:
                 self.init()
                 gamer = True
                 game = False
                 Thread(target=threadman, daemon=True).start()
-            if (dsaf4 - adc_red.read_adc(1, gain=GAIN) >= 1000 or dsaf4 - adc_red.read_adc(1, gain=GAIN) <= -1000):
-                self.init()
-                gamer = True
-                game = False
-
-                Thread(target=threadman, daemon=True).start()
-            if (dsaf5 - adc_blue.read_adc(1, gain=GAIN) >= 1000 or dsaf5 - adc_blue.read_adc(1, gain=GAIN) <= -1000):
+            if dsaf3 - adc_green.read_adc(0, gain=GAIN) >= 1000 or dsaf3 - adc_green.read_adc(0, gain=GAIN) <= -1000:
                 self.init()
                 gamer = True
                 game = False
                 Thread(target=threadman, daemon=True).start()
-            if (dsaf6 - adc_green.read_adc(1, gain=GAIN) >= 1000 or dsaf6 - adc_green.read_adc(1, gain=GAIN) <= -1000):
+            if dsaf4 - adc_red.read_adc(1, gain=GAIN) >= 1000 or dsaf4 - adc_red.read_adc(1, gain=GAIN) <= -1000:
                 self.init()
                 gamer = True
                 game = False
                 Thread(target=threadman, daemon=True).start()
-            if (dsaf7 - adc_red.read_adc(2, gain=GAIN) >= 1000 or dsaf7 - adc_red.read_adc(2, gain=GAIN) <= -1000):
-                self.init()
-                gamer = True
-                game = False
-
-                Thread(target=threadman, daemon=True).start()
-            if (dsaf8 - adc_blue.read_adc(2, gain=GAIN) >= 1000 or dsaf8 - adc_blue.read_adc(2, gain=GAIN) <= -1000):
+            if dsaf5 - adc_blue.read_adc(1, gain=GAIN) >= 1000 or dsaf5 - adc_blue.read_adc(1, gain=GAIN) <= -1000:
                 self.init()
                 gamer = True
                 game = False
                 Thread(target=threadman, daemon=True).start()
-            if (dsaf9 - adc_green.read_adc(2, gain=GAIN) >= 1000 or dsaf9 - adc_green.read_adc(2, gain=GAIN) <= -1000):
+            if dsaf6 - adc_green.read_adc(1, gain=GAIN) >= 1000 or dsaf6 - adc_green.read_adc(1, gain=GAIN) <= -1000:
+                self.init()
+                gamer = True
+                game = False
+                Thread(target=threadman, daemon=True).start()
+            if dsaf7 - adc_red.read_adc(2, gain=GAIN) >= 1000 or dsaf7 - adc_red.read_adc(2, gain=GAIN) <= -1000:
+                self.init()
+                gamer = True
+                game = False
+                Thread(target=threadman, daemon=True).start()
+            if dsaf8 - adc_blue.read_adc(2, gain=GAIN) >= 1000 or dsaf8 - adc_blue.read_adc(2, gain=GAIN) <= -1000:
+                self.init()
+                gamer = True
+                game = False
+                Thread(target=threadman, daemon=True).start()
+            if dsaf9 - adc_green.read_adc(2, gain=GAIN) >= 1000 or dsaf9 - adc_green.read_adc(2, gain=GAIN) <= -1000:
                 self.init()
                 gamer = True
                 game = False
@@ -432,6 +411,7 @@ class MainScreen(Screen):
         :return: None
         """
         SCREEN_MANAGER.current = 'passCode'
+
 
 class AdminScreen(Screen):
     """
@@ -514,6 +494,8 @@ class AdminScreen(Screen):
         sleep(.05)
         led.change_percentage(2, clamp(value_as_percent("red", 0), 0, 100))
         quit()
+
+
 def value_to_m(value):
     if value < 5:
         return 0
@@ -521,6 +503,7 @@ def value_to_m(value):
         return 100
     else:
         return value
+
 
 def value_as_percent(color, value):
     if color == "red":
@@ -530,8 +513,10 @@ def value_as_percent(color, value):
     if color == "blue":
         return value_to_m(((value-100)*100)/(11280-100))
 
+
 def scale_joystick_value(value):
     return (value - 6600)/6000
+
 
 def joy_val_filter(value):
     if value < -0.9:
@@ -554,7 +539,7 @@ def threadman():
     global dsaf7
     global dsaf8
     global dsaf9
-    while gamer ==True:
+    while gamer == True:
         dsaf = adc_red.read_adc(0, gain=GAIN)
         dsaf2 = adc_blue.read_adc(0, gain=GAIN)
         dsaf3 = adc_green.read_adc(0, gain=GAIN)
@@ -562,87 +547,84 @@ def threadman():
         led.change_percentage(1, clamp(value_as_percent("red", adc_green.read_adc(0, gain=GAIN)), 0, 100))
         led.change_percentage(2, clamp(value_as_percent("red", adc_blue.read_adc(0, gain=GAIN)), 0, 100))
 
-
         movement_amount = round(scale_joystick_value(adc_red.read_adc(1, gain=GAIN)) * increment)
-        if (movement_amount == 0):
+        if movement_amount == 0:
             motor_4.softStop()
         if movement_amount is not 0 and not motor_4.is_busy() or movement_amount is not 0 and motor_4.getPosition() >=1000 or motor_4.getPosition() <=-7000:
-            #print(motor_4.getPosition())
             print(movement_amount)
             motor_4.softStop()
-            if(motor_4.getPosition() >=1000 & movement_amount==-1 or motor_4.getPosition() >=1000 & movement_amount == 0 ):
+            if motor_4.getPosition() >=1000 & movement_amount==-1 or motor_4.getPosition() >=1000 & movement_amount == 0:
                 print(motor_4.getPosition())
                 motor_4.stop()
                 print("yep")
-            elif(motor_4.getPosition() <=-7000 & movement_amount<0):
+            elif motor_4.getPosition() <=-7000 & movement_amount<0:
                 motor_4.stop()
                 print("working")
             else:
                 motor_4.start_relative_move(movement_amount*100)
-            # print(motor_4.get_position())
 
         movement_amount = round(scale_joystick_value(adc_blue.read_adc(1, gain=GAIN)) * increment)
-        if (movement_amount == 0):
+        if movement_amount == 0:
             motor_5.softStop()
         if movement_amount is not 0 and not motor_5.is_busy() or movement_amount is not 0 and motor_5.getPosition() >=1000 or motor_5.getPosition() <=-7000:
             print(motor_5.getPosition())
             motor_5.softStop()
-            if (motor_5.getPosition() >= 1000 & movement_amount == -1 or motor_5.getPosition() >= 1000 & movement_amount == 0):
+            if motor_5.getPosition() >= 1000 & movement_amount == -1 or motor_5.getPosition() >= 1000 & movement_amount == 0:
                 print(motor_5.getPosition())
                 motor_5.stop()
                 print("yep")
-            elif (motor_5.getPosition() <= -7000 & movement_amount < 0):
+            elif motor_5.getPosition() <= -7000 & movement_amount < 0:
                 motor_5.stop()
                 print("working")
             else:
                 motor_5.start_relative_move(movement_amount*100)
 
         movement_amount = round(scale_joystick_value(adc_green.read_adc(1, gain=GAIN)) * increment)
-        if (movement_amount == 0):
+        if movement_amount == 0:
             motor_6.softStop()
         if movement_amount is not 0 and not motor_6.is_busy() or movement_amount is not 0 and motor_6.getPosition() >=1000 or motor_6.getPosition() <=-7000:
             print(motor_6.getPosition())
             motor_6.softStop()
-            if (motor_6.getPosition() >= 1000 & movement_amount == -1 or motor_6.getPosition() >= 1000 & movement_amount == 0):
+            if motor_6.getPosition() >= 1000 & movement_amount == -1 or motor_6.getPosition() >= 1000 & movement_amount == 0:
                 print(motor_6.getPosition())
                 motor_6.stop()
                 print("yep")
-            elif (motor_6.getPosition() <= -7000 & movement_amount < 0):
+            elif motor_6.getPosition() <= -7000 & movement_amount < 0:
                 motor_6.stop()
                 print("working")
             else:
                 motor_6.start_relative_move(movement_amount*100)
 
         movement_amount = round(scale_joystick_value(adc_red.read_adc(2, gain=GAIN)) * increment)
-        if (movement_amount == 0):
+        if movement_amount == 0:
             motor_1.softStop()
             print("stoppd")
         if movement_amount is not 0 and not motor_1.is_busy() or movement_amount is not 0 and motor_1.getPosition() >=14000 or motor_1.getPosition() <=-500:
             print(movement_amount)
             print(motor_1.getPosition())
             motor_1.softStop()
-            if (motor_1.getPosition() >= 14000 & movement_amount > 0):
+            if motor_1.getPosition() >= 14000 & movement_amount > 0:
                 print(motor_1.getPosition())
                 print("yep")
                 motor_1.softStop()
-            elif (motor_1.getPosition() <= 2000 & movement_amount <= 1):
+            elif motor_1.getPosition() <= 2000 & movement_amount <= 1:
                 print(motor_1.getPosition())
                 print("working")
                 motor_1.softStop()
             else:
                 motor_1.start_relative_move(-movement_amount*100)
         movement_amount = round(scale_joystick_value(adc_green.read_adc(2, gain=GAIN)-6000) * increment)
-        if (movement_amount == 0):
+        if movement_amount == 0:
             motor_2.softStop()
         if movement_amount is not 0 and not motor_2.is_busy() or movement_amount is not 0 and motor_2.getPosition() >=14000 or motor_2.getPosition() <=-500:
             print(movement_amount)
             print(motor_2.getPosition())
             motor_2.softStop()
-            if (motor_2.getPosition() >= 14000 & movement_amount > 0):
+            if motor_2.getPosition() >= 14000 & movement_amount > 0:
                 print(motor_2.getPosition())
                 print("yep")
                 motor_2.softStop()
-            elif (motor_2.getPosition() <= 2000 & movement_amount <= 1):
+            elif motor_2.getPosition() <= 2000 & movement_amount <= 1:
                 print(motor_2.getPosition())
                 print("working")
                 motor_2.softStop()
@@ -650,16 +632,16 @@ def threadman():
                 motor_2.start_relative_move(-movement_amount * 100)
 
         movement_amount = round(scale_joystick_value(adc_blue.read_adc(2, gain=GAIN)) * increment)
-        if (movement_amount == 0):
+        if movement_amount == 0:
             motor_3.softStop()
         if movement_amount is not 0 and not motor_3.is_busy() or movement_amount is not 0 and motor_3.getPosition() >=14000 or motor_3.getPosition() <=-500:
             print(movement_amount)
             print(motor_3.getPosition())
-            if (motor_3.getPosition() >= 14000 & movement_amount > 0):
+            if motor_3.getPosition() >= 14000 & movement_amount > 0:
                 print(motor_3.getPosition())
                 motor_3.softStop()
                 print("yep")
-            elif (motor_3.getPosition() <= 2000 & movement_amount <= 1):
+            elif motor_3.getPosition() <= 2000 & movement_amount <= 1:
                 print(motor_3.getPosition())
                 print("working")
                 motor_3.softStop()
@@ -667,9 +649,9 @@ def threadman():
                 motor_3.start_relative_move(-movement_amount * 100)
 
 
-        #print("red knob: " + str(adc_red.read_adc(0, gain = GAIN)) + "   red x: " + str(adc_red.read_adc(1, gain = GAIN)) + "  red y: " + str(adc_red.read_adc(2, gain = GAIN)),end = '        ')
-        #print("blue knob: " + str(adc_blue.read_adc(0, gain = GAIN)) + "   blue x: " + str(adc_blue.read_adc(1, gain = GAIN)) + "  blue y: " + str(adc_blue.read_adc(2, gain = GAIN)),end = '      ')
-        print("green knob: " + str(adc_green.read_adc(0, gain = GAIN)) + "   green x: " + str(adc_green.read_adc(1, gain = GAIN)) + "  green y: " + str(adc_green.read_adc(2, gain = GAIN)))
+        # print("red knob: " + str(adc_red.read_adc(0, gain = GAIN)) + "   red x: " + str(adc_red.read_adc(1, gain = GAIN)) + "  red y: " + str(adc_red.read_adc(2, gain = GAIN)),end = '        ')
+        # print("blue knob: " + str(adc_blue.read_adc(0, gain = GAIN)) + "   blue x: " + str(adc_blue.read_adc(1, gain = GAIN)) + "  blue y: " + str(adc_blue.read_adc(2, gain = GAIN)),end = '      ')
+        # print("green knob: " + str(adc_green.read_adc(0, gain = GAIN)) + "   green x: " + str(adc_green.read_adc(1, gain = GAIN)) + "  green y: " + str(adc_green.read_adc(2, gain = GAIN)))
 Builder.load_file('main.kv')
 SCREEN_MANAGER.add_widget(MainScreen(name=MAIN_SCREEN_NAME))
 SCREEN_MANAGER.add_widget(PassCodeScreen(name='passCode'))
@@ -679,6 +661,8 @@ SCREEN_MANAGER.add_widget(AdminScreen(name=ADMIN_SCREEN_NAME))
 Thread(target=threadman).start()
 Thread.daemon = True
 print("happesns")
+
+
 def send_event(event_name):
     """
     Send an event to MixPanel without properties
