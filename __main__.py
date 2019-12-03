@@ -17,9 +17,8 @@ from pidev.stepper import stepper
 from time import sleep
 from threading import Thread
 from Slush.Devices import L6480Registers as LReg6480, L6470Registers as LReg6470
-import Adafruit_Ease_Lib as ael
-
 sys.path.insert(0, "/home/pi/packages/Adafruit_16_Channel_PWM_Module_Easy_Library")
+import Adafruit_Ease_Lib as ael
 led = ael.Adafruit_Ease_Lib()
 led.change_frequency(2000)
 pwms = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 , 13, 14, 15]
