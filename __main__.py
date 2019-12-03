@@ -3,6 +3,7 @@ import Adafruit_ADS1x15
 import os
 
 from kivy.app import App
+from kivy.properties import ObjectProperty
 from kivy.uix.image import Image
 from kivy.core.window import Window
 from kivy.lang import Builder
@@ -72,27 +73,6 @@ class ProjectNameGUI(App):
 
 
 Window.clearcolor = (0, 0, 0, 1)
-
-
-class MainScreen(Screen):
-    """
-    Class to handle the main screen and its associated touch events
-    """
-
-    def pressed(self):
-        """
-        Function called on button touch event for button with id: testButton
-        :return: None
-        """
-        PauseScreen.pause(pause_scene_name='pauseScene', transition_back_scene='main', text="Test", pause_duration=5)
-
-    def admin_action(self):
-        """
-        Hidden admin button touch event. Transitions to passCodeScreen.
-        This method is called from pidev/kivy/PassCodeScreen.kv
-        :return: None
-        """
-        SCREEN_MANAGER.current = 'passCode'
 
 
 current = 30
@@ -185,6 +165,9 @@ class MainScreen(Screen):
     """
     global game
     game = False
+    bruhmst = ObjectProperty(None)
+    bruhmst2 = ObjectProperty(None)
+    bruhmst3 = ObjectProperty(None)
 
     def init(self):
         motor_1.free()
@@ -551,6 +534,9 @@ def threadman():
         led.change_percentage(0, clamp(value_as_percent("red", adc_red.read_adc(0, gain=GAIN)), 0, 100))
         led.change_percentage(1, clamp(value_as_percent("red", adc_green.read_adc(0, gain=GAIN)), 0, 100))
         led.change_percentage(2, clamp(value_as_percent("red", adc_blue.read_adc(0, gain=GAIN)), 0, 100))
+        #MainScreen.bruhmst.text = "Red Light: %s" % adc_red.read_adc(0, gain=GAIN)
+        #MainScreen.bruhmst2.text = "Blue Light: %s" % adc_blue.read_adc(0, gain=GAIN)
+       # MainScreen.bruhmst3.text = "Green Light: %s" % adc_green.read_adc(0, gain=GAIN)
 
         movement_amount = round(scale_joystick_value(adc_red.read_adc(1, gain=GAIN)) * increment)
         if movement_amount == 0:

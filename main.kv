@@ -1,5 +1,8 @@
 <MainScreen>:
     name: 'main'
+    bruhmst: bruhmst
+    bruhmst2: bruhmst2
+    bruhmst3: bruhmst3
     FloatLayout:
         size_hint: None, None
 
@@ -7,6 +10,27 @@
         source: "stuff.png"
         allow_stretch: True
         keep_ratio: True
+    Label:
+        id: bruhmst
+        text: "Red Light:"
+        font_size: 30
+        x: root.width * -.2
+        y: root.height * .3
+        color: 1, 1, 1, 1
+    Label:
+        id: bruhmst2
+        text: "Blue Light:"
+        font_size: 30
+        x: root.width * .2
+        y: root.height * .3
+        color: 1, 1, 1, 1
+    Label:
+        id: bruhmst3
+        text: "Green Light:"
+        font_size: 30
+        x: root.width * 0
+        y: root.height * .3
+        color: 1, 1, 1, 1
 
 
 
