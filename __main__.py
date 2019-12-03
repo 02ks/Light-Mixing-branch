@@ -158,7 +158,7 @@ dsaf7 = adc_red.read_adc(2, gain=GAIN)
 dsaf8 = adc_blue.read_adc(2, gain=GAIN)
 dsaf9 = adc_green.read_adc(2, gain=GAIN)
 
-PASSWORD = '7266'
+PASSWORD = '7266' # make different pw lead to different places?
 USERPW = ''
 
 passcode_screen_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "", "PassCodeScreen.kv")
