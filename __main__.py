@@ -151,6 +151,9 @@ global dsaf6
 global dsaf7
 global dsaf8
 global dsaf9
+dsaf = adc_red.read_adc(0, gain=GAIN)
+dsaf2 = adc_blue.read_adc(0, gain=GAIN)
+dsaf3 = adc_green.read_adc(0, gain=GAIN)
 dsaf4 = adc_red.read_adc(1, gain=GAIN)
 dsaf5 = adc_blue.read_adc(1, gain=GAIN)
 dsaf6 = adc_green.read_adc(1, gain=GAIN)
@@ -650,6 +653,14 @@ def threadman():
     while gamer ==True:
         bruhm = bruhm + 1
         print( bruhm)
+        if(dsaf - adc_red.read_adc(0, gain=GAIN) >= 1000 or dsaf - adc_red.read_adc(0, gain=GAIN) <= -1000):
+            bruhm = 0
+
+        elif (dsaf2 - adc_blue.read_adc(0, gain=GAIN) >= 1000 or dsaf2 - adc_blue.read_adc(0, gain=GAIN) <= -1000):
+            bruhm = 0
+
+        elif (dsaf3 - adc_green.read_adc(0, gain=GAIN) >= 1000 or dsaf3 - adc_green.read_adc(0, gain=GAIN) <= -1000):
+            bruhm = 0
         dsaf = adc_red.read_adc(0, gain=GAIN)
         dsaf2 = adc_blue.read_adc(0, gain=GAIN)
         dsaf3 = adc_green.read_adc(0, gain=GAIN)
@@ -658,7 +669,7 @@ def threadman():
         led.change_percentage(2, clamp(value_as_percent("red", adc_blue.read_adc(0, gain=GAIN)), 0, 100))
         #MainScreen.bruhmst.text = "Red Light: %s" % adc_red.read_adc(0, gain=GAIN)
         #MainScreen.bruhmst2.text = "Blue Light: %s" % adc_blue.read_adc(0, gain=GAIN)
-       # MainScreen.bruhmst3.text = "Green Light: %s" % adc_green.read_adc(0, gain=GAIN)
+        #MainScreen.bruhmst3.text = "Green Light: %s" % adc_green.read_adc(0, gain=GAIN)
 
         movement_amount = round(scale_joystick_value(adc_red.read_adc(1, gain=GAIN)) * increment)
         if movement_amount == 0:
