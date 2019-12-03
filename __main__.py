@@ -202,13 +202,6 @@ class MainScreen(Screen):
     """
     global game
     game = False
-    def idle(self):
-        global game
-        global gamer
-        if(game == False):
-            game = True
-            gamer = False
-            Thread(target=self.idleThread(), daemon=True).start()
 
     def init(self):
 
@@ -377,53 +370,53 @@ class MainScreen(Screen):
                 print("stoppeders")
                 motor_6.start_relative_move(f)
             if(dsaf - adc_red.read_adc(0, gain=GAIN) >= 1000 or dsaf - adc_red.read_adc(0, gain=GAIN) <= -1000):
-                self.init()
+                self.init(self)
                 gamer = True
                 game = False
 
-                Thread(target=threadman, daemon=True).start()
-            if (dsaf2 - adc_blue.read_adc(0, gain=GAIN) >= 1000 or dsaf2 - adc_blue.read_adc(0, gain=GAIN) <= -1000):
-                self.init()
+               # Thread(target=threadman, daemon=True).start()
+            elif (dsaf2 - adc_blue.read_adc(0, gain=GAIN) >= 1000 or dsaf2 - adc_blue.read_adc(0, gain=GAIN) <= -1000):
+                self.init(self)
                 gamer = True
                 game = False
-                Thread(target=threadman, daemon=True).start()
-            if (dsaf3 - adc_green.read_adc(0, gain=GAIN) >= 1000 or dsaf3 - adc_green.read_adc(0, gain=GAIN) <= -1000):
-                self.init()
+               # Thread(target=threadman, daemon=True).start()
+            elif (dsaf3 - adc_green.read_adc(0, gain=GAIN) >= 1000 or dsaf3 - adc_green.read_adc(0, gain=GAIN) <= -1000):
+                self.init(self)
                 gamer = True
                 game = False
-                Thread(target=threadman, daemon=True).start()
-            if (dsaf4 - adc_red.read_adc(1, gain=GAIN) >= 1000 or dsaf4 - adc_red.read_adc(1, gain=GAIN) <= -1000):
-                self.init()
-                gamer = True
-                game = False
-
-                Thread(target=threadman, daemon=True).start()
-            if (dsaf5 - adc_blue.read_adc(1, gain=GAIN) >= 1000 or dsaf5 - adc_blue.read_adc(1, gain=GAIN) <= -1000):
-                self.init()
-                gamer = True
-                game = False
-                Thread(target=threadman, daemon=True).start()
-            if (dsaf6 - adc_green.read_adc(1, gain=GAIN) >= 1000 or dsaf6 - adc_green.read_adc(1, gain=GAIN) <= -1000):
-                self.init()
-                gamer = True
-                game = False
-                Thread(target=threadman, daemon=True).start()
-            if (dsaf7 - adc_red.read_adc(2, gain=GAIN) >= 1000 or dsaf7 - adc_red.read_adc(2, gain=GAIN) <= -1000):
-                self.init()
+               # Thread(target=threadman, daemon=True).start()
+            elif (dsaf4 - adc_red.read_adc(1, gain=GAIN) >= 1000 or dsaf4 - adc_red.read_adc(1, gain=GAIN) <= -1000):
+                self.init(self)
                 gamer = True
                 game = False
 
-                Thread(target=threadman, daemon=True).start()
-            if (dsaf8 - adc_blue.read_adc(2, gain=GAIN) >= 1000 or dsaf8 - adc_blue.read_adc(2, gain=GAIN) <= -1000):
-                self.init()
+               # Thread(target=threadman, daemon=True).start()
+            elif (dsaf5 - adc_blue.read_adc(1, gain=GAIN) >= 1000 or dsaf5 - adc_blue.read_adc(1, gain=GAIN) <= -1000):
+                self.init(self)
                 gamer = True
                 game = False
-                Thread(target=threadman, daemon=True).start()
-            if (dsaf9 - adc_green.read_adc(2, gain=GAIN) >= 1000 or dsaf9 - adc_green.read_adc(2, gain=GAIN) <= -1000):
-                self.init()
+               # Thread(target=threadman, daemon=True).start()
+            elif (dsaf6 - adc_green.read_adc(1, gain=GAIN) >= 1000 or dsaf6 - adc_green.read_adc(1, gain=GAIN) <= -1000):
+                self.init(self)
                 gamer = True
                 game = False
-                Thread(target=threadman, daemon=True).start()
+               # Thread(target=threadman, daemon=True).start()
+            elif (dsaf7 - adc_red.read_adc(2, gain=GAIN) >= 1000 or dsaf7 - adc_red.read_adc(2, gain=GAIN) <= -1000):
+                self.init(self)
+                gamer = True
+                game = False
+
+               # Thread(target=threadman, daemon=True).start()
+            elif (dsaf8 - adc_blue.read_adc(2, gain=GAIN) >= 1000 or dsaf8 - adc_blue.read_adc(2, gain=GAIN) <= -1000):
+                self.init(self)
+                gamer = True
+                game = False
+                #Thread(target=threadman, daemon=True).start()
+            elif (dsaf9 - adc_green.read_adc(2, gain=GAIN) >= 1000 or dsaf9 - adc_green.read_adc(2, gain=GAIN) <= -1000):
+                self.init(self)
+                gamer = True
+                game = False
+               # Thread(target=threadman, daemon=True).start()
 
     def admin_action(self):
         """
@@ -542,7 +535,14 @@ def joy_val_filter(value):
         return 0
     else:
         return value
-
+def idle():
+    global game
+    global gamer
+    if(game == False):
+        game = True
+        gamer = False
+        self = MainScreen
+        Thread(target=MainScreen.idleThread(self), daemon=True).start()
 
 def threadman():
     global dsaf
@@ -554,7 +554,11 @@ def threadman():
     global dsaf7
     global dsaf8
     global dsaf9
+    global bruhm
+    bruhm = 0
     while gamer ==True:
+        bruhm = bruhm + 1
+        print( bruhm)
         dsaf = adc_red.read_adc(0, gain=GAIN)
         dsaf2 = adc_blue.read_adc(0, gain=GAIN)
         dsaf3 = adc_green.read_adc(0, gain=GAIN)
@@ -569,6 +573,7 @@ def threadman():
         if movement_amount is not 0 and not motor_4.is_busy() or movement_amount is not 0 and motor_4.getPosition() >=1000 or motor_4.getPosition() <=-7000:
             #print(motor_4.getPosition())
             print(movement_amount)
+            bruhm = 0
             motor_4.softStop()
             if(motor_4.getPosition() >=1000 & movement_amount==-1 or motor_4.getPosition() >=1000 & movement_amount == 0 ):
                 print(motor_4.getPosition())
@@ -586,6 +591,7 @@ def threadman():
             motor_5.softStop()
         if movement_amount is not 0 and not motor_5.is_busy() or movement_amount is not 0 and motor_5.getPosition() >=1000 or motor_5.getPosition() <=-7000:
             print(motor_5.getPosition())
+            bruhm = 0
             motor_5.softStop()
             if (motor_5.getPosition() >= 1000 & movement_amount == -1 or motor_5.getPosition() >= 1000 & movement_amount == 0):
                 print(motor_5.getPosition())
@@ -602,6 +608,7 @@ def threadman():
             motor_6.softStop()
         if movement_amount is not 0 and not motor_6.is_busy() or movement_amount is not 0 and motor_6.getPosition() >=1000 or motor_6.getPosition() <=-7000:
             print(motor_6.getPosition())
+            bruhm = 0
             motor_6.softStop()
             if (motor_6.getPosition() >= 1000 & movement_amount == -1 or motor_6.getPosition() >= 1000 & movement_amount == 0):
                 print(motor_6.getPosition())
@@ -619,6 +626,7 @@ def threadman():
             print("stoppd")
         if movement_amount is not 0 and not motor_1.is_busy() or movement_amount is not 0 and motor_1.getPosition() >=14000 or motor_1.getPosition() <=-500:
             print(movement_amount)
+            bruhm = 0
             print(motor_1.getPosition())
             motor_1.softStop()
             if (motor_1.getPosition() >= 14000 & movement_amount > 0):
@@ -636,6 +644,7 @@ def threadman():
             motor_2.softStop()
         if movement_amount is not 0 and not motor_2.is_busy() or movement_amount is not 0 and motor_2.getPosition() >=14000 or motor_2.getPosition() <=-500:
             print(movement_amount)
+            bruhm = 0
             print(motor_2.getPosition())
             motor_2.softStop()
             if (motor_2.getPosition() >= 14000 & movement_amount > 0):
@@ -654,6 +663,7 @@ def threadman():
             motor_3.softStop()
         if movement_amount is not 0 and not motor_3.is_busy() or movement_amount is not 0 and motor_3.getPosition() >=14000 or motor_3.getPosition() <=-500:
             print(movement_amount)
+            bruhm = 0
             print(motor_3.getPosition())
             if (motor_3.getPosition() >= 14000 & movement_amount > 0):
                 print(motor_3.getPosition())
@@ -665,6 +675,9 @@ def threadman():
                 motor_3.softStop()
             else:
                 motor_3.start_relative_move(-movement_amount * 100)
+        if(bruhm == 200):
+            bruhm = 0
+            idle()
 
 
         #print("red knob: " + str(adc_red.read_adc(0, gain = GAIN)) + "   red x: " + str(adc_red.read_adc(1, gain = GAIN)) + "  red y: " + str(adc_red.read_adc(2, gain = GAIN)),end = '        ')
