@@ -293,6 +293,11 @@ class MainScreen(Screen):
     bruhmst = ObjectProperty(None)
     bruhmst2 = ObjectProperty(None)
     bruhmst3 = ObjectProperty(None)
+    aaa = ObjectProperty(None)
+
+    def test(self):
+        print("yeahaaaaaaa")
+        self.ids.aaa.text = "changed"
 
     def init(self):
         motor_1.free()
@@ -551,23 +556,24 @@ class AdminScreen(Screen):
         """
         global gamer
         gamer = False
-        motor_1.softFree()
-        sleep(.2)
-        motor_2.softFree()
-        sleep(.2)
-        motor_3.softFree()
-        sleep(.2)
-        motor_4.softFree()
-        sleep(.2)
-        motor_5.softFree()
-        sleep(.2)
-        motor_6.softFree()
-        sleep(.2)
+        motor_1.free()
+        sleep(.3)
+        motor_2.free()
+        sleep(.3)
+        motor_3.free()
+        sleep(.3)
+        motor_4.free()
+        sleep(.3)
+        motor_5.free()
+        sleep(.3)
+        motor_6.free()
+        sleep(.3)
         led.change_percentage(0, clamp(value_as_percent("red", 0), 0, 100))
-        sleep(.2)
+        sleep(.3)
         led.change_percentage(1, clamp(value_as_percent("red", 0), 0, 100))
-        sleep(.2)
+        sleep(.3)
         led.change_percentage(2, clamp(value_as_percent("red", 0), 0, 100))
+        sleep(.3)
         os.system("sudo shutdown now")
 
     @staticmethod
@@ -578,23 +584,24 @@ class AdminScreen(Screen):
         :return: None
         """
         gamer = False
-        motor_1.softFree()
-        sleep(.2)
-        motor_2.softFree()
-        sleep(.2)
-        motor_3.softFree()
-        sleep(.2)
-        motor_4.softFree()
-        sleep(.2)
-        motor_5.softFree()
-        sleep(.2)
-        motor_6.softFree()
-        sleep(.2)
+        motor_1.free()
+        sleep(.3)
+        motor_2.free()
+        sleep(.3)
+        motor_3.free()
+        sleep(.3)
+        motor_4.free()
+        sleep(.3)
+        motor_5.free()
+        sleep(.3)
+        motor_6.free()
+        sleep(.3)
         led.change_percentage(0, clamp(value_as_percent("red", 0), 0, 100))
-        sleep(.2)
+        sleep(.3)
         led.change_percentage(1, clamp(value_as_percent("red", 0), 0, 100))
-        sleep(.2)
+        sleep(.3)
         led.change_percentage(2, clamp(value_as_percent("red", 0), 0, 100))
+        sleep(.3)
         quit()
 
 
@@ -790,7 +797,6 @@ SCREEN_MANAGER.add_widget(MainScreen(name=MAIN_SCREEN_NAME))
 SCREEN_MANAGER.add_widget(PassCodeScreen(name='passCode'))
 SCREEN_MANAGER.add_widget(PauseScreen(name='pauseScene'))
 SCREEN_MANAGER.add_widget(AdminScreen(name=ADMIN_SCREEN_NAME))
-
 Thread(target=threadman).start()
 Thread.daemon = True
 print("happesns")
