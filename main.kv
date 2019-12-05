@@ -1,18 +1,23 @@
 <MainScreen>:
-    on_enter: root.test()
     name: 'main'
     bruhmst: bruhmst
     bruhmst2: bruhmst2
     bruhmst3: bruhmst3
     aaa: aaa
+    on_enter: root.test()
     FloatLayout:
         size_hint: None, None
+
+    CustomImage:
+        source: "stuff.png"
+        allow_stretch: True
+        keep_ratio: True
     Label:
         id: aaa
         text: "Test"
         font_size: 30
         x: root.width * 0
-        y: root.height * .3
+        y: root.height * -.3
         color: 1, 1, 1, 1
     Label:
         id: bruhmst
@@ -25,24 +30,13 @@
         id: bruhmst2
         text: "Blue Light:"
         font_size: 30
-        x: root.width * .2
+        x: root.width * 0
         y: root.height * .3
         color: 1, 1, 1, 1
     Label:
         id: bruhmst3
         text: "Green Light:"
         font_size: 30
-        x: root.width * 0
+        x: root.width * .2
         y: root.height * .3
         color: 1, 1, 1, 1
-    CustomImage:
-        source: "stuff.png"
-        allow_stretch: True
-        keep_ratio: True
-
-
-
-
-
-
-

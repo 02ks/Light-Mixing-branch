@@ -295,9 +295,166 @@ class MainScreen(Screen):
     bruhmst3 = ObjectProperty(None)
     aaa = ObjectProperty(None)
 
+    def threadman(self):
+        global dsaf
+        global dsaf2
+        global dsaf3
+        global dsaf4
+        global dsaf5
+        global dsaf6
+        global dsaf7
+        global dsaf8
+        global dsaf9
+        global bruhm
+        bruhm = 0
+        while gamer == True:
+            bruhm = bruhm + 1
+            print(bruhm)
+            if (dsaf - adc_red.read_adc(0, gain=GAIN) >= 1000 or dsaf - adc_red.read_adc(0, gain=GAIN) <= -1000):
+                bruhm = 0
+
+            elif (dsaf2 - adc_blue.read_adc(0, gain=GAIN) >= 1000 or dsaf2 - adc_blue.read_adc(0, gain=GAIN) <= -1000):
+                bruhm = 0
+
+            elif (dsaf3 - adc_green.read_adc(0, gain=GAIN) >= 1000 or dsaf3 - adc_green.read_adc(0,
+                                                                                                 gain=GAIN) <= -1000):
+                bruhm = 0
+            dsaf = adc_red.read_adc(0, gain=GAIN)
+            dsaf2 = adc_blue.read_adc(0, gain=GAIN)
+            dsaf3 = adc_green.read_adc(0, gain=GAIN)
+            led.change_percentage(0, clamp(value_as_percent("red", adc_red.read_adc(0, gain=GAIN)), 0, 100))
+            led.change_percentage(1, clamp(value_as_percent("red", adc_green.read_adc(0, gain=GAIN)), 0, 100))
+            led.change_percentage(2, clamp(value_as_percent("red", adc_blue.read_adc(0, gain=GAIN)), 0, 100))
+            sd = ((adc_red.read_adc(0, gain=GAIN)-3968 * 1.0)/(15200-3968)) * 256
+            fd = ((adc_blue.read_adc(0, gain= GAIN)-160*1.0)/(11200-160))*256
+            ff = ((adc_green.read_adc(0, gain= GAIN)-3760*1.0)/(14620-3760)) * 256
+            if(int(sd) > 256):
+                sd = 256
+            if(int(fd) > 256):
+                fd = 256
+            if(int(ff) > 256):
+                ff = 256
+            self.ids.bruhmst.text = "Red Light: %s" % int(sd)
+            self.ids.bruhmst2.text = "Blue Light: %s" % int(fd)
+            self.ids.bruhmst3.text = "Green Light: %s" % int(ff)
+
+            movement_amount = round(scale_joystick_value(adc_red.read_adc(1, gain=GAIN)) * increment)
+            if movement_amount == 0:
+                motor_4.softStop()
+            if movement_amount is not 0 and not motor_4.is_busy() or movement_amount is not 0 and motor_4.getPosition() >= 1000 or motor_4.getPosition() <= -7000:
+                print(movement_amount)
+                bruhm = 0
+                motor_4.softStop()
+                if motor_4.getPosition() >= 1000 & movement_amount == -1 or motor_4.getPosition() >= 1000 & movement_amount == 0:
+                    print(motor_4.getPosition())
+                    motor_4.stop()
+                    print("yep")
+                elif motor_4.getPosition() <= -7000 & movement_amount < 0:
+                    motor_4.stop()
+                    print("working")
+                else:
+                    motor_4.start_relative_move(movement_amount * 100)
+
+            movement_amount = round(scale_joystick_value(adc_blue.read_adc(1, gain=GAIN)) * increment)
+            if movement_amount == 0:
+                motor_5.softStop()
+            if movement_amount is not 0 and not motor_5.is_busy() or movement_amount is not 0 and motor_5.getPosition() >= 1000 or motor_5.getPosition() <= -7000:
+                print(motor_5.getPosition())
+                bruhm = 0
+                motor_5.softStop()
+                if motor_5.getPosition() >= 1000 & movement_amount == -1 or motor_5.getPosition() >= 1000 & movement_amount == 0:
+                    print(motor_5.getPosition())
+                    motor_5.stop()
+                    print("yep")
+                elif motor_5.getPosition() <= -7000 & movement_amount < 0:
+                    motor_5.stop()
+                    print("working")
+                else:
+                    motor_5.start_relative_move(movement_amount * 100)
+
+            movement_amount = round(scale_joystick_value(adc_green.read_adc(1, gain=GAIN)) * increment)
+            if movement_amount == 0:
+                motor_6.softStop()
+            if movement_amount is not 0 and not motor_6.is_busy() or movement_amount is not 0 and motor_6.getPosition() >= 1000 or motor_6.getPosition() <= -7000:
+                print(motor_6.getPosition())
+                bruhm = 0
+                motor_6.softStop()
+                if motor_6.getPosition() >= 1000 & movement_amount == -1 or motor_6.getPosition() >= 1000 & movement_amount == 0:
+                    print(motor_6.getPosition())
+                    motor_6.stop()
+                    print("yep")
+                elif motor_6.getPosition() <= -7000 & movement_amount < 0:
+                    motor_6.stop()
+                    print("working")
+                else:
+                    motor_6.start_relative_move(movement_amount * 100)
+
+            movement_amount = round(scale_joystick_value(adc_red.read_adc(2, gain=GAIN)) * increment)
+            if movement_amount == 0:
+                motor_1.softStop()
+                print("stoppd")
+            if movement_amount is not 0 and not motor_1.is_busy() or movement_amount is not 0 and motor_1.getPosition() >= 14000 or motor_1.getPosition() <= -500:
+                print(movement_amount)
+                bruhm = 0
+                print(motor_1.getPosition())
+                motor_1.softStop()
+                if motor_1.getPosition() >= 14000 & movement_amount > 0:
+                    print(motor_1.getPosition())
+                    print("yep")
+                    motor_1.softStop()
+                elif motor_1.getPosition() <= 2000 & movement_amount <= 1:
+                    print(motor_1.getPosition())
+                    print("working")
+                    motor_1.softStop()
+                else:
+                    motor_1.start_relative_move(-movement_amount * 100)
+            movement_amount = round(scale_joystick_value(adc_green.read_adc(2, gain=GAIN) - 6000) * increment)
+            if movement_amount == 0:
+                motor_2.softStop()
+            if movement_amount is not 0 and not motor_2.is_busy() or movement_amount is not 0 and motor_2.getPosition() >= 14000 or motor_2.getPosition() <= -500:
+                print(movement_amount)
+                bruhm = 0
+                print(motor_2.getPosition())
+                motor_2.softStop()
+                if motor_2.getPosition() >= 14000 & movement_amount > 0:
+                    print(motor_2.getPosition())
+                    print("yep")
+                    motor_2.softStop()
+                elif motor_2.getPosition() <= 2000 & movement_amount <= 1:
+                    print(motor_2.getPosition())
+                    print("working")
+                    motor_2.softStop()
+                else:
+                    motor_2.start_relative_move(-movement_amount * 100)
+
+            movement_amount = round(scale_joystick_value(adc_blue.read_adc(2, gain=GAIN)) * increment)
+            if movement_amount == 0:
+                motor_3.softStop()
+            if movement_amount is not 0 and not motor_3.is_busy() or movement_amount is not 0 and motor_3.getPosition() >= 14000 or motor_3.getPosition() <= -500:
+                print(movement_amount)
+                bruhm = 0
+                print(motor_3.getPosition())
+                if motor_3.getPosition() >= 14000 & movement_amount > 0:
+                    print(motor_3.getPosition())
+                    motor_3.softStop()
+                    print("yep")
+                elif motor_3.getPosition() <= 2000 & movement_amount <= 1:
+                    print(motor_3.getPosition())
+                    print("working")
+                    motor_3.softStop()
+                else:
+                    motor_3.start_relative_move(-movement_amount * 100)
+            if (bruhm == 200):
+                bruhm = 0
+                idle()
+
+            # print("red knob: " + str(adc_red.read_adc(0, gain = GAIN)) + "   red x: " + str(adc_red.read_adc(1, gain = GAIN)) + "  red y: " + str(adc_red.read_adc(2, gain = GAIN)),end = '        ')
+            # print("blue knob: " + str(adc_blue.read_adc(0, gain = GAIN)) + "   blue x: " + str(adc_blue.read_adc(1, gain = GAIN)) + "  blue y: " + str(adc_blue.read_adc(2, gain = GAIN)),end = '      ')
+            # print("green knob: " + str(adc_green.read_adc(0, gain = GAIN)) + "   green x: " + str(adc_green.read_adc(1, gain = GAIN)) + "  green y: " + str(adc_green.read_adc(2, gain = GAIN)))
     def test(self):
-        print("yeahaaaaaaa")
-        self.ids.aaa.text = "changed"
+        Thread(target=self.threadman).start()
+        Thread.daemon = True
+
 
     def init(self):
         motor_1.free()
@@ -645,160 +802,13 @@ def idle():
         self = MainScreen
         Thread(target=MainScreen.idleThread(self), daemon=True).start()
 
-def threadman():
-    global dsaf
-    global dsaf2
-    global dsaf3
-    global dsaf4
-    global dsaf5
-    global dsaf6
-    global dsaf7
-    global dsaf8
-    global dsaf9
-    global bruhm
-    bruhm = 0
-    while gamer ==True:
-        bruhm = bruhm + 1
-        print( bruhm)
-        if(dsaf - adc_red.read_adc(0, gain=GAIN) >= 1000 or dsaf - adc_red.read_adc(0, gain=GAIN) <= -1000):
-            bruhm = 0
 
-        elif (dsaf2 - adc_blue.read_adc(0, gain=GAIN) >= 1000 or dsaf2 - adc_blue.read_adc(0, gain=GAIN) <= -1000):
-            bruhm = 0
-
-        elif (dsaf3 - adc_green.read_adc(0, gain=GAIN) >= 1000 or dsaf3 - adc_green.read_adc(0, gain=GAIN) <= -1000):
-            bruhm = 0
-        dsaf = adc_red.read_adc(0, gain=GAIN)
-        dsaf2 = adc_blue.read_adc(0, gain=GAIN)
-        dsaf3 = adc_green.read_adc(0, gain=GAIN)
-        led.change_percentage(0, clamp(value_as_percent("red", adc_red.read_adc(0, gain=GAIN)), 0, 100))
-        led.change_percentage(1, clamp(value_as_percent("red", adc_green.read_adc(0, gain=GAIN)), 0, 100))
-        led.change_percentage(2, clamp(value_as_percent("red", adc_blue.read_adc(0, gain=GAIN)), 0, 100))
-        #MainScreen.bruhmst.text = "Red Light: %s" % adc_red.read_adc(0, gain=GAIN)
-        #MainScreen.bruhmst2.text = "Blue Light: %s" % adc_blue.read_adc(0, gain=GAIN)
-        #MainScreen.bruhmst3.text = "Green Light: %s" % adc_green.read_adc(0, gain=GAIN)
-
-        movement_amount = round(scale_joystick_value(adc_red.read_adc(1, gain=GAIN)) * increment)
-        if movement_amount == 0:
-            motor_4.softStop()
-        if movement_amount is not 0 and not motor_4.is_busy() or movement_amount is not 0 and motor_4.getPosition() >=1000 or motor_4.getPosition() <=-7000:
-            print(movement_amount)
-            bruhm = 0
-            motor_4.softStop()
-            if motor_4.getPosition() >=1000 & movement_amount==-1 or motor_4.getPosition() >=1000 & movement_amount == 0:
-                print(motor_4.getPosition())
-                motor_4.stop()
-                print("yep")
-            elif motor_4.getPosition() <=-7000 & movement_amount<0:
-                motor_4.stop()
-                print("working")
-            else:
-                motor_4.start_relative_move(movement_amount*100)
-
-        movement_amount = round(scale_joystick_value(adc_blue.read_adc(1, gain=GAIN)) * increment)
-        if movement_amount == 0:
-            motor_5.softStop()
-        if movement_amount is not 0 and not motor_5.is_busy() or movement_amount is not 0 and motor_5.getPosition() >=1000 or motor_5.getPosition() <=-7000:
-            print(motor_5.getPosition())
-            bruhm = 0
-            motor_5.softStop()
-            if motor_5.getPosition() >= 1000 & movement_amount == -1 or motor_5.getPosition() >= 1000 & movement_amount == 0:
-                print(motor_5.getPosition())
-                motor_5.stop()
-                print("yep")
-            elif motor_5.getPosition() <= -7000 & movement_amount < 0:
-                motor_5.stop()
-                print("working")
-            else:
-                motor_5.start_relative_move(movement_amount*100)
-
-        movement_amount = round(scale_joystick_value(adc_green.read_adc(1, gain=GAIN)) * increment)
-        if movement_amount == 0:
-            motor_6.softStop()
-        if movement_amount is not 0 and not motor_6.is_busy() or movement_amount is not 0 and motor_6.getPosition() >=1000 or motor_6.getPosition() <=-7000:
-            print(motor_6.getPosition())
-            bruhm = 0
-            motor_6.softStop()
-            if motor_6.getPosition() >= 1000 & movement_amount == -1 or motor_6.getPosition() >= 1000 & movement_amount == 0:
-                print(motor_6.getPosition())
-                motor_6.stop()
-                print("yep")
-            elif motor_6.getPosition() <= -7000 & movement_amount < 0:
-                motor_6.stop()
-                print("working")
-            else:
-                motor_6.start_relative_move(movement_amount*100)
-
-        movement_amount = round(scale_joystick_value(adc_red.read_adc(2, gain=GAIN)) * increment)
-        if movement_amount == 0:
-            motor_1.softStop()
-            print("stoppd")
-        if movement_amount is not 0 and not motor_1.is_busy() or movement_amount is not 0 and motor_1.getPosition() >=14000 or motor_1.getPosition() <=-500:
-            print(movement_amount)
-            bruhm = 0
-            print(motor_1.getPosition())
-            motor_1.softStop()
-            if motor_1.getPosition() >= 14000 & movement_amount > 0:
-                print(motor_1.getPosition())
-                print("yep")
-                motor_1.softStop()
-            elif motor_1.getPosition() <= 2000 & movement_amount <= 1:
-                print(motor_1.getPosition())
-                print("working")
-                motor_1.softStop()
-            else:
-                motor_1.start_relative_move(-movement_amount*100)
-        movement_amount = round(scale_joystick_value(adc_green.read_adc(2, gain=GAIN)-6000) * increment)
-        if movement_amount == 0:
-            motor_2.softStop()
-        if movement_amount is not 0 and not motor_2.is_busy() or movement_amount is not 0 and motor_2.getPosition() >=14000 or motor_2.getPosition() <=-500:
-            print(movement_amount)
-            bruhm = 0
-            print(motor_2.getPosition())
-            motor_2.softStop()
-            if motor_2.getPosition() >= 14000 & movement_amount > 0:
-                print(motor_2.getPosition())
-                print("yep")
-                motor_2.softStop()
-            elif motor_2.getPosition() <= 2000 & movement_amount <= 1:
-                print(motor_2.getPosition())
-                print("working")
-                motor_2.softStop()
-            else:
-                motor_2.start_relative_move(-movement_amount * 100)
-
-        movement_amount = round(scale_joystick_value(adc_blue.read_adc(2, gain=GAIN)) * increment)
-        if movement_amount == 0:
-            motor_3.softStop()
-        if movement_amount is not 0 and not motor_3.is_busy() or movement_amount is not 0 and motor_3.getPosition() >=14000 or motor_3.getPosition() <=-500:
-            print(movement_amount)
-            bruhm = 0
-            print(motor_3.getPosition())
-            if motor_3.getPosition() >= 14000 & movement_amount > 0:
-                print(motor_3.getPosition())
-                motor_3.softStop()
-                print("yep")
-            elif motor_3.getPosition() <= 2000 & movement_amount <= 1:
-                print(motor_3.getPosition())
-                print("working")
-                motor_3.softStop()
-            else:
-                motor_3.start_relative_move(-movement_amount * 100)
-        if(bruhm == 200):
-            bruhm = 0
-            idle()
-
-
-        # print("red knob: " + str(adc_red.read_adc(0, gain = GAIN)) + "   red x: " + str(adc_red.read_adc(1, gain = GAIN)) + "  red y: " + str(adc_red.read_adc(2, gain = GAIN)),end = '        ')
-        # print("blue knob: " + str(adc_blue.read_adc(0, gain = GAIN)) + "   blue x: " + str(adc_blue.read_adc(1, gain = GAIN)) + "  blue y: " + str(adc_blue.read_adc(2, gain = GAIN)),end = '      ')
-        # print("green knob: " + str(adc_green.read_adc(0, gain = GAIN)) + "   green x: " + str(adc_green.read_adc(1, gain = GAIN)) + "  green y: " + str(adc_green.read_adc(2, gain = GAIN)))
 Builder.load_file('main.kv')
 SCREEN_MANAGER.add_widget(MainScreen(name=MAIN_SCREEN_NAME))
 SCREEN_MANAGER.add_widget(PassCodeScreen(name='passCode'))
 SCREEN_MANAGER.add_widget(PauseScreen(name='pauseScene'))
 SCREEN_MANAGER.add_widget(AdminScreen(name=ADMIN_SCREEN_NAME))
-Thread(target=threadman).start()
-Thread.daemon = True
+
 print("happesns")
 
 
