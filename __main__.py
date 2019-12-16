@@ -289,7 +289,7 @@ class MainScreen(Screen):
     Class to handle the main screen and its associated touch events
     """
     global game
-    game = False
+    game = True
     bruhmst = ObjectProperty(None)
     bruhmst2 = ObjectProperty(None)
     bruhmst3 = ObjectProperty(None)
@@ -454,7 +454,14 @@ class MainScreen(Screen):
     def test(self):
         Thread(target=self.threadman).start()
         Thread.daemon = True
-
+    def idleTrue(self):
+        global game
+        if(game == False):
+            game = True
+            self.ids.asd.text = "Idle On"
+        else:
+            game = False
+            self.ids.asd.text = "Idle Off"
 
     def init(self):
         motor_1.free()
@@ -796,7 +803,7 @@ def joy_val_filter(value):
 def idle():
     global game
     global gamer
-    if(game == False):
+    if(game == True):
         game = True
         gamer = False
         self = MainScreen
