@@ -289,12 +289,51 @@ class MainScreen(Screen):
     Class to handle the main screen and its associated touch events
     """
     global game
+    global gamer
+    global gamer2000
+    gamer2000 = True
     game = True
     bruhmst = ObjectProperty(None)
     bruhmst2 = ObjectProperty(None)
     bruhmst3 = ObjectProperty(None)
     aaa = ObjectProperty(None)
-
+    def whatsThis(self):
+        global gamer
+        global game
+        global gamer2000
+        gamer = False
+        game = False
+        if(gamer2000 == True):
+            self.init()
+            led.change_percentage(0, clamp(value_as_percent("red", 15152), 0, 100))
+            led.change_percentage(1, clamp(value_as_percent("red", 14496), 0, 100))
+            led.change_percentage(2, clamp(value_as_percent("red", 11152), 0, 100))
+            print(motor_1.getPosition())
+            print(motor_2.getPosition())
+            print(motor_3.getPosition())
+            print(motor_4.getPosition())
+            print(motor_5.getPosition())
+            print(motor_6.getPosition())
+           # motor_1.go_to_position(5564)
+           # motor_2.go_to_position(5468)
+           # motor_3.go_to_position(5759)
+          #  motor_4.go_to_position(-902)
+           # motor_5.go_to_position(-2534)
+          #  motor_6.go_to_position(-4783)
+            motor_1.goToDir(1, 5564)
+            motor_2.goToDir(1, 5468)
+            motor_3.goToDir(1, 5759)
+            motor_4.go_to(-902)
+            motor_5.goToDir(1, -2534)
+            motor_6.goToDir(1, -4783)
+            sleep(5)
+            gamer2000 = False
+        else:
+            game = True
+            gamer =True
+            gamer2000 = True
+            self.init()
+            self.test()
     def threadman(self):
         global dsaf
         global dsaf2
@@ -448,9 +487,15 @@ class MainScreen(Screen):
                 bruhm = 0
                 idle()
 
-            # print("red knob: " + str(adc_red.read_adc(0, gain = GAIN)) + "   red x: " + str(adc_red.read_adc(1, gain = GAIN)) + "  red y: " + str(adc_red.read_adc(2, gain = GAIN)),end = '        ')
-            # print("blue knob: " + str(adc_blue.read_adc(0, gain = GAIN)) + "   blue x: " + str(adc_blue.read_adc(1, gain = GAIN)) + "  blue y: " + str(adc_blue.read_adc(2, gain = GAIN)),end = '      ')
-            # print("green knob: " + str(adc_green.read_adc(0, gain = GAIN)) + "   green x: " + str(adc_green.read_adc(1, gain = GAIN)) + "  green y: " + str(adc_green.read_adc(2, gain = GAIN)))
+           # print("red knob: " + str(adc_red.read_adc(0, gain = GAIN)) + "   red x: " + str(adc_red.read_adc(1, gain = GAIN)) + "  red y: " + str(adc_red.read_adc(2, gain = GAIN)),end = '        ')
+          #  print("blue knob: " + str(adc_blue.read_adc(0, gain = GAIN)) + "   blue x: " + str(adc_blue.read_adc(1, gain = GAIN)) + "  blue y: " + str(adc_blue.read_adc(2, gain = GAIN)),end = '      ')
+         #   print("green knob: " + str(adc_green.read_adc(0, gain = GAIN)) + "   green x: " + str(adc_green.read_adc(1, gain = GAIN)) + "  green y: " + str(adc_green.read_adc(2, gain = GAIN)))
+           # print(motor_1.getPosition())
+           # print(motor_2.getPosition())
+          #  print(motor_3.getPosition())
+          #  print(motor_4.getPosition())
+          #  print(motor_5.getPosition())
+           # print(motor_6.getPosition())
     def test(self):
         Thread(target=self.threadman).start()
         Thread.daemon = True

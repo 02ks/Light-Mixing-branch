@@ -24,10 +24,19 @@
 
         text: "Idle On"
         on_press:root.idleTrue()
+    DPEAButton:
+        id: LMF
+        size: 200, 200
+        center_x: root.width * .75
+        center_y: root.height * .25
 
+        background_color: 0,0,0,0
+        color: 0.035, 0.152, 0.725, 1
+
+        text: "Make White"
+        on_press:root.whatsThis()
     Label:
         id: aaa
-        text: "Test"
         font_size: 30
         x: root.width * 0
         y: root.height * -.3
