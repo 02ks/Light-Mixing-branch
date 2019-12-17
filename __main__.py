@@ -140,6 +140,7 @@ adc_blue = Adafruit_ADS1x15.ADS1115(0x48)
 adc_green = Adafruit_ADS1x15.ADS1115(0x49)
 
 global gamer
+global gamer2000
 gamer = True
 clamp = lambda n, min_n, max_n: max(min(max_n, n), min_n)
 global dsaf
@@ -300,14 +301,17 @@ class MainScreen(Screen):
     def whatsThis(self):
         global gamer
         global game
+        global gamer3000
         global gamer2000
         gamer = False
         game = False
         if(gamer2000 == True):
+            gamer3000 = True
+            self.ids.LMF.text = "Uncenter"
+            gamer2000 = False
+            Thread(target=self.justColor).start()
+            Thread.daemon = True
             self.init()
-            led.change_percentage(0, clamp(value_as_percent("red", 15152), 0, 100))
-            led.change_percentage(1, clamp(value_as_percent("red", 14496), 0, 100))
-            led.change_percentage(2, clamp(value_as_percent("red", 11152), 0, 100))
             print(motor_1.getPosition())
             print(motor_2.getPosition())
             print(motor_3.getPosition())
@@ -324,16 +328,45 @@ class MainScreen(Screen):
             motor_2.goToDir(1, 5468)
             motor_3.goToDir(1, 5759)
             motor_4.go_to(-902)
-            motor_5.goToDir(1, -2534)
+            motor_5.goToDir(1, -2834)
             motor_6.goToDir(1, -4783)
             sleep(5)
-            gamer2000 = False
         else:
+            gamer3000 = False
+            self.ids.LMF.text = "Center"
             game = True
             gamer =True
             gamer2000 = True
             self.init()
             self.test()
+    def justColor(self):
+        while gamer3000 == True:
+            led.change_percentage(0, clamp(value_as_percent("red", adc_red.read_adc(0, gain=GAIN)), 0, 100))
+            led.change_percentage(1, clamp(value_as_percent("red", adc_green.read_adc(0, gain=GAIN)), 0, 100))
+            led.change_percentage(2, clamp(value_as_percent("red", adc_blue.read_adc(0, gain=GAIN)), 0, 100))
+            sd = ((adc_red.read_adc(0, gain=GAIN)-3968 * 1.0)/(15200-3968)) * 256
+            fd = ((adc_blue.read_adc(0, gain= GAIN)-160*1.0)/(11200-160))*256
+            ff = ((adc_green.read_adc(0, gain= GAIN)-3760*1.0)/(14620-3760)) * 256
+            if(int(sd) > 256):
+                sd = 256
+            if(int(fd) > 256):
+                fd = 256
+            if(int(ff) > 256):
+                ff = 256
+            self.ids.bruhmst.text = "Red Light: %s" % int(sd)
+            self.ids.bruhmst2.text = "Blue Light: %s" % int(fd)
+            self.ids.bruhmst3.text = "Green Light: %s" % int(ff)
+            print(adc_red.read_adc(0, gain=GAIN))
+            print(adc_blue.read_adc(0, gain= GAIN))
+            print(adc_green.read_adc(0, gain= GAIN))
+            print("break")
+    def setWhite(self):
+        print('yo')
+        global gamer3000
+        gamer3000 = False
+        led.change_percentage(0, 10928)
+        led.change_percentage(2, 8480)
+        led.change_percentage(1, 14496)
     def threadman(self):
         global dsaf
         global dsaf2
@@ -765,6 +798,8 @@ class AdminScreen(Screen):
         """
         global gamer
         gamer = False
+        global gamer2000
+        gamer2000 = True
         motor_1.free()
         sleep(.3)
         motor_2.free()
@@ -788,11 +823,13 @@ class AdminScreen(Screen):
     @staticmethod
     def exit_program():
         global gamer
+        global gamer2000
         """
         Quit the program. This should free all steppers and do any cleanup necessary
         :return: None
         """
         gamer = False
+        gamer2000 = True
         motor_1.free()
         sleep(.3)
         motor_2.free()
