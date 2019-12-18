@@ -21,7 +21,7 @@ sys.path.insert(0, "/home/pi/packages/Adafruit_16_Channel_PWM_Module_Easy_Librar
 import Adafruit_Ease_Lib as ael
 led = ael.Adafruit_Ease_Lib()
 led.change_frequency(2000)
-pwms = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 , 13, 14, 15]
+pwms = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 led.change_percentage(pwms, 50)
 
 AXIS_MOTOR_SETTINGS = {
