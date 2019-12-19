@@ -368,6 +368,18 @@ class MainScreen(Screen):
         led.change_percentage(2, 8480)
         led.change_percentage(1, 14496)
     def threadman(self):
+        global stored_movement_amount1
+        global stored_movement_amount2
+        global stored_movement_amount3
+        global stored_movement_amount4
+        global stored_movement_amount5
+        global stored_movement_amount6
+        stored_movement_amount1 = 0
+        stored_movement_amount2 = 0
+        stored_movement_amount3 = 0
+        stored_movement_amount4 = 0
+        stored_movement_amount5 = 0
+        stored_movement_amount6 = 0
         global dsaf
         global dsaf2
         global dsaf3
@@ -411,13 +423,16 @@ class MainScreen(Screen):
             self.ids.bruhmst3.text = "Green Light: %s" % int(ff)
 
             movement_amount = round(scale_joystick_value(adc_red.read_adc(1, gain=GAIN)) * increment)
-            if movement_amount == 0:
+            if movement_amount == 0 or abs(abs(stored_movement_amount4) - abs(movement_amount)) > 1:
+                stored_movement_amount4 = movement_amount
                 motor_4.softStop()
             if movement_amount is not 0 and not motor_4.is_busy() or movement_amount is not 0 and motor_4.getPosition() >= 1000 or motor_4.getPosition() <= -7000:
                 print(movement_amount)
+                stored_movement_amount4 = movement_amount
+                motor_4.set_speed(abs(movement_amount*2))
                 bruhm = 0
                 motor_4.softStop()
-                if motor_4.getPosition() >= 1000 & movement_amount == -1 or motor_4.getPosition() >= 1000 & movement_amount == 0:
+                if motor_4.getPosition() >= 1000 and movement_amount > 0:
                     print(motor_4.getPosition())
                     motor_4.stop()
                     print("yep")
@@ -428,13 +443,16 @@ class MainScreen(Screen):
                     motor_4.start_relative_move(movement_amount * 100)
 
             movement_amount = round(scale_joystick_value(adc_blue.read_adc(1, gain=GAIN)) * increment)
-            if movement_amount == 0:
+            if movement_amount == 0 or abs(abs(stored_movement_amount5) - abs(movement_amount)) > 1:
+                stored_movement_amount5 = movement_amount
                 motor_5.softStop()
             if movement_amount is not 0 and not motor_5.is_busy() or movement_amount is not 0 and motor_5.getPosition() >= 1000 or motor_5.getPosition() <= -7000:
                 print(motor_5.getPosition())
+                stored_movement_amount5 = movement_amount
+                motor_5.set_speed(abs(movement_amount * 2))
                 bruhm = 0
                 motor_5.softStop()
-                if motor_5.getPosition() >= 1000 & movement_amount == -1 or motor_5.getPosition() >= 1000 & movement_amount == 0:
+                if motor_5.getPosition() >= 1000 and movement_amount > 0:
                     print(motor_5.getPosition())
                     motor_5.stop()
                     print("yep")
@@ -445,13 +463,17 @@ class MainScreen(Screen):
                     motor_5.start_relative_move(movement_amount * 100)
 
             movement_amount = round(scale_joystick_value(adc_green.read_adc(1, gain=GAIN)) * increment)
-            if movement_amount == 0:
+            if movement_amount == 0 or abs(abs(stored_movement_amount6) - abs(movement_amount)) > 1:
+                stored_movement_amount6 = movement_amount
                 motor_6.softStop()
             if movement_amount is not 0 and not motor_6.is_busy() or movement_amount is not 0 and motor_6.getPosition() >= 1000 or motor_6.getPosition() <= -7000:
                 print(motor_6.getPosition())
+                stored_movement_amount6 = movement_amount
+                motor_6.set_speed(abs(movement_amount * 2))
                 bruhm = 0
                 motor_6.softStop()
-                if motor_6.getPosition() >= 1000 & movement_amount == -1 or motor_6.getPosition() >= 1000 & movement_amount == 0:
+                if motor_6.getPosition() >= 1000 and movement_amount > 0:
+                    print("This is yep movement_amount value: %d" % movement_amount)
                     print(motor_6.getPosition())
                     motor_6.stop()
                     print("yep")
@@ -462,11 +484,14 @@ class MainScreen(Screen):
                     motor_6.start_relative_move(movement_amount * 100)
 
             movement_amount = round(scale_joystick_value(adc_red.read_adc(2, gain=GAIN)) * increment)
-            if movement_amount == 0:
+            if movement_amount == 0 or abs(abs(stored_movement_amount1) - abs(movement_amount)) > 1:
+                stored_movement_amount1 = movement_amount
                 motor_1.softStop()
                 print("stoppd")
             if movement_amount is not 0 and not motor_1.is_busy() or movement_amount is not 0 and motor_1.getPosition() >= 14000 or motor_1.getPosition() <= -500:
                 print(movement_amount)
+                stored_movement_amount1 = movement_amount
+                motor_1.set_speed(abs(movement_amount * 2))
                 bruhm = 0
                 print(motor_1.getPosition())
                 motor_1.softStop()
@@ -480,11 +505,14 @@ class MainScreen(Screen):
                     motor_1.softStop()
                 else:
                     motor_1.start_relative_move(-movement_amount * 100)
-            movement_amount = round(scale_joystick_value(adc_green.read_adc(2, gain=GAIN) - 6000) * increment)
-            if movement_amount == 0:
+            movement_amount = round(scale_joystick_value(adc_green.read_adc(2, gain=GAIN)) * increment)
+            if movement_amount == 0 or abs(abs(stored_movement_amount2) - abs(movement_amount)) > 1:
+                stored_movement_amount2 = movement_amount
                 motor_2.softStop()
             if movement_amount is not 0 and not motor_2.is_busy() or movement_amount is not 0 and motor_2.getPosition() >= 14000 or motor_2.getPosition() <= -500:
                 print(movement_amount)
+                stored_movement_amount2 = movement_amount
+                motor_2.set_speed(abs(movement_amount * 2))
                 bruhm = 0
                 print(motor_2.getPosition())
                 motor_2.softStop()
@@ -500,10 +528,13 @@ class MainScreen(Screen):
                     motor_2.start_relative_move(-movement_amount * 100)
 
             movement_amount = round(scale_joystick_value(adc_blue.read_adc(2, gain=GAIN)) * increment)
-            if movement_amount == 0:
+            if movement_amount == 0 or abs(abs(stored_movement_amount3) - abs(movement_amount)) > 1:
+                stored_movement_amount3 = movement_amount
                 motor_3.softStop()
             if movement_amount is not 0 and not motor_3.is_busy() or movement_amount is not 0 and motor_3.getPosition() >= 14000 or motor_3.getPosition() <= -500:
                 print(movement_amount)
+                stored_movement_amount3 = movement_amount
+                motor_3.set_speed(abs(movement_amount * 2))
                 bruhm = 0
                 print(motor_3.getPosition())
                 if motor_3.getPosition() >= 14000 & movement_amount > 0:
@@ -602,6 +633,12 @@ class MainScreen(Screen):
         global change4
         global change5
         global change6
+        motor_1.set_speed(13)
+        motor_2.set_speed(13)
+        motor_3.set_speed(13)
+        motor_4.set_speed(13)
+        motor_5.set_speed(13)
+        motor_6.set_speed(13)
         change = random.random() * 999
         change2 = random.random() * 999
         change3 = random.random() * 999
@@ -870,7 +907,9 @@ def value_as_percent(color, value):
 
 
 def scale_joystick_value(value):
-    return (value - 6600)/6000
+    abf = (value-6600)/2000
+    print("movement_amount: %d" % abf)
+    return (value - 6600)/1000
 
 
 def joy_val_filter(value):
