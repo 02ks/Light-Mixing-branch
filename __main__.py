@@ -291,6 +291,8 @@ class MainScreen(Screen):
     """
     global game
     global gamer
+    global idlem
+    idlem = False
     global gamer2000
     gamer2000 = True
     game = True
@@ -304,8 +306,14 @@ class MainScreen(Screen):
         global gamer3000
         global gamer2000
         gamer = False
-        game = False
-        if(gamer2000 == True):
+        global idlem
+        if idlem == True:
+            game = False
+            self.init()
+            game = True
+            gamer = True
+            self.test()
+        elif(gamer2000 == True):
             gamer3000 = True
             self.ids.LMF.text = "Uncenter"
             gamer2000 = False
@@ -362,6 +370,16 @@ class MainScreen(Screen):
             print("break")
     def setWhite(self):
         print('yo')
+        global gamer
+        global game
+        global idlem
+        if idlem == True:
+            game = False
+            self.init()
+            game = True
+            gamer = True
+            self.test()
+            return
         global gamer3000
         gamer3000 = False
         led.change_percentage(0, 10928)
@@ -565,7 +583,15 @@ class MainScreen(Screen):
         Thread.daemon = True
     def idleTrue(self):
         global game
-        if(game == False):
+        global gamer
+        global idlem
+        if(idlem == True):
+            game = False
+            self.init()
+            game = True
+            gamer = True
+            self.test()
+        elif(game == False):
             game = True
             self.ids.asd.text = "Idle On"
         else:
@@ -622,6 +648,8 @@ class MainScreen(Screen):
         global d
         global gamer
         global e
+        global idlem
+        idlem = True
         global game
         global f
         global dsaf
@@ -789,6 +817,7 @@ class MainScreen(Screen):
                 gamer = True
                 game = False
                # Thread(target=threadman, daemon=True).start()
+        idlem = False
 
     def admin_action(self):
         """
@@ -834,9 +863,11 @@ class AdminScreen(Screen):
         :return: None
         """
         global gamer
+        global game
         gamer = False
         global gamer2000
         gamer2000 = True
+        game = False
         motor_1.free()
         sleep(.3)
         motor_2.free()
@@ -861,6 +892,8 @@ class AdminScreen(Screen):
     def exit_program():
         global gamer
         global gamer2000
+        global game
+        game = False
         """
         Quit the program. This should free all steppers and do any cleanup necessary
         :return: None
@@ -908,7 +941,7 @@ def value_as_percent(color, value):
 
 def scale_joystick_value(value):
     abf = (value-6600)/2000
-    print("movement_amount: %d" % abf)
+    #print("movement_amount: %d" % abf)
     return (value - 6600)/1000
 
 
