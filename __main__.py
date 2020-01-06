@@ -969,7 +969,7 @@ SCREEN_MANAGER.add_widget(MainScreen(name=MAIN_SCREEN_NAME))
 SCREEN_MANAGER.add_widget(PassCodeScreen(name='passCode'))
 SCREEN_MANAGER.add_widget(PauseScreen(name='pauseScene'))
 SCREEN_MANAGER.add_widget(AdminScreen(name=ADMIN_SCREEN_NAME))
-
+MainScreen().test()
 print("happesns")
 
 
