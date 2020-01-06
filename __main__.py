@@ -292,6 +292,8 @@ class MainScreen(Screen):
     global game
     global gamer
     global idlem
+    global loopRun
+    loopRun = False
     idlem = False
     global gamer2000
     gamer2000 = True
@@ -392,6 +394,8 @@ class MainScreen(Screen):
         global stored_movement_amount4
         global stored_movement_amount5
         global stored_movement_amount6
+        global loopRun
+        loopRun = False
         stored_movement_amount1 = 0
         stored_movement_amount2 = 0
         stored_movement_amount3 = 0
@@ -410,6 +414,7 @@ class MainScreen(Screen):
         global bruhm
         bruhm = 0
         while gamer == True:
+            loopRun = True
             bruhm = bruhm + 1
             print(bruhm)
             if (dsaf - adc_red.read_adc(0, gain=GAIN) >= 1000 or dsaf - adc_red.read_adc(0, gain=GAIN) <= -1000):
@@ -418,8 +423,7 @@ class MainScreen(Screen):
             elif (dsaf2 - adc_blue.read_adc(0, gain=GAIN) >= 1000 or dsaf2 - adc_blue.read_adc(0, gain=GAIN) <= -1000):
                 bruhm = 0
 
-            elif (dsaf3 - adc_green.read_adc(0, gain=GAIN) >= 1000 or dsaf3 - adc_green.read_adc(0,
-                                                                                                 gain=GAIN) <= -1000):
+            elif (dsaf3 - adc_green.read_adc(0, gain=GAIN) >= 1000 or dsaf3 - adc_green.read_adc(0, gain=GAIN) <= -1000):
                 bruhm = 0
             dsaf = adc_red.read_adc(0, gain=GAIN)
             dsaf2 = adc_blue.read_adc(0, gain=GAIN)
@@ -443,13 +447,11 @@ class MainScreen(Screen):
             movement_amount = round(scale_joystick_value(adc_red.read_adc(1, gain=GAIN)) * increment)
             if movement_amount == 0 or abs(abs(stored_movement_amount4) - abs(movement_amount)) > 1:
                 stored_movement_amount4 = movement_amount
-                motor_4.softStop()
+                motor_4.stop()
             if movement_amount is not 0 and not motor_4.is_busy() or movement_amount is not 0 and motor_4.getPosition() >= 1000 or motor_4.getPosition() <= -7000:
                 print(movement_amount)
-                stored_movement_amount4 = movement_amount
                 motor_4.set_speed(abs(movement_amount*2))
                 bruhm = 0
-                motor_4.softStop()
                 if motor_4.getPosition() >= 1000 and movement_amount > 0:
                     print(motor_4.getPosition())
                     motor_4.stop()
@@ -463,13 +465,11 @@ class MainScreen(Screen):
             movement_amount = round(scale_joystick_value(adc_blue.read_adc(1, gain=GAIN)) * increment)
             if movement_amount == 0 or abs(abs(stored_movement_amount5) - abs(movement_amount)) > 1:
                 stored_movement_amount5 = movement_amount
-                motor_5.softStop()
+                motor_5.stop()
             if movement_amount is not 0 and not motor_5.is_busy() or movement_amount is not 0 and motor_5.getPosition() >= 1000 or motor_5.getPosition() <= -7000:
                 print(motor_5.getPosition())
-                stored_movement_amount5 = movement_amount
                 motor_5.set_speed(abs(movement_amount * 2))
                 bruhm = 0
-                motor_5.softStop()
                 if motor_5.getPosition() >= 1000 and movement_amount > 0:
                     print(motor_5.getPosition())
                     motor_5.stop()
@@ -483,13 +483,11 @@ class MainScreen(Screen):
             movement_amount = round(scale_joystick_value(adc_green.read_adc(1, gain=GAIN)) * increment)
             if movement_amount == 0 or abs(abs(stored_movement_amount6) - abs(movement_amount)) > 1:
                 stored_movement_amount6 = movement_amount
-                motor_6.softStop()
+                motor_6.stop()
             if movement_amount is not 0 and not motor_6.is_busy() or movement_amount is not 0 and motor_6.getPosition() >= 1000 or motor_6.getPosition() <= -7000:
                 print(motor_6.getPosition())
-                stored_movement_amount6 = movement_amount
                 motor_6.set_speed(abs(movement_amount * 2))
                 bruhm = 0
-                motor_6.softStop()
                 if motor_6.getPosition() >= 1000 and movement_amount > 0:
                     print("This is yep movement_amount value: %d" % movement_amount)
                     print(motor_6.getPosition())
@@ -504,15 +502,13 @@ class MainScreen(Screen):
             movement_amount = round(scale_joystick_value(adc_red.read_adc(2, gain=GAIN)) * increment)
             if movement_amount == 0 or abs(abs(stored_movement_amount1) - abs(movement_amount)) > 1:
                 stored_movement_amount1 = movement_amount
-                motor_1.softStop()
+                motor_1.stop()
                 print("stoppd")
             if movement_amount is not 0 and not motor_1.is_busy() or movement_amount is not 0 and motor_1.getPosition() >= 14000 or motor_1.getPosition() <= -500:
                 print(movement_amount)
-                stored_movement_amount1 = movement_amount
                 motor_1.set_speed(abs(movement_amount * 2))
                 bruhm = 0
                 print(motor_1.getPosition())
-                motor_1.softStop()
                 if motor_1.getPosition() >= 14000 & movement_amount > 0:
                     print(motor_1.getPosition())
                     print("yep")
@@ -526,14 +522,12 @@ class MainScreen(Screen):
             movement_amount = round(scale_joystick_value(adc_green.read_adc(2, gain=GAIN)) * increment)
             if movement_amount == 0 or abs(abs(stored_movement_amount2) - abs(movement_amount)) > 1:
                 stored_movement_amount2 = movement_amount
-                motor_2.softStop()
+                motor_2.stop()
             if movement_amount is not 0 and not motor_2.is_busy() or movement_amount is not 0 and motor_2.getPosition() >= 14000 or motor_2.getPosition() <= -500:
                 print(movement_amount)
-                stored_movement_amount2 = movement_amount
                 motor_2.set_speed(abs(movement_amount * 2))
                 bruhm = 0
                 print(motor_2.getPosition())
-                motor_2.softStop()
                 if motor_2.getPosition() >= 14000 & movement_amount > 0:
                     print(motor_2.getPosition())
                     print("yep")
@@ -548,10 +542,9 @@ class MainScreen(Screen):
             movement_amount = round(scale_joystick_value(adc_blue.read_adc(2, gain=GAIN)) * increment)
             if movement_amount == 0 or abs(abs(stored_movement_amount3) - abs(movement_amount)) > 1:
                 stored_movement_amount3 = movement_amount
-                motor_3.softStop()
+                motor_3.stop()
             if movement_amount is not 0 and not motor_3.is_busy() or movement_amount is not 0 and motor_3.getPosition() >= 14000 or motor_3.getPosition() <= -500:
                 print(movement_amount)
-                stored_movement_amount3 = movement_amount
                 motor_3.set_speed(abs(movement_amount * 2))
                 bruhm = 0
                 print(motor_3.getPosition())
@@ -568,6 +561,7 @@ class MainScreen(Screen):
             if (bruhm == 200):
                 bruhm = 0
                 idle()
+        loopRun = False
 
            # print("red knob: " + str(adc_red.read_adc(0, gain = GAIN)) + "   red x: " + str(adc_red.read_adc(1, gain = GAIN)) + "  red y: " + str(adc_red.read_adc(2, gain = GAIN)),end = '        ')
           #  print("blue knob: " + str(adc_blue.read_adc(0, gain = GAIN)) + "   blue x: " + str(adc_blue.read_adc(1, gain = GAIN)) + "  blue y: " + str(adc_blue.read_adc(2, gain = GAIN)),end = '      ')
@@ -579,8 +573,10 @@ class MainScreen(Screen):
           #  print(motor_5.getPosition())
            # print(motor_6.getPosition())
     def test(self):
-        Thread(target=self.threadman).start()
-        Thread.daemon = True
+        global loopRun
+        if(loopRun == False):
+            Thread(target=self.threadman).start()
+            Thread.daemon = True
     def idleTrue(self):
         global game
         global gamer
@@ -969,7 +965,6 @@ SCREEN_MANAGER.add_widget(MainScreen(name=MAIN_SCREEN_NAME))
 SCREEN_MANAGER.add_widget(PassCodeScreen(name='passCode'))
 SCREEN_MANAGER.add_widget(PauseScreen(name='pauseScene'))
 SCREEN_MANAGER.add_widget(AdminScreen(name=ADMIN_SCREEN_NAME))
-MainScreen().test()
 print("happesns")
 
 
