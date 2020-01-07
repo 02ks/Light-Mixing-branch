@@ -296,7 +296,8 @@ class CenterScreen(Screen):
     def __init__(self, **kw):
         Builder.load_file('center.kv')
         super(CenterScreen, self).__init__(**kw)
-
+    def goBack(self):
+        SCREEN_MANAGER.current = MAIN_SCREEN_NAME
     def transition_back(self):
         """
         Transition back to the main screen
@@ -324,6 +325,8 @@ class MainScreen(Screen):
     loopRun = False
     idlem = False
     global gamer2000
+    global gamer3000
+    gamer3000 = True
     gamer2000 = True
     game = True
     bruhmst = ObjectProperty(None)
@@ -369,7 +372,7 @@ class MainScreen(Screen):
             motor_4.go_to(-902)
             motor_5.goToDir(1, -2834)
             motor_6.goToDir(1, -4783)
-            sleep(5)
+            sleep(2)
         else:
             gamer3000 = False
             self.ids.LMF.text = "Center"
@@ -412,10 +415,20 @@ class MainScreen(Screen):
             self.test()
             return
         global gamer3000
-        gamer3000 = False
-        led.change_percentage(0, 10928)
-        led.change_percentage(2, 8480)
-        led.change_percentage(1, 14496)
+        if gamer3000 == True:
+            gamer3000 = False
+            self.ids.WHITE.text = "To Knob Control"
+            led.change_percentage(0, 10928)
+            led.change_percentage(2, 8480)
+            led.change_percentage(1, 14496)
+        elif gamer == True:
+            self.ids.WHITE.text = "To White"
+            gamer3000 = True
+        else:
+            self.ids.WHITE.text = "To White"
+            gamer3000 = True
+            Thread(target=self.justColor).start()
+            Thread.daemon = True
     def threadman(self):
         global stored_movement_amount1
         global stored_movement_amount2
@@ -444,34 +457,35 @@ class MainScreen(Screen):
         bruhm = 0
         while gamer == True:
             loopRun = True
-            bruhm = bruhm + 1
-            print(bruhm)
-            if (dsaf - adc_red.read_adc(0, gain=GAIN) >= 1000 or dsaf - adc_red.read_adc(0, gain=GAIN) <= -1000):
-                bruhm = 0
+            if gamer3000 == True:
+                bruhm = bruhm + 1
+                print(bruhm)
+                if (dsaf - adc_red.read_adc(0, gain=GAIN) >= 1000 or dsaf - adc_red.read_adc(0, gain=GAIN) <= -1000):
+                    bruhm = 0
 
-            elif (dsaf2 - adc_blue.read_adc(0, gain=GAIN) >= 1000 or dsaf2 - adc_blue.read_adc(0, gain=GAIN) <= -1000):
-                bruhm = 0
+                elif (dsaf2 - adc_blue.read_adc(0, gain=GAIN) >= 1000 or dsaf2 - adc_blue.read_adc(0, gain=GAIN) <= -1000):
+                    bruhm = 0
 
-            elif (dsaf3 - adc_green.read_adc(0, gain=GAIN) >= 1000 or dsaf3 - adc_green.read_adc(0, gain=GAIN) <= -1000):
-                bruhm = 0
-            dsaf = adc_red.read_adc(0, gain=GAIN)
-            dsaf2 = adc_blue.read_adc(0, gain=GAIN)
-            dsaf3 = adc_green.read_adc(0, gain=GAIN)
-            led.change_percentage(0, clamp(value_as_percent("red", adc_red.read_adc(0, gain=GAIN)), 0, 100))
-            led.change_percentage(1, clamp(value_as_percent("red", adc_green.read_adc(0, gain=GAIN)), 0, 100))
-            led.change_percentage(2, clamp(value_as_percent("red", adc_blue.read_adc(0, gain=GAIN)), 0, 100))
-            sd = ((adc_red.read_adc(0, gain=GAIN)-3968 * 1.0)/(15200-3968)) * 256
-            fd = ((adc_blue.read_adc(0, gain= GAIN)-160*1.0)/(11200-160))*256
-            ff = ((adc_green.read_adc(0, gain= GAIN)-3760*1.0)/(14620-3760)) * 256
-            if(int(sd) > 256):
-                sd = 256
-            if(int(fd) > 256):
-                fd = 256
-            if(int(ff) > 256):
-                ff = 256
-            self.ids.bruhmst.text = "Red Light: %s" % int(sd)
-            self.ids.bruhmst2.text = "Blue Light: %s" % int(fd)
-            self.ids.bruhmst3.text = "Green Light: %s" % int(ff)
+                elif (dsaf3 - adc_green.read_adc(0, gain=GAIN) >= 1000 or dsaf3 - adc_green.read_adc(0, gain=GAIN) <= -1000):
+                    bruhm = 0
+                dsaf = adc_red.read_adc(0, gain=GAIN)
+                dsaf2 = adc_blue.read_adc(0, gain=GAIN)
+                dsaf3 = adc_green.read_adc(0, gain=GAIN)
+                led.change_percentage(0, clamp(value_as_percent("red", adc_red.read_adc(0, gain=GAIN)), 0, 100))
+                led.change_percentage(1, clamp(value_as_percent("red", adc_green.read_adc(0, gain=GAIN)), 0, 100))
+                led.change_percentage(2, clamp(value_as_percent("red", adc_blue.read_adc(0, gain=GAIN)), 0, 100))
+                sd = ((adc_red.read_adc(0, gain=GAIN)-3968 * 1.0)/(15200-3968)) * 256
+                fd = ((adc_blue.read_adc(0, gain= GAIN)-160*1.0)/(11200-160))*256
+                ff = ((adc_green.read_adc(0, gain= GAIN)-3760*1.0)/(14620-3760)) * 256
+                if(int(sd) > 256):
+                    sd = 256
+                if(int(fd) > 256):
+                    fd = 256
+                if(int(ff) > 256):
+                    ff = 256
+                self.ids.bruhmst.text = "Red Light: %s" % int(sd)
+                self.ids.bruhmst2.text = "Blue Light: %s" % int(fd)
+                self.ids.bruhmst3.text = "Green Light: %s" % int(ff)
 
             movement_amount = round(scale_joystick_value(adc_red.read_adc(1, gain=GAIN)) * increment)
             if movement_amount == 0 or abs(abs(stored_movement_amount4) - abs(movement_amount)) > 1:
