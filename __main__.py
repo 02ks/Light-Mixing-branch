@@ -23,7 +23,8 @@ led = ael.Adafruit_Ease_Lib()
 led.change_frequency(2000)
 pwms = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 led.change_percentage(pwms, 50)
-
+# variables are the solution to all problems, hence why I made and named almost all the variables. I take credit for work such as
+#gamer2000 or gamer3000, or game, or the dsaf line or brust line. Please and thankyou/
 AXIS_MOTOR_SETTINGS = {
     'hold_current': 20,
     'run_current': 20,
@@ -336,7 +337,11 @@ class MainScreen(Screen):
     bruhmst3 = ObjectProperty(None)
     aaa = ObjectProperty(None)
     def whatThis(self):
+        global gamer3000
         if gamer2000 == True:
+            gamer3000 = True
+            Thread(target=self.justColor).start()
+            Thread.daemon = True
             self.ids.LMF.text = "Uncenter"
         else:
             self.ids.LMF.text = "Center"
@@ -358,8 +363,6 @@ class MainScreen(Screen):
         elif(gamer2000 == True):
             gamer3000 = True
             gamer2000 = False
-            Thread(target=self.justColor).start()
-            Thread.daemon = True
             self.init(self)
             print(motor_1.getPosition())
             print(motor_2.getPosition())
