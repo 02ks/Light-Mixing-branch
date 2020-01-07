@@ -298,6 +298,8 @@ class CenterScreen(Screen):
         super(CenterScreen, self).__init__(**kw)
     def goBack(self):
         SCREEN_MANAGER.current = MAIN_SCREEN_NAME
+    def oii(self):
+        MainScreen.whatsThis(MainScreen)
     def transition_back(self):
         """
         Transition back to the main screen
@@ -333,6 +335,12 @@ class MainScreen(Screen):
     bruhmst2 = ObjectProperty(None)
     bruhmst3 = ObjectProperty(None)
     aaa = ObjectProperty(None)
+    def whatThis(self):
+        if gamer2000 == True:
+            self.ids.LMF.text = "Uncenter"
+        else:
+            self.ids.LMF.text = "Center"
+        SCREEN_MANAGER.current = CENTER_SCREEN_NAME
     def whatsThis(self):
         global gamer
         global game
@@ -340,20 +348,19 @@ class MainScreen(Screen):
         global gamer2000
         gamer = False
         global idlem
-        SCREEN_MANAGER.current = CENTER_SCREEN_NAME
+        SCREEN_MANAGER.current = MAIN_SCREEN_NAME
         if idlem == True:
             game = False
-            self.init()
+            self.init(self)
             game = True
             gamer = True
-            self.test()
+            self.test(self)
         elif(gamer2000 == True):
             gamer3000 = True
-            self.ids.LMF.text = "Uncenter"
             gamer2000 = False
             Thread(target=self.justColor).start()
             Thread.daemon = True
-            self.init()
+            self.init(self)
             print(motor_1.getPosition())
             print(motor_2.getPosition())
             print(motor_3.getPosition())
@@ -375,12 +382,11 @@ class MainScreen(Screen):
             sleep(2)
         else:
             gamer3000 = False
-            self.ids.LMF.text = "Center"
             game = True
             gamer =True
             gamer2000 = True
-            self.init()
-            self.test()
+            self.init(self)
+            self.test(self)
     def justColor(self):
         while gamer3000 == True:
             led.change_percentage(0, clamp(value_as_percent("red", adc_red.read_adc(0, gain=GAIN)), 0, 100))
