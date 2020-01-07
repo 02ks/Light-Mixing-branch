@@ -299,7 +299,18 @@ class CenterScreen(Screen):
         super(CenterScreen, self).__init__(**kw)
     def goBack(self):
         SCREEN_MANAGER.current = MAIN_SCREEN_NAME
+    def LoadAnimation(self):
+        while(SCREEN_MANAGER.current == MAIN_SCREEN_NAME):
+            self.ids.owos.text = "Centering"
+            sleep(.1)
+            self.ids.owos.text = "Centering."
+            sleep(.1)
+            self.ids.owos.text = "Centering.."
+            sleep(.1)
+            self.ids.owos.text = "Centering..."
+            sleep(.1)
     def oii(self):
+        self.LoadAnimation()
         MainScreen.whatsThis(MainScreen)
     def transition_back(self):
         """
