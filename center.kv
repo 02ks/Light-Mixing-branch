@@ -1,0 +1,33 @@
+<CenterScreen>:
+    name: 'center'
+
+    FloatLayout:
+        size_hint: None, None
+
+    CustomImage:
+        source: "stuff.png"
+        allow_stretch: True
+        keep_ratio: True
+
+    DPEAButton:
+        id: LMF
+        size: 200, 100
+        center_x: root.width * .5
+        center_y: root.height * .5
+
+        background_color: 0,0,0,0
+        color: 0.035, 0.152, 0.725, 1
+
+        text: "Center"
+        on_press:root.whatsThis()
+
+    DPEAButton:
+        #Go back button
+        size: 175, 100
+        center_x: root.width * 0.1
+        center_y: root.height * 0.5
+        color: 0.035, 0.152, 0.725, 1
+
+        text: "Go back"
+        on_press: root.transition_back()
+

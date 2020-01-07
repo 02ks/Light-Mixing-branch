@@ -47,6 +47,7 @@ MIXPANEL = MixPanel("Project Name", MIXPANEL_TOKEN)
 SCREEN_MANAGER = ScreenManager()
 MAIN_SCREEN_NAME = 'main'
 ADMIN_SCREEN_NAME = 'admin'
+CENTER_SCREEN_NAME = 'center'
 PASSCODESCREEN_SCREEN_NAME = 'passCode'
 
 
@@ -285,6 +286,33 @@ class PassCodeScreen(Screen):
         with open(passcode_screen_path, 'w') as file:
             file.writelines(data)
 
+
+class CenterScreen(Screen):
+    global gamer3000
+    global game
+    global gamer
+    global gamer2000
+
+    def __init__(self, **kw):
+        Builder.load_file('center.kv')
+        super(CenterScreen, self).__init__(**kw)
+
+    def transition_back(self):
+        """
+        Transition back to the main screen
+        :return:
+        """
+        SCREEN_MANAGER.current = MAIN_SCREEN_NAME
+    #def whatsThis(self):
+     #   gamer3000 = False
+      #  self.ids.LMF.text = "Center"
+       # game = True
+        #gamer = True
+        #gamer2000 = True
+        #self.init()
+        #self.test()
+
+
 class MainScreen(Screen):
     """
     Class to handle the main screen and its associated touch events
@@ -309,6 +337,7 @@ class MainScreen(Screen):
         global gamer2000
         gamer = False
         global idlem
+        SCREEN_MANAGER.current = CENTER_SCREEN_NAME
         if idlem == True:
             game = False
             self.init()
@@ -962,6 +991,7 @@ def idle():
 
 Builder.load_file('main.kv')
 SCREEN_MANAGER.add_widget(MainScreen(name=MAIN_SCREEN_NAME))
+SCREEN_MANAGER.add_widget(CenterScreen(name=CENTER_SCREEN_NAME))
 SCREEN_MANAGER.add_widget(PassCodeScreen(name='passCode'))
 SCREEN_MANAGER.add_widget(PauseScreen(name='pauseScene'))
 SCREEN_MANAGER.add_widget(AdminScreen(name=ADMIN_SCREEN_NAME))
