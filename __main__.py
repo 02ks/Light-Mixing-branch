@@ -15,6 +15,7 @@ from pidev.kivy import DPEAButton
 from pidev.kivy import ImageButton
 from pidev.stepper import stepper
 from time import sleep
+from pidev.Joystick import Joystick
 from threading import Thread
 from Slush.Devices import L6480Registers as LReg6480, L6470Registers as LReg6470
 sys.path.insert(0, "/home/pi/packages/Adafruit_16_Channel_PWM_Module_Easy_Library")
@@ -154,6 +155,7 @@ global dsaf6
 global dsaf7
 global dsaf8
 global dsaf9
+joystick = Joystick(0, True)
 dsaf = adc_red.read_adc(0, gain=GAIN)
 dsaf2 = adc_blue.read_adc(0, gain=GAIN)
 dsaf3 = adc_green.read_adc(0, gain=GAIN)
@@ -355,6 +357,7 @@ class MainScreen(Screen):
             Thread.daemon = True
             self.ids.LMF.text = "Uncenter"
         else:
+            gamer3000 = True
             self.ids.LMF.text = "Center"
         SCREEN_MANAGER.current = CENTER_SCREEN_NAME
     def whatsThis(self):
@@ -400,6 +403,7 @@ class MainScreen(Screen):
             gamer =True
             gamer2000 = True
             self.init(self)
+            gamer3000 = True
             self.test(self)
     def justColor(self):
         while gamer3000 == True:
@@ -507,7 +511,7 @@ class MainScreen(Screen):
                 self.ids.bruhmst2.text = "Blue Light: %s" % int(fd)
                 self.ids.bruhmst3.text = "Green Light: %s" % int(ff)
 
-            movement_amount = round(scale_joystick_value(adc_red.read_adc(1, gain=GAIN)) * increment)
+            movement_amount = round(scale_joystick_value2(joystick.get_axis('x')) * increment)
             if movement_amount == 0 or abs(abs(stored_movement_amount4) - abs(movement_amount)) > 1:
                 stored_movement_amount4 = movement_amount
                 motor_4.stop()
@@ -562,7 +566,7 @@ class MainScreen(Screen):
                 else:
                     motor_6.start_relative_move(movement_amount * 100)
 
-            movement_amount = round(scale_joystick_value(adc_red.read_adc(2, gain=GAIN)) * increment)
+            movement_amount = round(scale_joystick_value2(-joystick.get_axis('y')) * increment)
             if movement_amount == 0 or abs(abs(stored_movement_amount1) - abs(movement_amount)) > 1:
                 stored_movement_amount1 = movement_amount
                 motor_1.stop()
@@ -1000,9 +1004,12 @@ def value_as_percent(color, value):
 
 def scale_joystick_value(value):
     abf = (value-6600)/2000
-    #print("movement_amount: %d" % abf)
+    print("movement_amount: %d" % abf)
     return (value - 6600)/1000
-
+def scale_joystick_value2(value):
+    abf = (value*6)
+    print("movement_amount2: %d" % abf)
+    return value*6
 
 def joy_val_filter(value):
     if value < -0.9:
