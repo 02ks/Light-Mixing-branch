@@ -1,0 +1,21 @@
+<CommuneScreen>:
+    name: 'commune'
+
+    FloatLayout:
+        size_hint: None, None
+
+    CustomImage:
+        source: "commune.jpg"
+        allow_stretch: True
+        keep_ratio: True
+    DPEAButton:
+        id:fds
+        size: 200, 100
+        center_x: root.width * .1
+        center_y: root.height * .1
+
+        background_color: 0,0,0,0
+        color: 0.125, 0.619, 0.164, 1
+
+        text: "Back"
+        on_press:root.goBack()

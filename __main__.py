@@ -49,6 +49,8 @@ SCREEN_MANAGER = ScreenManager()
 MAIN_SCREEN_NAME = 'main'
 ADMIN_SCREEN_NAME = 'admin'
 CENTER_SCREEN_NAME = 'center'
+COMMUNE_TIME_SCREEN = 'commune'
+FAKE_SCREEN_NAME = 'fake'
 PASSCODESCREEN_SCREEN_NAME = 'passCode'
 
 
@@ -164,7 +166,9 @@ dsaf7 = adc_red.read_adc(2, gain=GAIN)
 dsaf8 = adc_blue.read_adc(2, gain=GAIN)
 dsaf9 = adc_green.read_adc(2, gain=GAIN)
 
-PASSWORD = '7266' # make different pw lead to different places?
+PASSWORD = '7266'# make different pw lead to different places?
+PASSWORD2 = '1922'
+PASSWORD3 = '12345'
 USERPW = ''
 
 passcode_screen_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "", "PassCodeScreen.kv")
@@ -217,6 +221,24 @@ class PassCodeScreen(Screen):
         :return: None
         """
         global USERPW
+        if PASSWORD3 == USERPW:
+            self.ids.pw.text = ' '
+            USERPW = ''
+
+            if ADMIN_EVENTS_SCREEN is None:
+                print("Specify the admin screen name by calling PassCodeScreen.set_admin_events_screen")
+                return
+
+            self.parent.current = FAKE_SCREEN_NAME
+        if PASSWORD2 == USERPW:
+            self.ids.pw.text = ' '
+            USERPW = ''
+
+            if ADMIN_EVENTS_SCREEN is None:
+                print("Specify the admin screen name by calling PassCodeScreen.set_admin_events_screen")
+                return
+
+            self.parent.current = COMMUNE_TIME_SCREEN
         if PASSWORD == USERPW:
             self.ids.pw.text = ' '
             USERPW = ''
@@ -327,6 +349,24 @@ class CenterScreen(Screen):
         #self.init()
         #self.test()
 
+class CommuneScreen(Screen):
+
+    def __init__(self, **kw):
+        Builder.load_file('commune.kv')
+        super(CommuneScreen, self).__init__(**kw)
+    def goBack(self):
+        SCREEN_MANAGER.current = MAIN_SCREEN_NAME
+class FakeScreen(Screen):
+
+    def __init__(self, **kw):
+        Builder.load_file('fake.kv')
+        super(FakeScreen, self).__init__(**kw)
+    def goBack(self):
+        SCREEN_MANAGER.current = MAIN_SCREEN_NAME
+    def bamBoozle(self):
+        self.ids.bnr.text = " "
+        sleep(10)
+        self.ids.bnr.text = "Ha you thought, try something a little better then 12345 next time"
 
 class MainScreen(Screen):
     """
@@ -927,6 +967,8 @@ class AdminScreen(Screen):
         global game
         gamer = False
         global gamer2000
+        global gamer3000
+        gamer3000 = False
         gamer2000 = True
         game = False
         motor_1.free()
@@ -953,8 +995,10 @@ class AdminScreen(Screen):
     def exit_program():
         global gamer
         global gamer2000
+        global gamer3000
         global game
         game = False
+        gamer3000 = False
         """
         Quit the program. This should free all steppers and do any cleanup necessary
         :return: None
@@ -1028,6 +1072,8 @@ def idle():
 Builder.load_file('main.kv')
 SCREEN_MANAGER.add_widget(MainScreen(name=MAIN_SCREEN_NAME))
 SCREEN_MANAGER.add_widget(CenterScreen(name=CENTER_SCREEN_NAME))
+SCREEN_MANAGER.add_widget(CommuneScreen(name = COMMUNE_TIME_SCREEN))
+SCREEN_MANAGER.add_widget(FakeScreen(name = FAKE_SCREEN_NAME))
 SCREEN_MANAGER.add_widget(PassCodeScreen(name='passCode'))
 SCREEN_MANAGER.add_widget(PauseScreen(name='pauseScene'))
 SCREEN_MANAGER.add_widget(AdminScreen(name=ADMIN_SCREEN_NAME))
