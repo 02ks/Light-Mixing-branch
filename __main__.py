@@ -355,6 +355,7 @@ class MainScreen(Screen):
             Thread.daemon = True
             self.ids.LMF.text = "Uncenter"
         else:
+            gamer3000 = True
             self.ids.LMF.text = "Center"
         SCREEN_MANAGER.current = CENTER_SCREEN_NAME
     def whatsThis(self):
@@ -400,6 +401,7 @@ class MainScreen(Screen):
             gamer =True
             gamer2000 = True
             self.init(self)
+            gamer3000 = True
             self.test(self)
     def justColor(self):
         while gamer3000 == True:
