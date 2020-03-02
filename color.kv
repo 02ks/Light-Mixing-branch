@@ -1,0 +1,15 @@
+<ColorScreen>:
+    name: 'color'
+    FloatLayout:
+        size_hint: None, None
+    DPEAButton:
+        id: asd
+        size: 200, 100
+        center_x: root.width * 0.25
+        center_y: root.height * 0.25
+
+        background_color: 0,0,0,0
+        color: 0.839, 0.505, 0.168, 1
+
+        text: "go Back"
+        on_press:root.goBack()

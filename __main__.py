@@ -52,6 +52,7 @@ CENTER_SCREEN_NAME = 'center'
 COMMUNE_TIME_SCREEN = 'commune'
 FAKE_SCREEN_NAME = 'fake'
 PASSCODESCREEN_SCREEN_NAME = 'passCode'
+COLOR_SCREEN_NAME = 'color'
 
 
 class CustomImage(Image):
@@ -367,7 +368,12 @@ class FakeScreen(Screen):
         self.ids.bnr.text = " "
         sleep(10)
         self.ids.bnr.text = "Ha you thought, try something a little better then 12345 next time"
-
+class ColorScreen(Screen):
+    def __init__(self, **kw):
+        Builder.load_file('color.kv')
+        super(ColorScreen, self).__init__(**kw)
+    def goBack(self):
+        SCREEN_MANAGER.current = MAIN_SCREEN_NAME
 class MainScreen(Screen):
     """
     Class to handle the main screen and its associated touch events
@@ -398,6 +404,8 @@ class MainScreen(Screen):
             gamer3000 = True
             self.ids.LMF.text = "Center"
         SCREEN_MANAGER.current = CENTER_SCREEN_NAME
+    def colorScreen(self):
+        SCREEN_MANAGER.current = COLOR_SCREEN_NAME
     def whatsThis(self):
         global gamer
         global game
@@ -1077,6 +1085,7 @@ SCREEN_MANAGER.add_widget(FakeScreen(name = FAKE_SCREEN_NAME))
 SCREEN_MANAGER.add_widget(PassCodeScreen(name='passCode'))
 SCREEN_MANAGER.add_widget(PauseScreen(name='pauseScene'))
 SCREEN_MANAGER.add_widget(AdminScreen(name=ADMIN_SCREEN_NAME))
+SCREEN_MANAGER.add_widget(ColorScreen(name = COLOR_SCREEN_NAME))
 print("happesns")
 
 
