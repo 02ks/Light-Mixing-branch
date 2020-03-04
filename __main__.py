@@ -1,7 +1,7 @@
 import sys
 import Adafruit_ADS1x15
 import os
-
+from kivy.uix.colorpicker import ColorPicker
 from kivy.app import App
 from kivy.properties import ObjectProperty
 from kivy.uix.image import Image
@@ -12,6 +12,7 @@ import random
 from pidev.MixPanel import MixPanel
 from pidev.kivy.PauseScreen import PauseScreen
 from pidev.kivy import DPEAButton
+from kivy.uix.button import Button
 from pidev.kivy import ImageButton
 from pidev.stepper import stepper
 from time import sleep
@@ -372,8 +373,28 @@ class ColorScreen(Screen):
     def __init__(self, **kw):
         Builder.load_file('color.kv')
         super(ColorScreen, self).__init__(**kw)
+        global gamer3000
+        gamer3000 = False
+     #   clr_picker = ColorPicker()
+      #  self.add_widget(clr_picker)
     def goBack(self):
+        global gamer3000
+        gamer3000 = True
         SCREEN_MANAGER.current = MAIN_SCREEN_NAME
+    def ColorLarge(self, red, blue, green, otherValue):
+        global gamer3000
+        gamer3000 = False
+        print(self)
+        print(otherValue)
+        print(red)
+        print("bruh")
+        print(blue)
+        print(green)
+        led.change_percentage(0, red*200)
+        led.change_percentage(2, green*200)
+        led.change_percentage(1, blue*200)
+class ColPckr(ColorPicker):
+    pass
 class MainScreen(Screen):
     """
     Class to handle the main screen and its associated touch events
