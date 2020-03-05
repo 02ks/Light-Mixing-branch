@@ -1,18 +1,15 @@
 <ColorScreen>:
     name: 'color'
     asd: asd
+    on_enter: root.APLE()
     FloatLayout:
         size_hint: None, None
     ColPckr:
         on_color: root.ColorLarge(self.color[0], self.color[1], self.color[2], self.color[3])
-        DPEAButton:
+        ImageButton:
             id: asd
-            size: 200, 100
+            size: 650, 650
             center_x: root.width * 0.25
             center_y: root.height * 0.25
-
-            background_color: 0,0,0,0
-            color: 0.839, 0.505, 0.168, 1
-
-            text: "go Back"
+            source: "stuff.png"
             on_press:root.goBack()

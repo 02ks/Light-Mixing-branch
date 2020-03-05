@@ -167,7 +167,8 @@ dsaf6 = adc_green.read_adc(1, gain=GAIN)
 dsaf7 = adc_red.read_adc(2, gain=GAIN)
 dsaf8 = adc_blue.read_adc(2, gain=GAIN)
 dsaf9 = adc_green.read_adc(2, gain=GAIN)
-
+global abcd
+abcd = False
 PASSWORD = '7266'# make different pw lead to different places?
 PASSWORD2 = '1922'
 PASSWORD3 = '12345'
@@ -373,17 +374,18 @@ class ColorScreen(Screen):
     def __init__(self, **kw):
         Builder.load_file('color.kv')
         super(ColorScreen, self).__init__(**kw)
-        global gamer3000
-        gamer3000 = False
      #   clr_picker = ColorPicker()
       #  self.add_widget(clr_picker)
-    def goBack(self):
-        global gamer3000
-        gamer3000 = True
-        SCREEN_MANAGER.current = MAIN_SCREEN_NAME
-    def ColorLarge(self, red, blue, green, otherValue):
+    def APLE(self):
         global gamer3000
         gamer3000 = False
+    def goBack(self):
+        global abcd
+        global gamer3000
+        gamer3000 = True
+        print("activated")
+        SCREEN_MANAGER.current = MAIN_SCREEN_NAME
+    def ColorLarge(self, red, blue, green, otherValue):
         print(self)
         print(otherValue)
         print(red)
@@ -473,6 +475,7 @@ class MainScreen(Screen):
             gamer3000 = True
             self.test(self)
     def justColor(self):
+        global abcd
         while gamer3000 == True:
             led.change_percentage(0, clamp(value_as_percent("red", adc_red.read_adc(0, gain=GAIN)), 0, 100))
             led.change_percentage(1, clamp(value_as_percent("red", adc_green.read_adc(0, gain=GAIN)), 0, 100))
@@ -493,6 +496,7 @@ class MainScreen(Screen):
             print(adc_blue.read_adc(0, gain= GAIN))
             print(adc_green.read_adc(0, gain= GAIN))
             print("break")
+        abcd = True
     def setWhite(self):
         print('yo')
         global gamer
@@ -708,6 +712,11 @@ class MainScreen(Screen):
            # print(motor_6.getPosition())
     def test(self):
         global loopRun
+        global abcd
+        if(abcd == True):
+            abcd = False
+            Thread(target=self.justColor).start()
+            Thread.daemon = True
         if(loopRun == False):
             Thread(target=self.threadman).start()
             Thread.daemon = True
