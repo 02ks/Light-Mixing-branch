@@ -418,6 +418,7 @@ class MainScreen(Screen):
     aaa = ObjectProperty(None)
     def whatThis(self):
         global gamer3000
+        global game
         if gamer2000 == True:
             gamer3000 = True
             Thread(target=self.justColor).start()
@@ -425,6 +426,8 @@ class MainScreen(Screen):
             self.ids.LMF.text = "Uncenter"
         else:
             gamer3000 = True
+            if self.ids.asd.text == "Idle Off":
+                self.idleTrue()
             self.ids.LMF.text = "Center"
         SCREEN_MANAGER.current = CENTER_SCREEN_NAME
     def colorScreen(self):
