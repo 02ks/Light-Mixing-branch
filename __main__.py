@@ -430,6 +430,15 @@ class MainScreen(Screen):
             self.ids.LMF.text = "Center"
         SCREEN_MANAGER.current = CENTER_SCREEN_NAME
     def colorScreen(self):
+        global game
+        global gamer
+        if idlem == True:
+            game = False
+            self.init()
+            game = True
+            gamer = True
+            self.test()
+            return
         SCREEN_MANAGER.current = COLOR_SCREEN_NAME
     def whatsThis(self):
         global gamer
@@ -911,49 +920,58 @@ class MainScreen(Screen):
                 print("stoppeders")
                 motor_6.start_relative_move(f)
             if(dsaf - adc_red.read_adc(0, gain=GAIN) >= 1000 or dsaf - adc_red.read_adc(0, gain=GAIN) <= -1000):
+                idlem = False
                 self.init(self)
                 gamer = True
                 game = False
 
                # Thread(target=threadman, daemon=True).start()
             elif (dsaf2 - adc_blue.read_adc(0, gain=GAIN) >= 1000 or dsaf2 - adc_blue.read_adc(0, gain=GAIN) <= -1000):
+                idlem = False
                 self.init(self)
                 gamer = True
                 game = False
                # Thread(target=threadman, daemon=True).start()
             elif (dsaf3 - adc_green.read_adc(0, gain=GAIN) >= 1000 or dsaf3 - adc_green.read_adc(0, gain=GAIN) <= -1000):
+                idlem = False
                 self.init(self)
                 gamer = True
                 game = False
                # Thread(target=threadman, daemon=True).start()
             elif (dsaf4 - adc_red.read_adc(1, gain=GAIN) >= 1000 or dsaf4 - adc_red.read_adc(1, gain=GAIN) <= -1000):
+                idlem = False
                 self.init(self)
                 gamer = True
                 game = False
 
                # Thread(target=threadman, daemon=True).start()
             elif (dsaf5 - adc_blue.read_adc(1, gain=GAIN) >= 1000 or dsaf5 - adc_blue.read_adc(1, gain=GAIN) <= -1000):
+                idlem = False
                 self.init(self)
                 gamer = True
                 game = False
                # Thread(target=threadman, daemon=True).start()
             elif (dsaf6 - adc_green.read_adc(1, gain=GAIN) >= 1000 or dsaf6 - adc_green.read_adc(1, gain=GAIN) <= -1000):
+                idlem = False
                 self.init(self)
                 gamer = True
                 game = False
                # Thread(target=threadman, daemon=True).start()
             elif (dsaf7 - adc_red.read_adc(2, gain=GAIN) >= 1000 or dsaf7 - adc_red.read_adc(2, gain=GAIN) <= -1000):
+                idlem = False
                 self.init(self)
                 gamer = True
                 game = False
 
                # Thread(target=threadman, daemon=True).start()
             elif (dsaf8 - adc_blue.read_adc(2, gain=GAIN) >= 1000 or dsaf8 - adc_blue.read_adc(2, gain=GAIN) <= -1000):
+                idlem = False
                 self.init(self)
                 gamer = True
                 game = False
                 #Thread(target=threadman, daemon=True).start()
             elif (dsaf9 - adc_green.read_adc(2, gain=GAIN) >= 1000 or dsaf9 - adc_green.read_adc(2, gain=GAIN) <= -1000):
+                idlem = False
                 self.init(self)
                 gamer = True
                 game = False
