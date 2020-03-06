@@ -146,6 +146,8 @@ adc_blue = Adafruit_ADS1x15.ADS1115(0x48)
 adc_green = Adafruit_ADS1x15.ADS1115(0x49)
 
 global gamer
+global game
+game = True
 global gamer2000
 gamer = True
 clamp = lambda n, min_n, max_n: max(min(max_n, n), min_n)
@@ -411,7 +413,6 @@ class MainScreen(Screen):
     global gamer3000
     gamer3000 = True
     gamer2000 = True
-    game = True
     bruhmst = ObjectProperty(None)
     bruhmst2 = ObjectProperty(None)
     bruhmst3 = ObjectProperty(None)
@@ -426,8 +427,6 @@ class MainScreen(Screen):
             self.ids.LMF.text = "Uncenter"
         else:
             gamer3000 = True
-            if self.ids.asd.text == "Idle Off":
-                self.idleTrue()
             self.ids.LMF.text = "Center"
         SCREEN_MANAGER.current = CENTER_SCREEN_NAME
     def colorScreen(self):
@@ -471,7 +470,7 @@ class MainScreen(Screen):
             sleep(2)
         else:
             gamer3000 = False
-            game = True
+            #game = True
             gamer =True
             gamer2000 = True
             self.init(self)
