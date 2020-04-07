@@ -25,7 +25,7 @@ led.change_frequency(2000)
 pwms = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 led.change_percentage(pwms, 50)
 # variables are the solution to all problems, hence why I made and named almost all the variables. I take credit for work such as
-#gamer2000 or gamer3000, or game, or the dsaf line or brust line. Please and thankyou/
+#centeringVariable or colorControl, or idleToggle, or the knobStore line or brust line. Please and thankyou/
 AXIS_MOTOR_SETTINGS = {
     'hold_current': 20,
     'run_current': 20,
@@ -145,32 +145,32 @@ adc_red = Adafruit_ADS1x15.ADS1115(0x4A)
 adc_blue = Adafruit_ADS1x15.ADS1115(0x48)
 adc_green = Adafruit_ADS1x15.ADS1115(0x49)
 
-global gamer
-global game
-game = True
-global gamer2000
-gamer = True
+global mainThreadToggle
+global idleToggle
+idleToggle = True
+global centeringVariable
+mainThreadToggle = True
 clamp = lambda n, min_n, max_n: max(min(max_n, n), min_n)
-global dsaf
-global dsaf2
-global dsaf3
-global dsaf4
-global dsaf5
-global dsaf6
-global dsaf7
-global dsaf8
-global dsaf9
-dsaf = adc_red.read_adc(0, gain=GAIN)
-dsaf2 = adc_blue.read_adc(0, gain=GAIN)
-dsaf3 = adc_green.read_adc(0, gain=GAIN)
-dsaf4 = adc_red.read_adc(1, gain=GAIN)
-dsaf5 = adc_blue.read_adc(1, gain=GAIN)
-dsaf6 = adc_green.read_adc(1, gain=GAIN)
-dsaf7 = adc_red.read_adc(2, gain=GAIN)
-dsaf8 = adc_blue.read_adc(2, gain=GAIN)
-dsaf9 = adc_green.read_adc(2, gain=GAIN)
-global abcd
-abcd = False
+global knobStore
+global knobStore2
+global knobStore3
+global joyStore
+global joyStore2
+global joyStore3
+global joyStore4
+global joyStore8
+global joyStore9
+knobStore = adc_red.read_adc(0, gain=GAIN)
+knobStore2 = adc_blue.read_adc(0, gain=GAIN)
+knobStore3 = adc_green.read_adc(0, gain=GAIN)
+joyStore = adc_red.read_adc(1, gain=GAIN)
+joyStore2 = adc_blue.read_adc(1, gain=GAIN)
+joyStore3 = adc_green.read_adc(1, gain=GAIN)
+joyStore4 = adc_red.read_adc(2, gain=GAIN)
+joyStore8 = adc_blue.read_adc(2, gain=GAIN)
+joyStore9 = adc_green.read_adc(2, gain=GAIN)
+global betweenThreadToggle
+betweenThreadToggle = False
 PASSWORD = '7266'# make different pw lead to different places?
 PASSWORD2 = '1922'
 PASSWORD3 = '12345'
@@ -275,7 +275,7 @@ class PassCodeScreen(Screen):
     @staticmethod
     def set_transition_back_screen(screen):
         """
-        Set the screen to transition back to when the "Back to Game" button is pressed
+        Set the screen to transition back to when the "Back to idleToggle" button is pressed
         :param screen: Name of the screen to transition back to
         :return: None
         """
@@ -316,10 +316,10 @@ class PassCodeScreen(Screen):
 
 
 class CenterScreen(Screen):
-    global gamer3000
-    global game
-    global gamer
-    global gamer2000
+    global colorControl
+    global idleToggle
+    global mainThreadToggle
+    global centeringVariable
 
     def __init__(self, **kw):
         Builder.load_file('center.kv')
@@ -346,11 +346,11 @@ class CenterScreen(Screen):
         """
         SCREEN_MANAGER.current = MAIN_SCREEN_NAME
     #def whatsThis(self):
-     #   gamer3000 = False
+     #   colorControl = False
       #  self.ids.LMF.text = "Center"
-       # game = True
-        #gamer = True
-        #gamer2000 = True
+       # idleToggle = True
+        #mainThreadToggle = True
+        #centeringVariable = True
         #self.init()
         #self.test()
 
@@ -379,12 +379,12 @@ class ColorScreen(Screen):
      #   clr_picker = ColorPicker()
       #  self.add_widget(clr_picker)
     def APLE(self):
-        global gamer3000
-        gamer3000 = False
+        global colorControl
+        colorControl = False
     def goBack(self):
-        global abcd
-        global gamer3000
-        gamer3000 = True
+        global betweenThreadToggle
+        global colorControl
+        colorControl= True
         print("activated")
         SCREEN_MANAGER.current = MAIN_SCREEN_NAME
     def ColorLarge(self, red, blue, green, otherValue):
@@ -403,60 +403,60 @@ class MainScreen(Screen):
     """
     Class to handle the main screen and its associated touch events
     """
-    global game
-    global gamer
-    global idlem
+    global idleToggle
+    global mainThreadToggle
+    global idleTrueCheck
     global loopRun
     loopRun = False
-    idlem = False
-    global gamer2000
-    global gamer3000
-    gamer3000 = True
-    gamer2000 = True
-    bruhmst = ObjectProperty(None)
-    bruhmst2 = ObjectProperty(None)
-    bruhmst3 = ObjectProperty(None)
-    aaa = ObjectProperty(None)
+    idleTrueCheck = False
+    global centeringVariable
+    global colorControl
+    colorControl = True
+    centeringVariable = True
+    RBGtext = ObjectProperty(None)
+    RBGtext2 = ObjectProperty(None)
+    RBGtext3 = ObjectProperty(None)
+    uselessLabel = ObjectProperty(None)
     def whatThis(self):
-        global gamer3000
-        global game
-        if gamer2000 == True:
-            gamer3000 = True
+        global colorControl
+        global idleToggle
+        if centeringVariable == True:
+            colorControl = True
             Thread(target=self.justColor).start()
             Thread.daemon = True
             self.ids.LMF.text = "Uncenter"
         else:
-            gamer3000 = True
+            colorControl = True
             self.ids.LMF.text = "Center"
         SCREEN_MANAGER.current = CENTER_SCREEN_NAME
     def colorScreen(self):
-        global game
-        global gamer
-        if idlem == True:
-            game = False
+        global idleToggle
+        global mainThreadToggle
+        if idleTrueCheck == True:
+            idleToggle = False
             self.init()
-            game = True
-            gamer = True
+            idleToggle = True
+            mainThreadToggle = True
             self.test()
             return
         SCREEN_MANAGER.current = COLOR_SCREEN_NAME
     def whatsThis(self):
-        global gamer
-        global game
-        global gamer3000
-        global gamer2000
-        gamer = False
-        global idlem
+        global mainThreadToggle
+        global idleToggle
+        global colorControl
+        global centeringVariable
+        mainThreadToggle = False
+        global idleTrueCheck
         SCREEN_MANAGER.current = MAIN_SCREEN_NAME
-        if idlem == True:
-            game = False
+        if idleTrueCheck == True:
+            idleToggle = False
             self.init(self)
-            game = True
-            gamer = True
+            idleToggle = True
+            mainThreadToggle = True
             self.test(self)
-        elif(gamer2000 == True):
-            gamer3000 = True
-            gamer2000 = False
+        elif(centeringVariable == True):
+            colorControl = True
+            centeringVariable = False
             self.init(self)
             print(motor_1.getPosition())
             print(motor_2.getPosition())
@@ -478,16 +478,16 @@ class MainScreen(Screen):
             motor_6.goToDir(1, -4783)
             sleep(2)
         else:
-            gamer3000 = False
-            #game = True
-            gamer =True
-            gamer2000 = True
+            colorControl = False
+            #idleToggle = True
+            mainThreadToggle =True
+            centeringVariable = True
             self.init(self)
-            gamer3000 = True
+            colorControl = True
             self.test(self)
     def justColor(self):
-        global abcd
-        while gamer3000 == True:
+        global betweenThreadToggle
+        while colorControl == True:
             led.change_percentage(0, clamp(value_as_percent("red", adc_red.read_adc(0, gain=GAIN)), 0, 100))
             led.change_percentage(1, clamp(value_as_percent("red", adc_green.read_adc(0, gain=GAIN)), 0, 100))
             led.change_percentage(2, clamp(value_as_percent("red", adc_blue.read_adc(0, gain=GAIN)), 0, 100))
@@ -500,39 +500,39 @@ class MainScreen(Screen):
                 fd = 256
             if(int(ff) > 256):
                 ff = 256
-            self.ids.bruhmst.text = "Red Light: %s" % int(sd)
-            self.ids.bruhmst2.text = "Blue Light: %s" % int(fd)
-            self.ids.bruhmst3.text = "Green Light: %s" % int(ff)
+            self.ids.RBGtext.text = "Red Light: %s" % int(sd)
+            self.ids.RBGtext2.text = "Blue Light: %s" % int(fd)
+            self.ids.RBGtext3.text = "Green Light: %s" % int(ff)
             print(adc_red.read_adc(0, gain=GAIN))
             print(adc_blue.read_adc(0, gain= GAIN))
             print(adc_green.read_adc(0, gain= GAIN))
             print("break")
-        abcd = True
+        betweenThreadToggle = True
     def setWhite(self):
         print('yo')
-        global gamer
-        global game
-        global idlem
-        if idlem == True:
-            game = False
+        global mainThreadToggle
+        global idleToggle
+        global idleTrueCheck
+        if idleTrueCheck == True:
+            idleToggle = False
             self.init()
-            game = True
-            gamer = True
+            idleToggle = True
+            mainThreadToggle = True
             self.test()
             return
-        global gamer3000
-        if gamer3000 == True:
-            gamer3000 = False
+        global colorControl
+        if colorControl == True:
+            colorControl = False
             self.ids.WHITE.text = "To Knob Control"
             led.change_percentage(0, 10928)
             led.change_percentage(2, 8480)
             led.change_percentage(1, 14496)
-        elif gamer == True:
+        elif mainThreadToggle == True:
             self.ids.WHITE.text = "To White"
-            gamer3000 = True
+            colorControl = True
         else:
             self.ids.WHITE.text = "To White"
-            gamer3000 = True
+            colorControl = True
             Thread(target=self.justColor).start()
             Thread.daemon = True
     def threadman(self):
@@ -550,33 +550,33 @@ class MainScreen(Screen):
         stored_movement_amount4 = 0
         stored_movement_amount5 = 0
         stored_movement_amount6 = 0
-        global dsaf
-        global dsaf2
-        global dsaf3
-        global dsaf4
-        global dsaf5
-        global dsaf6
-        global dsaf7
-        global dsaf8
-        global dsaf9
-        global bruhm
-        bruhm = 0
-        while gamer == True:
+        global knobStore
+        global knobStore2
+        global knobStore3
+        global joyStore
+        global joyStore2
+        global joyStore3
+        global joyStore4
+        global joyStore8
+        global joyStore9
+        global idleCounter
+        idleCounter = 0
+        while mainThreadToggle == True:
             loopRun = True
-            if gamer3000 == True:
-                bruhm = bruhm + 1
-                print(bruhm)
-                if (dsaf - adc_red.read_adc(0, gain=GAIN) >= 1000 or dsaf - adc_red.read_adc(0, gain=GAIN) <= -1000):
-                    bruhm = 0
+            if colorControl == True:
+                idleCounter = idleCounter + 1
+                print(idleCounter)
+                if (knobStore - adc_red.read_adc(0, gain=GAIN) >= 1000 or knobStore - adc_red.read_adc(0, gain=GAIN) <= -1000):
+                    idleCounter = 0
 
-                elif (dsaf2 - adc_blue.read_adc(0, gain=GAIN) >= 1000 or dsaf2 - adc_blue.read_adc(0, gain=GAIN) <= -1000):
-                    bruhm = 0
+                elif (knobStore2 - adc_blue.read_adc(0, gain=GAIN) >= 1000 or knobStore2 - adc_blue.read_adc(0, gain=GAIN) <= -1000):
+                    idleCounter = 0
 
-                elif (dsaf3 - adc_green.read_adc(0, gain=GAIN) >= 1000 or dsaf3 - adc_green.read_adc(0, gain=GAIN) <= -1000):
-                    bruhm = 0
-                dsaf = adc_red.read_adc(0, gain=GAIN)
-                dsaf2 = adc_blue.read_adc(0, gain=GAIN)
-                dsaf3 = adc_green.read_adc(0, gain=GAIN)
+                elif (knobStore3 - adc_green.read_adc(0, gain=GAIN) >= 1000 or knobStore3 - adc_green.read_adc(0, gain=GAIN) <= -1000):
+                    idleCounter = 0
+                knobStore = adc_red.read_adc(0, gain=GAIN)
+                knobStore2 = adc_blue.read_adc(0, gain=GAIN)
+                knobStore3 = adc_green.read_adc(0, gain=GAIN)
                 led.change_percentage(0, clamp(value_as_percent("red", adc_red.read_adc(0, gain=GAIN)), 0, 100))
                 led.change_percentage(1, clamp(value_as_percent("red", adc_green.read_adc(0, gain=GAIN)), 0, 100))
                 led.change_percentage(2, clamp(value_as_percent("red", adc_blue.read_adc(0, gain=GAIN)), 0, 100))
@@ -589,9 +589,9 @@ class MainScreen(Screen):
                     fd = 256
                 if(int(ff) > 256):
                     ff = 256
-                self.ids.bruhmst.text = "Red Light: %s" % int(sd)
-                self.ids.bruhmst2.text = "Blue Light: %s" % int(fd)
-                self.ids.bruhmst3.text = "Green Light: %s" % int(ff)
+                self.ids.RBGtext.text = "Red Light: %s" % int(sd)
+                self.ids.RBGtext2.text = "Blue Light: %s" % int(fd)
+                self.ids.RBGtext3.text = "Green Light: %s" % int(ff)
 
             movement_amount = round(scale_joystick_value(adc_red.read_adc(1, gain=GAIN)) * increment)
             if movement_amount == 0 or abs(abs(stored_movement_amount4) - abs(movement_amount)) > 1:
@@ -600,7 +600,7 @@ class MainScreen(Screen):
             if movement_amount is not 0 and not motor_4.is_busy() or movement_amount is not 0 and motor_4.getPosition() >= 1000 or motor_4.getPosition() <= -7000:
                 print(movement_amount)
                 motor_4.set_speed(abs(movement_amount*2))
-                bruhm = 0
+                idleCounter = 0
                 if motor_4.getPosition() >= 1000 and movement_amount > 0:
                     print(motor_4.getPosition())
                     motor_4.stop()
@@ -618,7 +618,7 @@ class MainScreen(Screen):
             if movement_amount is not 0 and not motor_5.is_busy() or movement_amount is not 0 and motor_5.getPosition() >= 1000 or motor_5.getPosition() <= -7000:
                 print(motor_5.getPosition())
                 motor_5.set_speed(abs(movement_amount * 2))
-                bruhm = 0
+                idleCounter = 0
                 if motor_5.getPosition() >= 1000 and movement_amount > 0:
                     print(motor_5.getPosition())
                     motor_5.stop()
@@ -636,7 +636,7 @@ class MainScreen(Screen):
             if movement_amount is not 0 and not motor_6.is_busy() or movement_amount is not 0 and motor_6.getPosition() >= 1000 or motor_6.getPosition() <= -7000:
                 print(motor_6.getPosition())
                 motor_6.set_speed(abs(movement_amount * 2))
-                bruhm = 0
+                idleCounter = 0
                 if motor_6.getPosition() >= 1000 and movement_amount > 0:
                     print("This is yep movement_amount value: %d" % movement_amount)
                     print(motor_6.getPosition())
@@ -656,7 +656,7 @@ class MainScreen(Screen):
             if movement_amount is not 0 and not motor_1.is_busy() or movement_amount is not 0 and motor_1.getPosition() >= 14000 or motor_1.getPosition() <= -500:
                 print(movement_amount)
                 motor_1.set_speed(abs(movement_amount * 2))
-                bruhm = 0
+                idleCounter = 0
                 print(motor_1.getPosition())
                 if motor_1.getPosition() >= 14000 & movement_amount > 0:
                     print(motor_1.getPosition())
@@ -675,7 +675,7 @@ class MainScreen(Screen):
             if movement_amount is not 0 and not motor_2.is_busy() or movement_amount is not 0 and motor_2.getPosition() >= 14000 or motor_2.getPosition() <= -500:
                 print(movement_amount)
                 motor_2.set_speed(abs(movement_amount * 2))
-                bruhm = 0
+                idleCounter = 0
                 print(motor_2.getPosition())
                 if motor_2.getPosition() >= 14000 & movement_amount > 0:
                     print(motor_2.getPosition())
@@ -695,7 +695,7 @@ class MainScreen(Screen):
             if movement_amount is not 0 and not motor_3.is_busy() or movement_amount is not 0 and motor_3.getPosition() >= 14000 or motor_3.getPosition() <= -500:
                 print(movement_amount)
                 motor_3.set_speed(abs(movement_amount * 2))
-                bruhm = 0
+                idleCounter = 0
                 print(motor_3.getPosition())
                 if motor_3.getPosition() >= 14000 & movement_amount > 0:
                     print(motor_3.getPosition())
@@ -707,8 +707,8 @@ class MainScreen(Screen):
                     motor_3.softStop()
                 else:
                     motor_3.start_relative_move(-movement_amount * 100)
-            if (bruhm == 200):
-                bruhm = 0
+            if (idleCounter == 200):
+                idleCounter = 0
                 idle()
         loopRun = False
 
@@ -723,29 +723,29 @@ class MainScreen(Screen):
            # print(motor_6.getPosition())
     def test(self):
         global loopRun
-        global abcd
-        if(abcd == True):
-            abcd = False
+        global betweenThreadToggle
+        if(betweenThreadToggle == True):
+            betweenThreadToggle = False
             Thread(target=self.justColor).start()
             Thread.daemon = True
         if(loopRun == False):
             Thread(target=self.threadman).start()
             Thread.daemon = True
     def idleTrue(self):
-        global game
-        global gamer
-        global idlem
-        if(idlem == True):
-            game = False
+        global idleToggle
+        global mainThreadToggle
+        global idleTrueCheck
+        if(idleTrueCheck == True):
+            idleToggle = False
             self.init()
-            game = True
-            gamer = True
+            idleToggle = True
+            mainThreadToggle = True
             self.test()
-        elif(game == False):
-            game = True
+        elif(idleToggle == False):
+            idleToggle = True
             self.ids.asd.text = "Idle On"
         else:
-            game = False
+            idleToggle = False
             self.ids.asd.text = "Idle Off"
 
     def init(self):
@@ -796,15 +796,15 @@ class MainScreen(Screen):
         global b
         global c
         global d
-        global gamer
+        global mainThreadToggle
         global e
-        global idlem
-        idlem = True
-        global game
+        global idleTrueCheck
+        idleTrueCheck = True
+        global idleToggle
         global f
-        global dsaf
-        global dsaf2
-        global dsaf3
+        global knobStore
+        global knobStore2
+        global knobStore3
         global change
         global change2
         global change3
@@ -831,7 +831,7 @@ class MainScreen(Screen):
         e = 100
         f = 100
 
-        while game == True:
+        while idleToggle == True:
             change = change + 1
             change2 = change2 + 1
             change3 = change3 + 1
@@ -919,64 +919,64 @@ class MainScreen(Screen):
                 f = f * -1
                 print("stoppeders")
                 motor_6.start_relative_move(f)
-            if(dsaf - adc_red.read_adc(0, gain=GAIN) >= 1000 or dsaf - adc_red.read_adc(0, gain=GAIN) <= -1000):
-                idlem = False
+            if(knobStore - adc_red.read_adc(0, gain=GAIN) >= 1000 or knobStore - adc_red.read_adc(0, gain=GAIN) <= -1000):
+                idleTrueCheck = False
                 self.init(self)
-                gamer = True
-                game = False
+                mainThreadToggle = True
+                idleToggle = False
 
                # Thread(target=threadman, daemon=True).start()
-            elif (dsaf2 - adc_blue.read_adc(0, gain=GAIN) >= 1000 or dsaf2 - adc_blue.read_adc(0, gain=GAIN) <= -1000):
-                idlem = False
+            elif (knobStore2 - adc_blue.read_adc(0, gain=GAIN) >= 1000 or knobStore2 - adc_blue.read_adc(0, gain=GAIN) <= -1000):
+                idleTrueCheck = False
                 self.init(self)
-                gamer = True
-                game = False
+                mainThreadToggle = True
+                idleToggle = False
                # Thread(target=threadman, daemon=True).start()
-            elif (dsaf3 - adc_green.read_adc(0, gain=GAIN) >= 1000 or dsaf3 - adc_green.read_adc(0, gain=GAIN) <= -1000):
-                idlem = False
+            elif (knobStore3 - adc_green.read_adc(0, gain=GAIN) >= 1000 or knobStore3 - adc_green.read_adc(0, gain=GAIN) <= -1000):
+                idleTrueCheck = False
                 self.init(self)
-                gamer = True
-                game = False
+                mainThreadToggle = True
+                idleToggle = False
                # Thread(target=threadman, daemon=True).start()
-            elif (dsaf4 - adc_red.read_adc(1, gain=GAIN) >= 1000 or dsaf4 - adc_red.read_adc(1, gain=GAIN) <= -1000):
-                idlem = False
+            elif (joyStore - adc_red.read_adc(1, gain=GAIN) >= 1000 or joyStore - adc_red.read_adc(1, gain=GAIN) <= -1000):
+                idleTrueCheck = False
                 self.init(self)
-                gamer = True
-                game = False
+                mainThreadToggle = True
+                idleToggle = False
 
                # Thread(target=threadman, daemon=True).start()
-            elif (dsaf5 - adc_blue.read_adc(1, gain=GAIN) >= 1000 or dsaf5 - adc_blue.read_adc(1, gain=GAIN) <= -1000):
-                idlem = False
+            elif (joyStore2 - adc_blue.read_adc(1, gain=GAIN) >= 1000 or joyStore2 - adc_blue.read_adc(1, gain=GAIN) <= -1000):
+                idleTrueCheck = False
                 self.init(self)
-                gamer = True
-                game = False
+                mainThreadToggle = True
+                idleToggle = False
                # Thread(target=threadman, daemon=True).start()
-            elif (dsaf6 - adc_green.read_adc(1, gain=GAIN) >= 1000 or dsaf6 - adc_green.read_adc(1, gain=GAIN) <= -1000):
-                idlem = False
+            elif (joyStore3 - adc_green.read_adc(1, gain=GAIN) >= 1000 or joyStore3 - adc_green.read_adc(1, gain=GAIN) <= -1000):
+                idleTrueCheck = False
                 self.init(self)
-                gamer = True
-                game = False
+                mainThreadToggle = True
+                idleToggle = False
                # Thread(target=threadman, daemon=True).start()
-            elif (dsaf7 - adc_red.read_adc(2, gain=GAIN) >= 1000 or dsaf7 - adc_red.read_adc(2, gain=GAIN) <= -1000):
-                idlem = False
+            elif (joyStore4 - adc_red.read_adc(2, gain=GAIN) >= 1000 or joyStore4 - adc_red.read_adc(2, gain=GAIN) <= -1000):
+                idleTrueCheck = False
                 self.init(self)
-                gamer = True
-                game = False
+                mainThreadToggle = True
+                idleToggle = False
 
                # Thread(target=threadman, daemon=True).start()
-            elif (dsaf8 - adc_blue.read_adc(2, gain=GAIN) >= 1000 or dsaf8 - adc_blue.read_adc(2, gain=GAIN) <= -1000):
-                idlem = False
+            elif (joyStore8 - adc_blue.read_adc(2, gain=GAIN) >= 1000 or joyStore8 - adc_blue.read_adc(2, gain=GAIN) <= -1000):
+                idleTrueCheck = False
                 self.init(self)
-                gamer = True
-                game = False
+                mainThreadToggle = True
+                idleToggle = False
                 #Thread(target=threadman, daemon=True).start()
-            elif (dsaf9 - adc_green.read_adc(2, gain=GAIN) >= 1000 or dsaf9 - adc_green.read_adc(2, gain=GAIN) <= -1000):
-                idlem = False
+            elif (joyStore9 - adc_green.read_adc(2, gain=GAIN) >= 1000 or joyStore9 - adc_green.read_adc(2, gain=GAIN) <= -1000):
+                idleTrueCheck = False
                 self.init(self)
-                gamer = True
-                game = False
+                mainThreadToggle = True
+                idleToggle = False
                # Thread(target=threadman, daemon=True).start()
-        idlem = False
+        idleTrueCheck = False
 
     def admin_action(self):
         """
@@ -1003,7 +1003,7 @@ class AdminScreen(Screen):
         PassCodeScreen.set_admin_events_screen(
             ADMIN_SCREEN_NAME)  # Specify screen name to transition to after correct password
         PassCodeScreen.set_transition_back_screen(
-            MAIN_SCREEN_NAME)  # set screen name to transition to if "Back to Game is pressed"
+            MAIN_SCREEN_NAME)  # set screen name to transition to if "Back to idleToggle is pressed"
 
         super(AdminScreen, self).__init__(**kwargs)
 
@@ -1021,14 +1021,14 @@ class AdminScreen(Screen):
         Shutdown the system. This should free all steppers and do any cleanup necessary
         :return: None
         """
-        global gamer
-        global game
-        gamer = False
-        global gamer2000
-        global gamer3000
-        gamer3000 = False
-        gamer2000 = True
-        game = False
+        global mainThreadToggle
+        global idleToggle
+        mainThreadToggle = False
+        global centeringVariable
+        global colorControl
+        colorControl = False
+        centeringVariable = True
+        idleToggle = False
         motor_1.free()
         sleep(.3)
         motor_2.free()
@@ -1051,18 +1051,18 @@ class AdminScreen(Screen):
 
     @staticmethod
     def exit_program():
-        global gamer
-        global gamer2000
-        global gamer3000
-        global game
-        game = False
-        gamer3000 = False
+        global mainThreadToggle
+        global centeringVariable
+        global colorControl
+        global idleToggle
+        idleToggle = False
+        colorControl = False
         """
         Quit the program. This should free all steppers and do any cleanup necessary
         :return: None
         """
-        gamer = False
-        gamer2000 = True
+        mainThreadToggle = False
+        centeringVariable = True
         motor_1.free()
         sleep(.3)
         motor_2.free()
@@ -1118,11 +1118,11 @@ def joy_val_filter(value):
     else:
         return value
 def idle():
-    global game
-    global gamer
-    if(game == True):
-        game = True
-        gamer = False
+    global idleToggle
+    global mainThreadToggle
+    if(idleToggle == True):
+        idleToggle = True
+        mainThreadToggle = False
         self = MainScreen
         Thread(target=MainScreen.idleThread(self), daemon=True).start()
 

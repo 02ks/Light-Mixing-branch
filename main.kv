@@ -1,9 +1,9 @@
 <MainScreen>:
     name: 'main'
-    bruhmst: bruhmst
-    bruhmst2: bruhmst2
-    bruhmst3: bruhmst3
-    aaa: aaa
+    RBGtext: RBGtext
+    RBGtext2: RBGtext2
+    RBGtext3: RBGtext3
+    uselessLabel: uselessLabel
     on_enter: root.test()
     FloatLayout:
         size_hint: None, None
@@ -59,27 +59,27 @@
         text: "To White"
         on_press:root.setWhite()
     Label:
-        id: aaa
+        id: uselessLabel
         font_size: 30
         x: root.width * 0
         y: root.height * -.3
         color: 1, 1, 1, 1
     Label:
-        id: bruhmst
+        id: RBGtext
         text: "Red Light:"
         font_size: 30
         x: root.width * -.2
         y: root.height * .3
         color: 1, 1, 1, 1
     Label:
-        id: bruhmst2
+        id: RBGtext2
         text: "Blue Light:"
         font_size: 30
         x: root.width * 0
         y: root.height * .3
         color: 1, 1, 1, 1
     Label:
-        id: bruhmst3
+        id: RBGtext3
         text: "Green Light:"
         font_size: 30
         x: root.width * .2
