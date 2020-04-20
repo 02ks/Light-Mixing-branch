@@ -24,11 +24,11 @@ What to do Next:
 
   Software:
   
-    GUI:
+    GUI: Make things look better. That's about it. The GUI as it is is functional and moderately ok, but it lacks proper style.
     
-    Main code:
+    Main code: Fix all variables that havent't been fixed yet. Add comments. Lots of comments that explain EXACTLY how things work.
   
-  HardWare:
+  HardWare:  Add panels, not now but whenever we can.
   
 **This is the most updated and complete version of light mixing, I originally just made a copy of the engineering
 repository that eventually became this place. The stuff here will probably eventually be transfered back
