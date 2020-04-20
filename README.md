@@ -12,7 +12,7 @@ Light Mixing requires:
 Trouble Shooting:
 
 - Firstly, make sure you are not editing the main repository. That code should remain unchanged until new working version. Instead, edit Light Mixing Branch, a respository that can be found through Alex's github (IncrediblyOriginalUsername)
-- If you are having problems with our code (i.e. it's not working correctly when run on Light Mixing), feel free to double check with the code on the official Light Mixing repository on github. Some of our code on Light Mixing branch is still in development (Especially code like that of the color picker.
+- If you are having problems with our code (i.e. it's not working correctly when run on Light Mixing), feel free to double check with the code on the official Light Mixing repository on github. Some of our code on Light Mixing branch is still in development (Especially code like that of the color picker) and it is 
 
 
 **This is the most updated and complete version of light mixing, I originally just made a copy of the engineering
