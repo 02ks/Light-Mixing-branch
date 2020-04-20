@@ -345,15 +345,6 @@ class CenterScreen(Screen):
         :return:
         """
         SCREEN_MANAGER.current = MAIN_SCREEN_NAME
-    #def whatsThis(self):
-     #   colorControl = False
-      #  self.ids.LMF.text = "Center"
-       # idleToggle = True
-        #mainThreadToggle = True
-        #centeringVariable = True
-        #self.init()
-        #self.test()
-
 class CommuneScreen(Screen):
 
     def __init__(self, **kw):
@@ -376,8 +367,6 @@ class ColorScreen(Screen):
     def __init__(self, **kw):
         Builder.load_file('color.kv')
         super(ColorScreen, self).__init__(**kw)
-     #   clr_picker = ColorPicker()
-      #  self.add_widget(clr_picker)
     def APLE(self):
         global colorControl
         colorControl = False
@@ -464,12 +453,6 @@ class MainScreen(Screen):
             print(motor_4.getPosition())
             print(motor_5.getPosition())
             print(motor_6.getPosition())
-           # motor_1.go_to_position(5564)
-           # motor_2.go_to_position(5468)
-           # motor_3.go_to_position(5759)
-          #  motor_4.go_to_position(-902)
-           # motor_5.go_to_position(-2534)
-          #  motor_6.go_to_position(-4783)
             motor_1.goToDir(1, 5564)
             motor_2.goToDir(1, 5468)
             motor_3.goToDir(1, 5759)
@@ -712,15 +695,6 @@ class MainScreen(Screen):
                 idle()
         loopRun = False
 
-           # print("red knob: " + str(adc_red.read_adc(0, gain = GAIN)) + "   red x: " + str(adc_red.read_adc(1, gain = GAIN)) + "  red y: " + str(adc_red.read_adc(2, gain = GAIN)),end = '        ')
-          #  print("blue knob: " + str(adc_blue.read_adc(0, gain = GAIN)) + "   blue x: " + str(adc_blue.read_adc(1, gain = GAIN)) + "  blue y: " + str(adc_blue.read_adc(2, gain = GAIN)),end = '      ')
-         #   print("green knob: " + str(adc_green.read_adc(0, gain = GAIN)) + "   green x: " + str(adc_green.read_adc(1, gain = GAIN)) + "  green y: " + str(adc_green.read_adc(2, gain = GAIN)))
-           # print(motor_1.getPosition())
-           # print(motor_2.getPosition())
-          #  print(motor_3.getPosition())
-          #  print(motor_4.getPosition())
-          #  print(motor_5.getPosition())
-           # print(motor_6.getPosition())
     def test(self):
         global loopRun
         global betweenThreadToggle
@@ -969,13 +943,11 @@ class MainScreen(Screen):
                 self.init(self)
                 mainThreadToggle = True
                 idleToggle = False
-                #Thread(target=threadman, daemon=True).start()
             elif (joyStore9 - adc_green.read_adc(2, gain=GAIN) >= 1000 or joyStore9 - adc_green.read_adc(2, gain=GAIN) <= -1000):
                 idleTrueCheck = False
                 self.init(self)
                 mainThreadToggle = True
                 idleToggle = False
-               # Thread(target=threadman, daemon=True).start()
         idleTrueCheck = False
 
     def admin_action(self):
@@ -1152,6 +1124,4 @@ def send_event(event_name):
 
 
 if __name__ == "__main__":
-    # send_event("Project Initialized")
-    # Window.fullscreen = 'auto'
     ProjectNameGUI().run()
