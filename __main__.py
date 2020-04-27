@@ -1,6 +1,8 @@
 import sys
 import Adafruit_ADS1x15
 import os
+import random
+
 from kivy.uix.colorpicker import ColorPicker
 from kivy.app import App
 from kivy.properties import ObjectProperty
@@ -8,7 +10,6 @@ from kivy.uix.image import Image
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
-import random
 from pidev.MixPanel import MixPanel
 from pidev.kivy.PauseScreen import PauseScreen
 from pidev.kivy import DPEAButton
@@ -18,14 +19,16 @@ from pidev.stepper import stepper
 from time import sleep
 from threading import Thread
 from Slush.Devices import L6480Registers as LReg6480, L6470Registers as LReg6470
+
 sys.path.insert(0, "/home/pi/packages/Adafruit_16_Channel_PWM_Module_Easy_Library")
 import Adafruit_Ease_Lib as ael
 led = ael.Adafruit_Ease_Lib()
 led.change_frequency(2000)
 pwms = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 led.change_percentage(pwms, 50)
-# variables are the solution to all problems, hence why I made and named almost all the variables. I take credit for work such as
-#centeringVariable or colorControl, or idleToggle, or the knobStore line or brust line. Please and thankyou/
+# Variables are the solution to all problems, hence why I made and named almost all the variables. I take credit for
+# work such as centeringVariable or colorControl, or idleToggle, or the knobStore line or brust line.
+# Please and thank you. (by Alex)
 AXIS_MOTOR_SETTINGS = {
     'hold_current': 20,
     'run_current': 20,
@@ -66,15 +69,7 @@ class CustomImage(Image):
 
 
 class ProjectNameGUI(App):
-    """
-    Class to handle running the GUI Application
-    """
-
     def build(self):
-        """
-        Build the application
-        :return: Kivy Screen Manager instance
-        """
         return SCREEN_MANAGER
 
 
@@ -103,6 +98,7 @@ motor_6 = stepper(port=6, speed=100, hold_current=current, run_current=current, 
                   deaccel_current=current)
 motors = [motor_1, motor_2, motor_3, motor_4, motor_5, motor_6]
 microstepping = 32
+
 for motor in motors:
     motor.setAccel(0xF00)
     motor.setDecel(0xF00)
@@ -171,7 +167,7 @@ joyStore8 = adc_blue.read_adc(2, gain=GAIN)
 joyStore9 = adc_green.read_adc(2, gain=GAIN)
 global betweenThreadToggle
 betweenThreadToggle = False
-PASSWORD = '7266'# make different pw lead to different places?
+PASSWORD = '7266'
 PASSWORD2 = '1922'
 PASSWORD3 = '12345'
 USERPW = ''
@@ -183,16 +179,8 @@ Builder.load_file(passcode_screen_path)
 ADMIN_EVENTS_SCREEN = None
 TRANSITION_BACK_SCREEN = 'main'
 
-"""
-Class to display a passcode on screen to advance to admin screen
-"""
-
 
 class PassCodeScreen(Screen):
-    """
-    Class used to enter the PassCodeScreen to enter the admin screen
-    """
-
     def __init__(self, **kw):
         super(PassCodeScreen, self).__init__(**kw)
 
@@ -201,30 +189,17 @@ class PassCodeScreen(Screen):
         print("wait")
 
     def add_num(self, num):
-        """
-        Add a number to the current password entry
-        :param num: Number to add
-        :return: None
-        """
         global USERPW
 
         self.ids.pw.text += '* '
         USERPW += str(num)
 
     def remove_num(self):
-        """
-        Remove a number from the current password entry
-        :return: None
-        """
         global USERPW
         self.ids.pw.text = self.ids.pw.text[:len(self.ids.pw.text) - 2]
         USERPW = USERPW[:len(USERPW) - 1]
 
     def check_pass(self):
-        """
-        Check to see if the password was entered correctly
-        :return: None
-        """
         global USERPW
         if PASSWORD3 == USERPW:
             self.ids.pw.text = ' '
@@ -255,60 +230,32 @@ class PassCodeScreen(Screen):
             self.parent.current = ADMIN_EVENTS_SCREEN
 
     def transition_back(self):
-        """
-        Transition back to given transition back scren
-        :return: None
-        """
         self.ids.pw.text = ""
         self.parent.current = TRANSITION_BACK_SCREEN
 
     @staticmethod
     def set_admin_events_screen(screen):
-        """
-        Set the name of the screen to transition to when the password is correct
-        :param screen: Name of the screen to transition to
-        :return: None
-        """
         global ADMIN_EVENTS_SCREEN
         ADMIN_EVENTS_SCREEN = screen
 
     @staticmethod
     def set_transition_back_screen(screen):
-        """
-        Set the screen to transition back to when the "Back to idleToggle" button is pressed
-        :param screen: Name of the screen to transition back to
-        :return: None
-        """
         global TRANSITION_BACK_SCREEN
         TRANSITION_BACK_SCREEN = screen
 
     @staticmethod
     def set_password(pswd):
-        """
-        Change the default password
-        :param pswd: New password
-        :return: None
-        """
         global PASSWORD
         PASSWORD = pswd
 
     @staticmethod
     def change_main_screen_name(name):
-        """
-        Change the name of the screen to add the hidden button to go to the admin screen
-
-        NOTE: This only needs to be run ONCE, once it is called with the new name you can remove the call from your code
-        :param name: Name of the main screen of the UI
-        :return: None
-        """
         if name == '':
             return
 
         with open(passcode_screen_path) as file:
             data = file.readlines()
 
-        # This needs to be updated every time there are line changes in the PassCodeScreen.kv
-        # TODO implement a better way to dynamically change the main screen name
         data[134] = '<' + name + '>\n'
 
         with open(passcode_screen_path, 'w') as file:
@@ -324,8 +271,10 @@ class CenterScreen(Screen):
     def __init__(self, **kw):
         Builder.load_file('center.kv')
         super(CenterScreen, self).__init__(**kw)
+
     def goBack(self):
         SCREEN_MANAGER.current = MAIN_SCREEN_NAME
+
     def LoadAnimation(self):
         while(SCREEN_MANAGER.current == MAIN_SCREEN_NAME):
             self.ids.owos.text = "Centering"
@@ -336,15 +285,19 @@ class CenterScreen(Screen):
             sleep(.1)
             self.ids.owos.text = "Centering..."
             sleep(.1)
+
     def oii(self):
         self.LoadAnimation()
         MainScreen.whatsThis(MainScreen)
+
     def transition_back(self):
         """
         Transition back to the main screen
         :return:
         """
         SCREEN_MANAGER.current = MAIN_SCREEN_NAME
+
+
 class CommuneScreen(Screen):
 
     def __init__(self, **kw):
@@ -352,30 +305,39 @@ class CommuneScreen(Screen):
         super(CommuneScreen, self).__init__(**kw)
     def goBack(self):
         SCREEN_MANAGER.current = MAIN_SCREEN_NAME
+
+
 class FakeScreen(Screen):
 
     def __init__(self, **kw):
         Builder.load_file('fake.kv')
         super(FakeScreen, self).__init__(**kw)
+
     def goBack(self):
         SCREEN_MANAGER.current = MAIN_SCREEN_NAME
+
     def bamBoozle(self):
         self.ids.bnr.text = " "
         sleep(10)
         self.ids.bnr.text = "Ha you thought, try something a little better then 12345 next time"
+
+
 class ColorScreen(Screen):
     def __init__(self, **kw):
         Builder.load_file('color.kv')
         super(ColorScreen, self).__init__(**kw)
+
     def APLE(self):
         global colorControl
         colorControl = False
+
     def goBack(self):
         global betweenThreadToggle
         global colorControl
         colorControl= True
         print("activated")
         SCREEN_MANAGER.current = MAIN_SCREEN_NAME
+
     def ColorLarge(self, red, blue, green, otherValue):
         print(self)
         print(otherValue)
@@ -386,12 +348,13 @@ class ColorScreen(Screen):
         led.change_percentage(0, red*200)
         led.change_percentage(2, green*200)
         led.change_percentage(1, blue*200)
+
+
 class ColPckr(ColorPicker):
     pass
+
+
 class MainScreen(Screen):
-    """
-    Class to handle the main screen and its associated touch events
-    """
     global idleToggle
     global mainThreadToggle
     global idleTrueCheck
@@ -406,6 +369,7 @@ class MainScreen(Screen):
     RBGtext2 = ObjectProperty(None)
     RBGtext3 = ObjectProperty(None)
     uselessLabel = ObjectProperty(None)
+
     def whatThis(self):
         global colorControl
         global idleToggle
@@ -418,6 +382,7 @@ class MainScreen(Screen):
             colorControl = True
             self.ids.LMF.text = "Center"
         SCREEN_MANAGER.current = CENTER_SCREEN_NAME
+
     def colorScreen(self):
         global idleToggle
         global mainThreadToggle
@@ -429,6 +394,7 @@ class MainScreen(Screen):
             self.test()
             return
         SCREEN_MANAGER.current = COLOR_SCREEN_NAME
+
     def whatsThis(self):
         global mainThreadToggle
         global idleToggle
@@ -468,6 +434,7 @@ class MainScreen(Screen):
             self.init(self)
             colorControl = True
             self.test(self)
+
     def justColor(self):
         global betweenThreadToggle
         while colorControl == True:
@@ -491,6 +458,7 @@ class MainScreen(Screen):
             print(adc_green.read_adc(0, gain= GAIN))
             print("break")
         betweenThreadToggle = True
+
     def setWhite(self):
         print('yo')
         global mainThreadToggle
@@ -518,6 +486,7 @@ class MainScreen(Screen):
             colorControl = True
             Thread(target=self.justColor).start()
             Thread.daemon = True
+
     def threadman(self):
         global stored_movement_amount1
         global stored_movement_amount2
@@ -705,6 +674,7 @@ class MainScreen(Screen):
         if(loopRun == False):
             Thread(target=self.threadman).start()
             Thread.daemon = True
+
     def idleTrue(self):
         global idleToggle
         global mainThreadToggle
@@ -898,46 +868,36 @@ class MainScreen(Screen):
                 self.init(self)
                 mainThreadToggle = True
                 idleToggle = False
-
-               # Thread(target=threadman, daemon=True).start()
             elif (knobStore2 - adc_blue.read_adc(0, gain=GAIN) >= 1000 or knobStore2 - adc_blue.read_adc(0, gain=GAIN) <= -1000):
                 idleTrueCheck = False
                 self.init(self)
                 mainThreadToggle = True
                 idleToggle = False
-               # Thread(target=threadman, daemon=True).start()
             elif (knobStore3 - adc_green.read_adc(0, gain=GAIN) >= 1000 or knobStore3 - adc_green.read_adc(0, gain=GAIN) <= -1000):
                 idleTrueCheck = False
                 self.init(self)
                 mainThreadToggle = True
                 idleToggle = False
-               # Thread(target=threadman, daemon=True).start()
             elif (joyStore - adc_red.read_adc(1, gain=GAIN) >= 1000 or joyStore - adc_red.read_adc(1, gain=GAIN) <= -1000):
                 idleTrueCheck = False
                 self.init(self)
                 mainThreadToggle = True
                 idleToggle = False
-
-               # Thread(target=threadman, daemon=True).start()
             elif (joyStore2 - adc_blue.read_adc(1, gain=GAIN) >= 1000 or joyStore2 - adc_blue.read_adc(1, gain=GAIN) <= -1000):
                 idleTrueCheck = False
                 self.init(self)
                 mainThreadToggle = True
                 idleToggle = False
-               # Thread(target=threadman, daemon=True).start()
             elif (joyStore3 - adc_green.read_adc(1, gain=GAIN) >= 1000 or joyStore3 - adc_green.read_adc(1, gain=GAIN) <= -1000):
                 idleTrueCheck = False
                 self.init(self)
                 mainThreadToggle = True
                 idleToggle = False
-               # Thread(target=threadman, daemon=True).start()
             elif (joyStore4 - adc_red.read_adc(2, gain=GAIN) >= 1000 or joyStore4 - adc_red.read_adc(2, gain=GAIN) <= -1000):
                 idleTrueCheck = False
                 self.init(self)
                 mainThreadToggle = True
                 idleToggle = False
-
-               # Thread(target=threadman, daemon=True).start()
             elif (joyStore8 - adc_blue.read_adc(2, gain=GAIN) >= 1000 or joyStore8 - adc_blue.read_adc(2, gain=GAIN) <= -1000):
                 idleTrueCheck = False
                 self.init(self)
@@ -951,48 +911,26 @@ class MainScreen(Screen):
         idleTrueCheck = False
 
     def admin_action(self):
-        """
-        Hidden admin button touch event. Transitions to passCodeScreen.
-        This method is called from pidev/kivy/PassCodeScreen.kv
-        :return: None
-        """
         SCREEN_MANAGER.current = 'passCode'
 
 
 class AdminScreen(Screen):
-    """
-    Class to handle the AdminScreen and its functionality
-    """
-
     def __init__(self, **kwargs):
-        """
-        Load the AdminScreen.kv file. Set the necessary names of the screens for the PassCodeScreen to transition to.
-        Lastly super Screen's __init__
-        :param kwargs: Normal kivy.uix.screenmanager.Screen attributes
-        """
         Builder.load_file('AdminScreen.kv')
 
         PassCodeScreen.set_admin_events_screen(
-            ADMIN_SCREEN_NAME)  # Specify screen name to transition to after correct password
+            ADMIN_SCREEN_NAME)
         PassCodeScreen.set_transition_back_screen(
-            MAIN_SCREEN_NAME)  # set screen name to transition to if "Back to idleToggle is pressed"
+            MAIN_SCREEN_NAME)
 
         super(AdminScreen, self).__init__(**kwargs)
 
     @staticmethod
     def transition_back():
-        """
-        Transition back to the main screen
-        :return:
-        """
         SCREEN_MANAGER.current = MAIN_SCREEN_NAME
 
     @staticmethod
     def shutdown():
-        """
-        Shutdown the system. This should free all steppers and do any cleanup necessary
-        :return: None
-        """
         global mainThreadToggle
         global idleToggle
         mainThreadToggle = False
@@ -1029,10 +967,6 @@ class AdminScreen(Screen):
         global idleToggle
         idleToggle = False
         colorControl = False
-        """
-        Quit the program. This should free all steppers and do any cleanup necessary
-        :return: None
-        """
         mainThreadToggle = False
         centeringVariable = True
         motor_1.free()
@@ -1076,7 +1010,6 @@ def value_as_percent(color, value):
 
 def scale_joystick_value(value):
     abf = (value-6600)/2000
-    #print("movement_amount: %d" % abf)
     return (value - 6600)/1000
 
 
@@ -1089,6 +1022,7 @@ def joy_val_filter(value):
         return 0
     else:
         return value
+
 def idle():
     global idleToggle
     global mainThreadToggle
@@ -1108,15 +1042,11 @@ SCREEN_MANAGER.add_widget(PassCodeScreen(name='passCode'))
 SCREEN_MANAGER.add_widget(PauseScreen(name='pauseScene'))
 SCREEN_MANAGER.add_widget(AdminScreen(name=ADMIN_SCREEN_NAME))
 SCREEN_MANAGER.add_widget(ColorScreen(name = COLOR_SCREEN_NAME))
-print("happesns")
+print("happens")
 
 
-def send_event(event_name):
-    """
-    Send an event to MixPanel without properties
-    :param event_name: Name of the event
-    :return: None
-    """
+def send_event(event_name):00.
+
     global MIXPANEL
 
     MIXPANEL.set_event_name(event_name)
