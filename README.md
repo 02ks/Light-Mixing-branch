@@ -28,7 +28,7 @@ What to do Next:
     
     Main code: Fix all variables that havent't been fixed yet. Add comments. Lots of comments that explain EXACTLY how things work.
   
-  HardWare:  Add panels, not now but whenever we can.
+  HardWare:  Add panels, not now but whenever possible. In addition to panels, Light Mixing will also need to have its knobs reinstalled, and the anodized tube added to the project. The tube is meant to sheath the wires running up to the top of the machine. Originally, we had planned to add these in before the end of the year, but was unable to due to the coronavirus.
   
 **This is the most updated and complete version of light mixing, I originally just made a copy of the engineering
 repository that eventually became this place. The stuff here will probably eventually be transfered back
