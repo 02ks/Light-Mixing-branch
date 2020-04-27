@@ -1045,7 +1045,7 @@ SCREEN_MANAGER.add_widget(ColorScreen(name = COLOR_SCREEN_NAME))
 print("happens")
 
 
-def send_event(event_name):00.
+def send_event(event_name):
 
     global MIXPANEL
 
