@@ -26,9 +26,9 @@ What to do Next:
   
     GUI: Make things look better. That's about it. The GUI as it is is functional and moderately ok, but it lacks proper style.
     
-    Main code: Fix all variables that havent't been fixed yet. Add comments. Lots of comments that explain EXACTLY how things work.
+    Main code: Fix all variables that havent't been fixed yet. Add comments. Lots of comments that explain EXACTLY how things work. Also, the color picker is something that we were unable to finish. The functions work but it needs a lot of adjustments.
   
-  HardWare:  Add panels, not now but whenever possible. In addition to panels, Light Mixing will also need to have its knobs reinstalled, and the anodized tube added to the project. The tube is meant to sheath the wires running up to the top of the machine. Originally, we had planned to add these in before the end of the year, but was unable to due to the coronavirus.
+  Hardware:  Add panels, not now but whenever possible. In addition to panels, Light Mixing will also need to have its knobs reinstalled, and the anodized tube added to the project. The tube is meant to sheath the wires running up to the top of the machine. Originally, we had planned to add these in before the end of the year, but was unable to due to the coronavirus. Green LED also should be changed so that it is a tri LED. We buy these LEDs from LED supply. You will also need to get a regular clear triple lens for the new LED. Use regular silicon or abrasive to attach the lens to the LED. Be careful to not get glue onto the lens. Ask Mr. Harlow for help on how to replace the LEDs.
   
 **This is the most updated and complete version of light mixing, I originally just made a copy of the engineering
 repository that eventually became this place. The stuff here will probably eventually be transfered back
