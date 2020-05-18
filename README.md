@@ -20,15 +20,22 @@ function. I have no idea why or how this happens but 95% of the time the setup s
 This can be considered a bug but for now it's not really an issue. If it is in the future, it may possibly be fixed by added 
 delay in the right spots as in the past similar but more dire issues of motors just not moving occured due to not enough delay. 
 
-What to do Next:
+What to do next:
 
   Software:
   
     GUI: Make things look better. That's about it. The GUI as it is is functional and moderately ok, but it lacks proper style.
     
-    Main code: Fix all variables that havent't been fixed yet. Add comments. Lots of comments that explain EXACTLY how things work.
+    Main code: Fix all variables that havent't been fixed yet. Add comments. Lots of comments that explain EXACTLY how things work. Also, the color picker is something that we were unable to finish. The functions work but it needs a lot of adjustments.
   
-  HardWare:  Add panels, not now but whenever we can.
+  Hardware:  Add panels, not now but whenever possible. Most of the panels have already been added to the cut list, but the panel in between the lights and the panel next to the electrical panel needs to be designed. After makeing them on solidworks, you will need to make dxfs of them and put them on the cut list to be routed. 
+  In addition to panels, Light Mixing will also need to have its knobs reinstalled, and the anodized tube added to the project. The tube is meant to sheath the wires running up to the top of the machine. Originally, we had planned to add these in before the end of the year, but was unable to due to the coronavirus. 
+  Green LED also should be changed so that it is a tri LED. We buy these LEDs from LED supply. You will also need to get a regular clear triple lens for the new LED. Use regular silicon or abrasive to attach the lens to the LED. Be careful to not get glue onto the lens. Ask Mr. Harlow for help on how to replace the LEDs. 
+  
+  Triple 3 up green - CREEXPE2-GRN-3  https://www.ledsupply.com/leds/cree-xlamp-xp-e2-color-high-power-led-star
+  3-Up Narrow Spot LED Optic - 10507 Carclo Lens - https://www.ledsupply.com/led-optics/10507-carclo-lens-3-up-narrow-spot-led-optic
+  
+  Note: Wires on the electrical panels have already been somewhat organized and zip-tied, but it would be nice if someone were to go back and make it look even nicer.
   
 **This is the most updated and complete version of light mixing, I originally just made a copy of the engineering
 repository that eventually became this place. The stuff here will probably eventually be transfered back
