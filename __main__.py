@@ -316,6 +316,7 @@ class PassCodeScreen(Screen):
 
 
 class CenterScreen(Screen):
+    "Temporary screen that's entered while centering or uncentering to prevent issues where buttons can store up clicks "
     global colorControl
     global idleToggle
     global mainThreadToggle
@@ -327,6 +328,8 @@ class CenterScreen(Screen):
     def goBack(self):
         SCREEN_MANAGER.current = MAIN_SCREEN_NAME
     def LoadAnimation(self):
+        "This currently doesn't function cause the screen is technically frozen at the time, however if the issue of freezing is solved"
+        "this should work"
         while(SCREEN_MANAGER.current == MAIN_SCREEN_NAME):
             self.ids.owos.text = "Centering"
             sleep(.1)
@@ -346,14 +349,14 @@ class CenterScreen(Screen):
         """
         SCREEN_MANAGER.current = MAIN_SCREEN_NAME
 class CommuneScreen(Screen):
-
+    "Easter Egg Screen"
     def __init__(self, **kw):
         Builder.load_file('commune.kv')
         super(CommuneScreen, self).__init__(**kw)
     def goBack(self):
         SCREEN_MANAGER.current = MAIN_SCREEN_NAME
 class FakeScreen(Screen):
-
+    "Easter Egg Screen"
     def __init__(self, **kw):
         Builder.load_file('fake.kv')
         super(FakeScreen, self).__init__(**kw)
@@ -364,6 +367,7 @@ class FakeScreen(Screen):
         sleep(10)
         self.ids.bnr.text = "Ha you thought, try something a little better then 12345 next time"
 class ColorScreen(Screen):
+    "Color Changing Screen"
     def __init__(self, **kw):
         Builder.load_file('color.kv')
         super(ColorScreen, self).__init__(**kw)
@@ -407,6 +411,7 @@ class MainScreen(Screen):
     RBGtext3 = ObjectProperty(None)
     uselessLabel = ObjectProperty(None)
     def whatThis(self):
+        "Toggles between centering and uncentering, take note of the importance of the variables changed"
         global colorControl
         global idleToggle
         if centeringVariable == True:
@@ -419,6 +424,7 @@ class MainScreen(Screen):
             self.ids.LMF.text = "Center"
         SCREEN_MANAGER.current = CENTER_SCREEN_NAME
     def colorScreen(self):
+        "Toggles between colorscreen and namescreen, also important variables."
         global idleToggle
         global mainThreadToggle
         if idleTrueCheck == True:
