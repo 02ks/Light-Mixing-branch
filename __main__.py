@@ -402,6 +402,7 @@ class MainScreen(Screen):
         SCREEN_MANAGER.current = COLOR_SCREEN_NAME
 
     def whatsThis(self):
+        ""
         global mainThreadToggle
         global idleToggle
         global colorControl
@@ -442,6 +443,7 @@ class MainScreen(Screen):
             self.test(self)
 
     def justColor(self):
+        "A variation of threadman which only uses color, used when the motors are centered and stopped from moving"
         global betweenThreadToggle
         while colorControl == True:
             led.change_percentage(0, clamp(value_as_percent("red", adc_red.read_adc(0, gain=GAIN)), 0, 100))
@@ -466,6 +468,8 @@ class MainScreen(Screen):
         betweenThreadToggle = True
 
     def setWhite(self):
+        "A function to set colors to white instead of control them via the knobs, with some added if/elses to check"
+        "the current state of the project"
         print('yo')
         global mainThreadToggle
         global idleToggle
@@ -494,6 +498,7 @@ class MainScreen(Screen):
             Thread.daemon = True
 
     def threadman(self):
+        "Main Thread that runs everything, color and movement."
         global stored_movement_amount1
         global stored_movement_amount2
         global stored_movement_amount3
@@ -671,6 +676,7 @@ class MainScreen(Screen):
         loopRun = False
 
     def test(self):
+        "Used to toggle between threads when going between centered and uncentered states"
         global loopRun
         global betweenThreadToggle
         if(betweenThreadToggle == True):
@@ -699,6 +705,7 @@ class MainScreen(Screen):
             self.ids.asd.text = "Idle Off"
 
     def init(self):
+        "The setup function, used to prevent things from breaking in various places"
         motor_1.free()
         sleep(.05)
         motor_2.free()
@@ -742,6 +749,7 @@ class MainScreen(Screen):
         sleep(4)
 
     def idleThread(self):
+        "The idle thread that controls what happens when iddling"
         global a
         global b
         global c
@@ -1030,6 +1038,7 @@ def joy_val_filter(value):
         return value
 
 def idle():
+    "Runs the idle function when called. Must be outside of mainscreen"
     global idleToggle
     global mainThreadToggle
     if(idleToggle == True):
