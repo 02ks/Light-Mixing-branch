@@ -290,6 +290,7 @@ class CenterScreen(Screen):
             sleep(.1)
 
     def oii(self):
+        "Run on entering screen"
         self.LoadAnimation()
         MainScreen.whatsThis(MainScreen)
 
@@ -334,6 +335,7 @@ class ColorScreen(Screen):
     def APLE(self):
         global colorControl
         colorControl = False
+        "Run on enter"
 
     def goBack(self):
         global betweenThreadToggle
@@ -343,6 +345,7 @@ class ColorScreen(Screen):
         SCREEN_MANAGER.current = MAIN_SCREEN_NAME
 
     def ColorLarge(self, red, blue, green, otherValue):
+        "Interacts with color picker itself"
         print(self)
         print(otherValue)
         print(red)
@@ -375,7 +378,7 @@ class MainScreen(Screen):
     uselessLabel = ObjectProperty(None)
 
     def whatThis(self):
-        "Toggles between centering and uncentering, take note of the importance of the variables changed"
+        "Toggles between centering and uncentering, activated via button"
         global colorControl
         global idleToggle
         if centeringVariable == True:
@@ -402,7 +405,8 @@ class MainScreen(Screen):
         SCREEN_MANAGER.current = COLOR_SCREEN_NAME
 
     def whatsThis(self):
-        ""
+        "Run on entering centerscreen via function oii, controls the overall toggling process by running init and test and"
+        "changing variables when needed"
         global mainThreadToggle
         global idleToggle
         global colorControl
@@ -671,6 +675,7 @@ class MainScreen(Screen):
                 else:
                     motor_3.start_relative_move(-movement_amount * 100)
             if (idleCounter == 200):
+                "Determines when idle activates, will do nothing if idle function is set to off"
                 idleCounter = 0
                 idle()
         loopRun = False
@@ -688,6 +693,7 @@ class MainScreen(Screen):
             Thread.daemon = True
 
     def idleTrue(self):
+        "Toggles whether or not idle will activate after a set period of time, Controlled via button"
         global idleToggle
         global mainThreadToggle
         global idleTrueCheck
@@ -749,7 +755,7 @@ class MainScreen(Screen):
         sleep(4)
 
     def idleThread(self):
-        "The idle thread that controls what happens when iddling"
+        "The idle thread that controls what happens when idling"
         global a
         global b
         global c
@@ -796,6 +802,7 @@ class MainScreen(Screen):
             change4 = change4 + 1
             change5 = change5 + 1
             change6 = change6 + 1
+            "Change variables add randomization"
 
             if not motor_1.is_busy() or change == 1000:
                 if change == 1000:
