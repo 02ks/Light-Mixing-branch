@@ -1,3 +1,4 @@
+"Light Mixing code, DPEA 2020, written by ALex Roberts and Kogan Sam"
 import sys
 import Adafruit_ADS1x15
 import os
@@ -103,7 +104,7 @@ for motor in motors:
     motor.setAccel(0xF00)
     motor.setDecel(0xF00)
     motor.set_micro_steps(microstepping)
-
+"Boot up system below, makes sure everything is in place before anything else"
 motor_1.set_speed(50)
 motor_2.set_speed(50)
 motor_3.set_speed(50)
@@ -181,6 +182,7 @@ TRANSITION_BACK_SCREEN = 'main'
 
 
 class PassCodeScreen(Screen):
+    "copied from pidev, originally DPEA base pass code code, but modified for use on Light Mixing"
     def __init__(self, **kw):
         super(PassCodeScreen, self).__init__(**kw)
 
@@ -345,7 +347,7 @@ class ColorScreen(Screen):
         SCREEN_MANAGER.current = MAIN_SCREEN_NAME
 
     def ColorLarge(self, red, blue, green, otherValue):
-        "Interacts with color picker itself"
+        "Interacts with color picker itself (Note Color Picker needs adjustment as hardware does not function in sync with code)"
         print(self)
         print(otherValue)
         print(red)
@@ -530,6 +532,7 @@ class MainScreen(Screen):
         idleCounter = 0
         while mainThreadToggle == True:
             loopRun = True
+            "Below is the knob control code, its relatively simple and doesn't need as much parameters as the motors."
             if colorControl == True:
                 idleCounter = idleCounter + 1
                 print(idleCounter)
@@ -559,7 +562,11 @@ class MainScreen(Screen):
                 self.ids.RBGtext.text = "Red Light: %s" % int(sd)
                 self.ids.RBGtext2.text = "Blue Light: %s" % int(fd)
                 self.ids.RBGtext3.text = "Green Light: %s" % int(ff)
-
+            "Main code for movement of motors"
+            "This code is repeated for each of the motors"
+            "It takes the movement_amount from the joystick values, then the code checks the value for a series of "
+            "parameters to check that the motor won't be going to far or breaking. It then adds it to stored movement"
+            "and then tells the motors to do a relative movement."
             movement_amount = round(scale_joystick_value(adc_red.read_adc(1, gain=GAIN)) * increment)
             if movement_amount == 0 or abs(abs(stored_movement_amount4) - abs(movement_amount)) > 1:
                 stored_movement_amount4 = movement_amount
@@ -794,7 +801,7 @@ class MainScreen(Screen):
         d = 100
         e = 100
         f = 100
-
+        "The idle code. Functions similarly to the main thread except movement is randomized"
         while idleToggle == True:
             change = change + 1
             change2 = change2 + 1
@@ -936,6 +943,7 @@ class MainScreen(Screen):
 
 
 class AdminScreen(Screen):
+    "Simply admin screen, added here for customization, from pidev"
     def __init__(self, **kwargs):
         Builder.load_file('AdminScreen.kv')
 
@@ -1068,7 +1076,6 @@ print("happens")
 
 
 def send_event(event_name):
-
     global MIXPANEL
 
     MIXPANEL.set_event_name(event_name)
